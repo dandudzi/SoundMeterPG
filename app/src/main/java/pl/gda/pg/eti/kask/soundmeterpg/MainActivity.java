@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import android.os.Handler;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
     TextView mStatusView;
     MediaRecorder mRecorder;
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     {
                         try
                         {
-                            Thread.sleep(1000);
+                            Thread.sleep(5000);
                             Log.i("Noise", "Tock");
                         } catch (InterruptedException e) { };
                         mHandler.post(updater);
@@ -126,5 +128,9 @@ public class MainActivity extends AppCompatActivity {
         double amp =  getAmplitude();
         mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
         return mEMA;
+    }
+
+    public void insertData(View btn) throws IOException {
+        new Insert(getBaseContext()).execute(soundDb(1.0));
     }
 }
