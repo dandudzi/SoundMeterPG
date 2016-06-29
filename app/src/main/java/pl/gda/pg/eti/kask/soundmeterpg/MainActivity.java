@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     TextView mStatusView;
     MediaRecorder mRecorder;
     Thread runner;
-    public static int nic = 1;
+
     private static double mEMA = 0.0;
     static final private double EMA_FILTER = 0.6;
 
