@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onPause();
         stopRecorder();
+
     }
 
     public void startRecorder(){
-        if (mRecorder == null)
-        {
+        if (mRecorder == null){
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
         mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
         return mEMA;
     }
-
     public void insertData(View btn) throws IOException {
         new Insert(getBaseContext()).execute(soundDb(1.0));
     }

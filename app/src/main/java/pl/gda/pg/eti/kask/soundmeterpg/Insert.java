@@ -34,7 +34,7 @@ public Insert(Context cntx) {
 
     }
     protected String doInBackground(Double... params) {
-        String link = "http://192.168.1.100/insert.php?noiseDB='"+params[0]+"'";
+        String link = "http://192.168.1.104/insert.php?noiseDB='"+params[0]+"'";
 
 
         URL url = null;
