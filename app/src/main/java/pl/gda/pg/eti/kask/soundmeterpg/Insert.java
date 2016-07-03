@@ -21,6 +21,7 @@ import java.net.URL;
 /**
  * Created by gierl on 24.06.2016.
  */
+//TODO ta klasa jest cała do zmiany ze względu na to, że została stworzona w prototypie
 public class Insert extends AsyncTask<Double,Void,String>
 {
     private Context _context;
@@ -34,7 +35,7 @@ public Insert(Context cntx) {
 
     }
     protected String doInBackground(Double... params) {
-        String link = "http://192.168.1.10/WebMeterPG/insert.php?noiseDB='"+params[0]+"'";
+        String link = "http://192.168.1.9/WebMeterPG/insert.php?noiseDB='"+params[0]+"'";
 
 
         URL url = null;
