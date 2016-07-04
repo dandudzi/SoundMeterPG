@@ -1,6 +1,7 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.util.Log;
@@ -15,7 +16,9 @@ import java.io.IOException;
 //TODO ta klasa jest cała do zmiany ze względu na to, że została stworzona w prototypie
 public class TmpRecorder {
 
-    static final private double EMA_FILTER = 0.6;
+    private static final  double EMA_FILTER = 0.6;
+    private static final int MEASURMENTS_NUMBER_OF_SAMPLE_PER_MINUTES =16;
+    private static final int MILISECOND_IN_SECOND = 1000;
 
     private MediaRecorder mRecorder;
     private Thread runner;
@@ -31,6 +34,7 @@ public class TmpRecorder {
     final Handler mHandler = new Handler();
 
     public TmpRecorder(){
+
         if (runner == null)
         {
             runner = new Thread(){
@@ -40,9 +44,11 @@ public class TmpRecorder {
                     {
                         try
                         {
-                            Thread.sleep(5000);
+                            Thread.sleep(MILISECOND_IN_SECOND/MEASURMENTS_NUMBER_OF_SAMPLE_PER_MINUTES);
                             Log.i("Noise", "Tock");
-                        } catch (InterruptedException e) { };
+                        } catch (InterruptedException e) {
+                            Log.e("TmpRecorder error",e.getLocalizedMessage() + "\n" + e.getMessage());
+                        };
                         mHandler.post(updater);
                     }
                 }

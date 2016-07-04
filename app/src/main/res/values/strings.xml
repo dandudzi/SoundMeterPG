@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">SoundMeterPG</string>
+    <string name="email_contact">soundmeterpg@gmail.com</string>
+
+    <!-- MainActivity Settings our aplication -->
+    <string name="title_settings">Settings</string>
+
+    <!-- MainActivity Dialog About our aplication -->
+    <string name="title_about_dialog">About</string>
+    <string name="author_about_dialog">Created by Dudziak Daniel and Filip Gierłowski for Politechnika Gdańska</string>
+
 </resources>
