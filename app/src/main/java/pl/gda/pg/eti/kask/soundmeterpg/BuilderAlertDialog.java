@@ -42,6 +42,7 @@ public class BuilderAlertDialog {
         aboutDialog.setPositiveButton("OK",null);
         return aboutDialog.create();
     }
+    private void daj(){}
 
     private static void setTextView(View view, int dialogID, String text){
         TextView tmp = (TextView) view.findViewById(dialogID);

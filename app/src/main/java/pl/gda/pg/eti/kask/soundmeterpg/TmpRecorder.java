@@ -29,7 +29,7 @@ public class TmpRecorder {
 
         public void run(){
             updateTv();
-        };
+        }
     };
     final Handler mHandler = new Handler();
 
@@ -48,7 +48,7 @@ public class TmpRecorder {
                             Log.i("Noise", "Tock");
                         } catch (InterruptedException e) {
                             Log.e("TmpRecorder error",e.getLocalizedMessage() + "\n" + e.getMessage());
-                        };
+                        }
                         mHandler.post(updater);
                     }
                 }
