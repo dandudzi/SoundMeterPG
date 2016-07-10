@@ -1,19 +1,20 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
+/**
+ * Created by Daniel on 09.07.2016.
+ */
+import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.MenuPopupWindow;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -28,16 +29,14 @@ public class MainActivityToolbarTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
 
-    @Before
-    public void initValidString() {
-    }
 
     @Test
     public void changeText_sameActivity() {
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
         onView(withText(R.string.title_about_dialog)).perform(click());
-        onView(withText(R.string.title_about_dialog)).check(matches(isDisplayed()));
+        onView(withText(R.string.author_about_dialog)).check(matches(isDisplayed()));
         onView(withId(android.R.id.button1)).perform(click());
+        onView(withText(R.string.author_about_dialog)).check(doesNotExist());
     }
 
 
