@@ -91,6 +91,7 @@ public class TmpRecorder {
     public void stopRecorder() {
         if (mRecorder != null) {
             mRecorder.stop();
+            mRecorder.reset();
             mRecorder.release();
             mRecorder = null;
         }

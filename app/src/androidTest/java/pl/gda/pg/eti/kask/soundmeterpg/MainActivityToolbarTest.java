@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -32,7 +33,7 @@ public class MainActivityToolbarTest {
 
     @Test
     public void changeText_sameActivity() {
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_about_dialog)).perform(click());
         onView(withText(R.string.author_about_dialog)).check(matches(isDisplayed()));
         onView(withId(android.R.id.button1)).perform(click());

@@ -14,7 +14,9 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -32,7 +34,7 @@ public class BuilderAlertDialogTest {
 
     @Before
     public  void initDialog(){
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_about_dialog)).perform(click());
     }
 
@@ -49,12 +51,14 @@ public class BuilderAlertDialogTest {
 
     @Test
     public void isAuthorDisplayedCorrectly() {
+        onView(withId(R.id.author_abouta_dialog)).perform(scrollTo());
         onView(withId(R.id.author_abouta_dialog)).check(matches(isDisplayed()));
         onView(withId(R.id.author_abouta_dialog)).check(matches(withText(R.string.author_about_dialog)));
     }
 
     @Test
     public void isContactDisplayedCorrectly() {
+        onView(withId(R.id.contact_abouta_dialog)).perform(scrollTo());
         onView(withId(R.id.title_contact_abouta_dialog)).check(matches(isDisplayed()));
         onView(withId(R.id.contact_abouta_dialog)).check(matches(isDisplayed()));
         onView(withId(R.id.contact_abouta_dialog)).check(matches(withText(R.string.email_contact)));
@@ -62,12 +66,15 @@ public class BuilderAlertDialogTest {
 
     @Test
     public void isVersionDisplayedCorrectly() {
+        onView(withId(R.id.version_abouta_dialog)).perform(scrollTo());
         onView(withId(R.id.title_version_abouta_dialog)).check(matches(isDisplayed()));
         onView(withId(R.id.version_abouta_dialog)).check(matches(isDisplayed()));
     }
 
     @Test
     public void isLastBuildDisplayedCorrectly() {
+        //onView(withId(R.id.last_build_abouta_dialog)).check(matches())
+        onView(withId(R.id.last_build_abouta_dialog)).perform(scrollTo());
         onView(withId(R.id.title_last_build_abouta_dialog)).check(matches(isDisplayed()));
         onView(withId(R.id.last_build_abouta_dialog)).check(matches(isDisplayed()));
     }

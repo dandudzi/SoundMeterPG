@@ -1,6 +1,8 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
 
+import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(myToolbar);
 
-        tmpRecorder = new TmpRecorder();
+        PreferenceManager.setDefaultValues(this, R.xml.fragment_preferences, false);
+
+        //tmpRecorder = new TmpRecorder();
     }
 
     @Override
@@ -37,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-        tmpRecorder.startRecorder();
+        //tmpRecorder.startRecorder();
     }
 
     public void onPause()
     {
         super.onPause();
-        tmpRecorder.stopRecorder();
+        //tmpRecorder.stopRecorder();
 
     }
 
@@ -51,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings_action:
-                //TODO Utworzenie menu preferencji
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.about_action:
