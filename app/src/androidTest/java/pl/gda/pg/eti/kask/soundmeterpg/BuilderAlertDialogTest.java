@@ -73,7 +73,6 @@ public class BuilderAlertDialogTest {
 
     @Test
     public void isLastBuildDisplayedCorrectly() {
-        //onView(withId(R.id.last_build_abouta_dialog)).check(matches())
         onView(withId(R.id.last_build_abouta_dialog)).perform(scrollTo());
         onView(withId(R.id.title_last_build_abouta_dialog)).check(matches(isDisplayed()));
         onView(withId(R.id.last_build_abouta_dialog)).check(matches(isDisplayed()));
