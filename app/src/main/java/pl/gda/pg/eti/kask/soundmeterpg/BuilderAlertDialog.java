@@ -26,7 +26,6 @@ public class BuilderAlertDialog {
 
         LayoutInflater inflater = ownerDialog.getLayoutInflater();
 
-
         View dialogView = inflater.inflate(R.layout.about_dialog, null);
 
         String version = getVersionOfApplication(ownerContext);
@@ -42,12 +41,12 @@ public class BuilderAlertDialog {
         aboutDialog.setPositiveButton("OK",null);
         return aboutDialog.create();
     }
-    private void daj(){}
 
     private static void setTextView(View view, int dialogID, String text){
         TextView tmp = (TextView) view.findViewById(dialogID);
         tmp.setText(text);
     }
+
     private static String getLastDateBuildApplication(Context ownerContext) {
         String lastBuild = "null";
         ApplicationInfo appInfo = null;
@@ -58,9 +57,9 @@ public class BuilderAlertDialog {
             long time = entry.getTime();
             lastBuild = SimpleDateFormat.getInstance().format(new java.util.Date(time));
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e("Package version", e.getLocalizedMessage() + "\n" + e.getMessage());
+            Log.e("Last build", e.getLocalizedMessage() + "\n" + e.getMessage());
         } catch (IOException e) {
-            Log.e("Package version", e.getLocalizedMessage() + "\n" + e.getMessage());
+            Log.e("Last build", e.getLocalizedMessage() + "\n" + e.getMessage());
         }
 
         return lastBuild;

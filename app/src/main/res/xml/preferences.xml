@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <PreferenceCategory
+      android:title="@string/aplication_settings">
+
+    <CheckBoxPreference
+        android:key="@string/key_processing_private_data_preferenece"
+        android:title="@string/title_processing_private_data_preferenece"
+        android:summary="@string/summary_processing_private_data_preferenece"
+        android:defaultValue="true"
+        android:dependency="@string/key_recording_audio_preferenece"/>
+
+    <CheckBoxPreference
+        android:key="@string/key_working_in_background_preferenece"
+        android:title="@string/title_working_in_background_preferenece"
+        android:summary="@string/summary_working_in_background_preferenece"
+        android:defaultValue="true"
+        android:dependency="@string/key_recording_audio_preferenece"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:title="@string/device_settings">
+
+    <CheckBoxPreference
+        android:key="@string/key_recording_audio_preferenece"
+        android:title="@string/title_recording_audio_preferenece"
+        android:summary="@string/summary_recordiing_audio_preferenece"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="@string/key_access_to_gps_preference"
+        android:title="@string/title_access_to_gps_preferenece"
+        android:summary="@string/summary_access_to_gps_preferenece"
+        android:defaultValue="false"
+        android:dependency="@string/key_processing_private_data_preferenece"/>
+
+    <CheckBoxPreference
+        android:key="@string/key_access_to_internet_preference"
+        android:title="@string/title_access_to_internet_preferenece"
+        android:summary="@string/summary_access_to_internet_preferenece"
+        android:defaultValue="false"
+        android:dependency="@string/key_processing_private_data_preferenece"/>
+
+    <CheckBoxPreference
+        android:key="@string/key_access_to_internal_storage_preference"
+        android:title="@string/title_access_to_internal_storage_preferenece"
+        android:summary="@string/summary_access_to_internal_storaget_preferenece"
+        android:defaultValue="true"
+       />
+
+  </PreferenceCategory>
+
+</PreferenceScreen>

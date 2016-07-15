@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(myToolbar);
 
-        PreferenceManager.setDefaultValues(this, R.xml.fragment_preferences, false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         //tmpRecorder = new TmpRecorder();
     }

@@ -10,27 +10,15 @@ import java.util.List;
 /**
  * Created by Daniel on 10.07.2016.
  */
-public class SettingsActivity extends PreferenceActivity  {
+public class SettingsActivity extends Activity {
     @Override
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.header_preferences, target);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
     }
 
 
-    @Override
-    protected boolean isValidFragment(String fragmentName)
-    {
-        return SettingsActivity.class.getName().equals(fragmentName) ||
-                SettingsFragment.class.getName().equals(fragmentName);
-    }
-
-    public static class SettingsFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            addPreferencesFromResource(R.xml.fragment_preferences);
-        }
-
-    }
 }

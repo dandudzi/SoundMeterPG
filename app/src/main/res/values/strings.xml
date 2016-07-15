@@ -2,11 +2,47 @@
     <string name="app_name">SoundMeterPG</string>
     <string name="email_contact">soundmeterpg@gmail.com</string>
 
-    <!-- MainActivity Settings our aplication -->
+    <!--Settings MainActivity-->
     <string name="title_settings">Settings</string>
 
-    <!-- MainActivity Dialog About our aplication -->
+        <!--Settings Aplication-->
+        <string name="aplication_settings">Aplication Settings</string>
+
+            <!--Preference Aplication-->
+            <string name="key_working_in_background_preferenece">working_in_background</string>
+            <string name="title_working_in_background_preferenece">Allow working in background</string>
+            <string name="summary_working_in_background_preferenece"><!-- TODO --> Komentarz</string>
+
+            <string name="key_processing_private_data_preferenece">processing_private_data</string>
+            <string name="title_processing_private_data_preferenece">Allow processing private data</string>
+            <string name="summary_processing_private_data_preferenece"><!-- TODO --> Komentarz</string>
+
+
+        <!--Settings Device-->
+        <string name="device_settings">Device Settings</string>
+
+            <!--Preference Device-->
+            <string name="key_recording_audio_preferenece">recording_audio</string>
+            <string name="title_recording_audio_preferenece">Allow recording audio</string>
+            <string name="summary_recordiing_audio_preferenece"><!-- TODO --> Komentarz</string>
+
+            <string name="key_access_to_gps_preference">access_to_gps</string>
+            <string name="title_access_to_gps_preferenece">Allow access to GPS </string>
+            <string name="summary_access_to_gps_preferenece"><!-- TODO --> Komentarz</string>
+
+            <string name="key_access_to_internet_preference">access_to_internet</string>
+            <string name="title_access_to_internet_preferenece">Allow access to Internet data </string>
+            <string name="summary_access_to_internet_preferenece"><!-- TODO --> Komentarz</string>
+
+            <string name="key_access_to_internal_storage_preference">access_to_internal_storage</string>
+            <string name="title_access_to_internal_storage_preferenece">Allow access to internal storage </string>
+            <string name="summary_access_to_internal_storaget_preferenece"><!-- TODO --> Komentarz</string>
+
+
+    <!-- About Dialog MainActivity-->
     <string name="title_about_dialog">About</string>
     <string name="author_about_dialog">Created by Dudziak Daniel and Filip Gierłowski for Politechnika Gdańska</string>
+
+
 
 </resources>
