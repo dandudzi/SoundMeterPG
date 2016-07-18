@@ -28,7 +28,7 @@ public class SettingsFragment extends PreferenceFragment {
     private String keyWorkingInBackground;
     private Activity activity;
     private LocationManager locationManager;
-    private ConnectionInternetDetector intertnetDetector;
+    private ConnectionInternetDetector internetDetector;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class SettingsFragment extends PreferenceFragment {
         listener =  createPreferenceChangeListenerAccessToInternet();
         accessToInternetPreference.setOnPreferenceChangeListener(listener);
 
-        intertnetDetector = new ConnectionInternetDetector(activity.getBaseContext());
+        internetDetector = new ConnectionInternetDetector(activity.getBaseContext());
         changeCheckboxAccessToInternetValue();
     }
 
@@ -69,7 +69,7 @@ public class SettingsFragment extends PreferenceFragment {
                     break;
 
                 case  REQUEST_CODE_INTERNET:
-                    if(intertnetDetector.isConnectingToInternet())
+                    if(internetDetector.isConnectingToInternet())
                         accessToInternetPreference.setChecked(true);
                     else
                         accessToInternetPreference.setChecked(false);
@@ -162,7 +162,7 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
-                    if (!intertnetDetector.isConnectingToInternet()) {
+                    if (!internetDetector.isConnectingToInternet()) {
                         AlertDialog alert = BuilderAlertDialog.createNoInternetDialog(activity, SettingsFragment.this);
                         alert.show();
                         return false;
@@ -174,7 +174,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void changeCheckboxAccessToInternetValue() {
-        if(intertnetDetector.isConnectingToInternet() && accessToInternetPreference.isChecked())
+        if(internetDetector.isConnectingToInternet() && accessToInternetPreference.isChecked())
             accessToInternetPreference.setChecked(true);
         else
             accessToInternetPreference.setChecked(false);

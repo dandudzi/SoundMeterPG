@@ -7,9 +7,9 @@ import android.net.NetworkInfo;
 /**
  * Created by Daniel on 18.07.2016 :).
  */
-public class ConnectionInternetDetector {
+class ConnectionInternetDetector {
 
-    private Context _context;
+    private final Context _context;
 
     public ConnectionInternetDetector(Context context){
         this._context = context;
