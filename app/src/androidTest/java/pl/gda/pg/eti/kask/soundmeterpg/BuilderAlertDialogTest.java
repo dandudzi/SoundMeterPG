@@ -3,7 +3,6 @@ package pl.gda.pg.eti.kask.soundmeterpg;
 /**
  * Created by Daniel on 10.07.2016.
  */
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -13,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -51,31 +49,31 @@ public class BuilderAlertDialogTest {
 
     @Test
     public void isAuthorDisplayedCorrectly() {
-        onView(withId(R.id.author_abouta_dialog)).perform(scrollTo());
-        onView(withId(R.id.author_abouta_dialog)).check(matches(isDisplayed()));
-        onView(withId(R.id.author_abouta_dialog)).check(matches(withText(R.string.author_about_dialog)));
+        onView(withId(R.id.author_about_dialog)).perform(scrollTo());
+        onView(withId(R.id.author_about_dialog)).check(matches(isDisplayed()));
+        onView(withId(R.id.author_about_dialog)).check(matches(withText(R.string.author_about_dialog)));
     }
 
     @Test
     public void isContactDisplayedCorrectly() {
-        onView(withId(R.id.contact_abouta_dialog)).perform(scrollTo());
-        onView(withId(R.id.title_contact_abouta_dialog)).check(matches(isDisplayed()));
-        onView(withId(R.id.contact_abouta_dialog)).check(matches(isDisplayed()));
-        onView(withId(R.id.contact_abouta_dialog)).check(matches(withText(R.string.email_contact)));
+        onView(withId(R.id.contact_about_dialog)).perform(scrollTo());
+        onView(withId(R.id.title_contact_about_dialog)).check(matches(isDisplayed()));
+        onView(withId(R.id.contact_about_dialog)).check(matches(isDisplayed()));
+        onView(withId(R.id.contact_about_dialog)).check(matches(withText(R.string.email_contact)));
     }
 
     @Test
     public void isVersionDisplayedCorrectly() {
-        onView(withId(R.id.version_abouta_dialog)).perform(scrollTo());
-        onView(withId(R.id.title_version_abouta_dialog)).check(matches(isDisplayed()));
-        onView(withId(R.id.version_abouta_dialog)).check(matches(isDisplayed()));
+        onView(withId(R.id.version_about_dialog)).perform(scrollTo());
+        onView(withId(R.id.title_version_about_dialog)).check(matches(isDisplayed()));
+        onView(withId(R.id.version_about_dialog)).check(matches(isDisplayed()));
     }
 
     @Test
     public void isLastBuildDisplayedCorrectly() {
-        onView(withId(R.id.last_build_abouta_dialog)).perform(scrollTo());
-        onView(withId(R.id.title_last_build_abouta_dialog)).check(matches(isDisplayed()));
-        onView(withId(R.id.last_build_abouta_dialog)).check(matches(isDisplayed()));
+        onView(withId(R.id.last_build_about_dialog)).perform(scrollTo());
+        onView(withId(R.id.title_last_build_about_dialog)).check(matches(isDisplayed()));
+        onView(withId(R.id.last_build_about_dialog)).check(matches(isDisplayed()));
     }
 
 }

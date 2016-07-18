@@ -2,10 +2,6 @@ package pl.gda.pg.eti.kask.soundmeterpg;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-
-import java.util.List;
 
 /**
  * Created by Daniel on 10.07.2016.

@@ -5,27 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="pl.gda.pg.eti.kask.soundmeterpg.MainActivity"
-    android:id="@+id/relative_loyout_main_activity">
+    android:id="@+id/relative_layout_main_activity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/main_activity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#6a64d9"
-        android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Insert noise in DB"
-        android:id="@+id/insertButton"
-        android:layout_marginTop="62dp"
-        android:nestedScrollingEnabled="false"
-        android:onClick="insertData"
-        android:layout_below="@+id/main_activity_toolbar"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

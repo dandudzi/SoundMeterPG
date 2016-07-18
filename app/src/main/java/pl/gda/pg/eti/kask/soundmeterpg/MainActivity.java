@@ -16,7 +16,6 @@ import android.view.View;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-    private TmpRecorder tmpRecorder; //this class must be reworked so its temporary solution
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        //tmpRecorder = new TmpRecorder();
     }
 
     @Override
@@ -41,14 +39,11 @@ public class MainActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-        //tmpRecorder.startRecorder();
     }
 
     public void onPause()
     {
         super.onPause();
-        //tmpRecorder.stopRecorder();
-
     }
 
     @Override
@@ -60,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.about_action:
-                AlertDialog aboutAlert = BuilderAlertDialog.getAboutDialog(this);
+                AlertDialog aboutAlert = BuilderAlertDialog.createAboutDialog(this);
                 aboutAlert.show();
                 return true;
 
@@ -71,7 +66,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void insertData(View btn) throws IOException {
-        new Insert(getBaseContext()).execute(tmpRecorder.soundDb(1.0));
-    }
 }

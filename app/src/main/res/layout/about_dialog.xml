@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
@@ -27,7 +28,8 @@
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:id="@+id/icon_about_dialog"
-                        android:src="@mipmap/ic_politechnika" />
+                        android:src="@mipmap/ic_politechnika"
+                        android:contentDescription="@string/politechnika_gdanska"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -48,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/author_about_dialog"
-                android:id="@+id/author_abouta_dialog"
+                android:id="@+id/author_about_dialog"
                 android:layout_weight="0.05"
                 android:textStyle="bold"
                 android:textSize="20sp"
@@ -60,19 +62,20 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Contact us:"
-                android:id="@+id/title_contact_abouta_dialog"
+                android:id="@+id/title_contact_about_dialog"
                 android:layout_weight="0.05"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="kontakt"
-                android:id="@+id/contact_abouta_dialog"
+                android:text="@string/email_contact"
+                android:id="@+id/contact_about_dialog"
                 android:layout_weight="0.05"
                 android:textSize="15sp"
                 android:layout_marginLeft="5dp"
@@ -83,46 +86,50 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Version:"
-                android:id="@+id/title_version_abouta_dialog"
+                android:id="@+id/title_version_about_dialog"
                 android:layout_weight="0.05"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="wersja"
-                android:id="@+id/version_abouta_dialog"
+                android:id="@+id/version_about_dialog"
                 android:layout_weight="0.05"
                 android:textSize="15sp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Last Build"
-                android:id="@+id/title_last_build_abouta_dialog"
+                android:id="@+id/title_last_build_about_dialog"
                 android:layout_weight="0.05"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="build"
-                android:id="@+id/last_build_abouta_dialog"
+                android:id="@+id/last_build_about_dialog"
                 android:layout_weight="0.05"
                 android:textSize="15sp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </ScrollView>
 
