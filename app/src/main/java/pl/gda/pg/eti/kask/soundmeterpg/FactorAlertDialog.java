@@ -22,51 +22,42 @@ import java.util.zip.ZipFile;
 /**
  * Created by Daniel on 03.07.2016 :).
  */
-class BuilderAlertDialog {
+class FactorAlertDialog {
+    public static final int REQUEST_CODE_INTERNET =4991 ;
+    public static final int REQUEST_CODE_GPS =1994 ;
+
     public static AlertDialog createNoGPSDialog(final Activity ownerDialog, final Fragment ownerFragment){
-        AlertDialog.Builder noGPSDialog = new AlertDialog.Builder(ownerDialog);
-        LayoutInflater inflater = ownerDialog.getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.no_gps_dialog, null);
-
-        noGPSDialog.setCancelable(false);
-        noGPSDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-
-                final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                ownerFragment.startActivityForResult(intent,SettingsFragment.REQUEST_CODE_GPS);
-            }
-        });
-        noGPSDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                dialog.cancel();
-            }
-        });
-        noGPSDialog.setView(dialogView);
-        return noGPSDialog.create();
+        Intent intent =new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_GPS,R.layout.no_gps_dialog);
+        return createCustomDialog(info);
     }
 
 
     public static AlertDialog createNoInternetDialog(final Activity ownerDialog, final Fragment ownerFragment){
-        AlertDialog.Builder noInternetDialog = new AlertDialog.Builder(ownerDialog);
-        LayoutInflater inflater = ownerDialog.getLayoutInflater();
+        Intent intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+        InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_INTERNET,R.layout.no_internet_dialog);
+        return createCustomDialog(info);
+    }
 
-        View dialogView = inflater.inflate(R.layout.no_internet_dialog, null);
+    private static AlertDialog createCustomDialog(final InformationToCreateDialog info){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(info.ownerDialog);
+        LayoutInflater inflater = info.ownerDialog.getLayoutInflater();
 
-        noInternetDialog.setCancelable(false);
-        noInternetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        View dialogView = inflater.inflate(info.layout, null);
+
+        dialog.setCancelable(false);
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-
-                ownerFragment.startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS),SettingsFragment.REQUEST_CODE_INTERNET);
+                info.ownerFragment.startActivityForResult(info.intent,info.requestCode);
             }
         });
-        noInternetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                 dialog.cancel();
             }
         });
-        noInternetDialog.setView(dialogView);
-        return noInternetDialog.create();
+        dialog.setView(dialogView);
+        return dialog.create();
     }
 
     public static AlertDialog createAboutDialog(Activity ownerDialog) {
@@ -94,7 +85,7 @@ class BuilderAlertDialog {
         tmp.setText(text);
     }
 
-    private static String getLastDateBuildApplication(Context ownerContext) {
+    public static String getLastDateBuildApplication(Context ownerContext) {
         String lastBuild = "null";
         ApplicationInfo appInfo ;
         try {
@@ -110,7 +101,7 @@ class BuilderAlertDialog {
         return lastBuild;
     }
 
-    private static String getVersionOfApplication(Context ownerContext) {
+    public static String getVersionOfApplication(Context ownerContext) {
         String version = "null";
         try {
              version =  ownerContext.getPackageManager().getPackageInfo(ownerContext.getPackageName(), 0).versionName;
@@ -118,6 +109,25 @@ class BuilderAlertDialog {
             Log.e("Package version", e.getLocalizedMessage() + "\n" + e.getMessage());
         }
         return version;
+    }
+
+
+}
+
+
+class InformationToCreateDialog{
+    int layout;
+    int requestCode;
+    final Intent intent;
+    final Activity ownerDialog;
+    final Fragment ownerFragment;
+
+    public InformationToCreateDialog(Intent intent, Activity ownerDialog, Fragment ownerFragment, int requestCode, int layout) {
+        this.intent = intent;
+        this.ownerDialog = ownerDialog;
+        this.ownerFragment = ownerFragment;
+        this.requestCode = requestCode;
+        this.layout = layout;
     }
 
 

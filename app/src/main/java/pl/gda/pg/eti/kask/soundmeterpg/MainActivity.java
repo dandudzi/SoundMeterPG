@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -51,12 +50,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.about_action:
-                AlertDialog aboutAlert = BuilderAlertDialog.createAboutDialog(this);
+                AlertDialog aboutAlert = FactorAlertDialog.createAboutDialog(this);
                 aboutAlert.show();
                 return true;
 
             default:
-
                 return super.onOptionsItemSelected(item);
 
         }

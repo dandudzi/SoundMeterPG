@@ -15,15 +15,13 @@ import android.support.v7.app.AlertDialog;
  * Created by Daniel on 14.07.2016.
  */
 public class SettingsFragment extends PreferenceFragment {
+    
 
-    public static final int REQUEST_CODE_INTERNET =4991 ;
-    public static final int REQUEST_CODE_GPS =1994 ;
-
-    private CheckBoxPreference accessToInternalStoragePreference;
-    private CheckBoxPreference workingInBackgroundPreference;
-    private CheckBoxPreference processingPrivateDataPreference;
-    private CheckBoxPreference accessToGPSPreference;
-    private CheckBoxPreference accessToInternetPreference;
+    private CheckBoxPreference accessToInternalStorage;
+    private CheckBoxPreference workingInBackground;
+    private CheckBoxPreference processingPrivateData;
+    private CheckBoxPreference accessToGPS;
+    private CheckBoxPreference accessToInternet;
     private String keyProcessingPrivateData;
     private String keyWorkingInBackground;
     private Activity activity;
@@ -42,58 +40,64 @@ public class SettingsFragment extends PreferenceFragment {
         setAvailabilityForAccessToInternalStoragePreference();
 
         listener =  createPreferenceChangeListenerAccessToGPS();
-        accessToGPSPreference.setOnPreferenceChangeListener(listener);
+        accessToGPS.setOnPreferenceChangeListener(listener);
+
+        listener =  createPreferenceChangeListenerAccessToInternet();
+        accessToInternet.setOnPreferenceChangeListener(listener);
 
         activity = SettingsFragment.this.getActivity();
         locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-        changeCheckboxAccessToGPSValue();
-
-        listener =  createPreferenceChangeListenerAccessToInternet();
-        accessToInternetPreference.setOnPreferenceChangeListener(listener);
-
         internetDetector = new ConnectionInternetDetector(activity.getBaseContext());
-        changeCheckboxAccessToInternetValue();
-    }
 
+        setCheckboxInternetAndGpsStartingValueDependentOnAccessToService();
+
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 0) {
             switch (requestCode) {
-                case REQUEST_CODE_GPS:
-                    if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
-                        accessToGPSPreference.setChecked(true);
-                    else
-                        accessToGPSPreference.setChecked(false);
+                case FactorAlertDialog.REQUEST_CODE_GPS:
+                    setGPSCheckboxSelectBasedOnResultUserAction();
                     break;
 
-                case  REQUEST_CODE_INTERNET:
-                    if(internetDetector.isConnectingToInternet())
-                        accessToInternetPreference.setChecked(true);
-                    else
-                        accessToInternetPreference.setChecked(false);
+                case  FactorAlertDialog.REQUEST_CODE_INTERNET:
+                    setInternetCheckboxSelectBasedOnResultUserAction();
                     break;
             }
         }
 
     }
 
+    private void setInternetCheckboxSelectBasedOnResultUserAction() {
+        if(internetDetector.isConnectingToInternet())
+            accessToInternet.setChecked(true);
+        else
+            accessToInternet.setChecked(false);
+    }
 
+    private void setGPSCheckboxSelectBasedOnResultUserAction() {
+        if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
+            accessToGPS.setChecked(true);
+        else
+            accessToGPS.setChecked(false);
+    }
 
     private void initialCheckBoxesAndKeysPreference() {
         Resources resources = getResources();
-        String keyAccessToInternalStorage = resources.getString(R.string.key_access_to_internal_storage_preference);
-        keyProcessingPrivateData = resources.getString(R.string.key_processing_private_data_preference);
+        String keyAccessToInternalStorage = resources.getString(R.string.key_internal_storage_preference);
+        keyProcessingPrivateData = resources.getString(R.string.key_private_data_preference);
         keyWorkingInBackground = resources.getString(R.string.key_working_in_background_preference);
-        String keyAccessToGPS = resources.getString(R.string.key_access_to_gps_preference);
-        String keyAccessToInternet = resources.getString(R.string.key_access_to_internet_preference);
+        String keyAccessToGPS = resources.getString(R.string.key_gps_preference);
+        String keyAccessToInternet = resources.getString(R.string.key_internet_preference);
 
-        accessToInternalStoragePreference = (CheckBoxPreference) findPreference(keyAccessToInternalStorage);
-        workingInBackgroundPreference= (CheckBoxPreference)findPreference(keyWorkingInBackground);
-        processingPrivateDataPreference = (CheckBoxPreference)findPreference(keyProcessingPrivateData);
-        accessToGPSPreference = (CheckBoxPreference) findPreference(keyAccessToGPS);
-        accessToInternetPreference = (CheckBoxPreference) findPreference(keyAccessToInternet);
+        accessToInternalStorage = (CheckBoxPreference) findPreference(keyAccessToInternalStorage);
+        workingInBackground = (CheckBoxPreference)findPreference(keyWorkingInBackground);
+        processingPrivateData = (CheckBoxPreference)findPreference(keyProcessingPrivateData);
+        accessToGPS = (CheckBoxPreference) findPreference(keyAccessToGPS);
+        accessToInternet = (CheckBoxPreference) findPreference(keyAccessToInternet);
     }
 
     private Preference.OnPreferenceChangeListener createNewPreferenceChangeListenerAccessToInternalStorageOn() {
@@ -106,13 +110,13 @@ public class SettingsFragment extends PreferenceFragment {
 
                 String keyChangedPreference = changedPreference.getKey();
                 if(newValue.toString().equals("true"))
-                    accessToInternalStoragePreference.setEnabled(true);
+                    accessToInternalStorage.setEnabled(true);
                 else if(keyChangedPreference.equals(keyProcessingPrivateData)) {
-                    if (!workingInBackgroundPreference.isChecked())
-                        accessToInternalStoragePreference.setEnabled(false);
+                    if (!workingInBackground.isChecked())
+                        accessToInternalStorage.setEnabled(false);
                 }else if(keyChangedPreference.equals(keyWorkingInBackground)) {
-                    if (!processingPrivateDataPreference.isChecked())
-                        accessToInternalStoragePreference.setEnabled(false);
+                    if (!processingPrivateData.isChecked())
+                        accessToInternalStorage.setEnabled(false);
                 }
                 return true;
             }
@@ -121,25 +125,25 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setDependencyForAccessToInternalStoragePreference(Preference.OnPreferenceChangeListener newOnPreferenceChangeListener) {
-        workingInBackgroundPreference.setOnPreferenceChangeListener(newOnPreferenceChangeListener);
-        processingPrivateDataPreference.setOnPreferenceChangeListener(newOnPreferenceChangeListener);
+        workingInBackground.setOnPreferenceChangeListener(newOnPreferenceChangeListener);
+        processingPrivateData.setOnPreferenceChangeListener(newOnPreferenceChangeListener);
     }
 
     private void setAvailabilityForAccessToInternalStoragePreference() {
-        if(workingInBackgroundPreference.isChecked() || processingPrivateDataPreference.isChecked())
-            accessToInternalStoragePreference.setEnabled(true);
+        if(workingInBackground.isChecked() || processingPrivateData.isChecked())
+            accessToInternalStorage.setEnabled(true);
         else
-            accessToInternalStoragePreference.setEnabled(false);
+            accessToInternalStorage.setEnabled(false);
     }
 
-    private  Preference.OnPreferenceChangeListener createPreferenceChangeListenerAccessToGPS(){
+    private Preference.OnPreferenceChangeListener createPreferenceChangeListenerAccessToGPS(){
         return new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
                     if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        AlertDialog alert = BuilderAlertDialog.createNoGPSDialog(activity, SettingsFragment.this);
+                        AlertDialog alert = FactorAlertDialog.createNoGPSDialog(activity, SettingsFragment.this);
                         alert.show();
                         return false;
                     }
@@ -147,13 +151,6 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         };
-    }
-
-    private void changeCheckboxAccessToGPSValue() {
-        if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )&& accessToGPSPreference.isChecked())
-            accessToGPSPreference.setChecked(true);
-        else
-            accessToGPSPreference.setChecked(false);
     }
 
     private Preference.OnPreferenceChangeListener createPreferenceChangeListenerAccessToInternet() {
@@ -163,7 +160,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
                     if (!internetDetector.isConnectingToInternet()) {
-                        AlertDialog alert = BuilderAlertDialog.createNoInternetDialog(activity, SettingsFragment.this);
+                        AlertDialog alert = FactorAlertDialog.createNoInternetDialog(activity, SettingsFragment.this);
                         alert.show();
                         return false;
                     }
@@ -173,11 +170,16 @@ public class SettingsFragment extends PreferenceFragment {
         };
     }
 
-    private void changeCheckboxAccessToInternetValue() {
-        if(internetDetector.isConnectingToInternet() && accessToInternetPreference.isChecked())
-            accessToInternetPreference.setChecked(true);
+    private void setCheckboxInternetAndGpsStartingValueDependentOnAccessToService() {
+        if(internetDetector.isConnectingToInternet() && accessToInternet.isChecked())
+            accessToInternet.setChecked(true);
         else
-            accessToInternetPreference.setChecked(false);
+            accessToInternet.setChecked(false);
+
+        if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )&& accessToGPS.isChecked())
+            accessToGPS.setChecked(true);
+        else
+            accessToGPS.setChecked(false);
     }
 
 

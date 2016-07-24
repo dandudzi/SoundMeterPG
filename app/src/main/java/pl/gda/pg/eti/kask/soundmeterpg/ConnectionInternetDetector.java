@@ -7,16 +7,16 @@ import android.net.NetworkInfo;
 /**
  * Created by Daniel on 18.07.2016 :).
  */
-class ConnectionInternetDetector {
+class ConnectionInternetDetector implements InternetManager {
 
-    private final Context _context;
+    private final Context context;
 
     public ConnectionInternetDetector(Context context){
-        this._context = context;
+        this.context = context;
     }
 
     public boolean isConnectingToInternet(){
-        ConnectivityManager connectivity = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
             if(networkInfo!=null && networkInfo.isConnected())

@@ -34,7 +34,11 @@ dependencies {
     androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
     // Optional -- UI testing with Espresso
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
     // Optional -- UI testing with UI Automator
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.1'){
+        exclude group: 'com.android.support', module: 'support-v4'        exclude group: 'com.android.support', module: 'appcompat-v7'        exclude group: 'com.android.support', module: 'support-annotations'
+    }
 
 }
