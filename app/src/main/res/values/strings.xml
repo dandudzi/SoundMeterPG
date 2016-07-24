@@ -48,11 +48,23 @@
     <string name="title_version_about_dialog">Version:</string>
     <string name="title_last_build_about_dialog">Last Build:</string>
 
-    <!--FAQ Dialog MainActivity-->
+    <!--FAQ Dialog MainActivity--><!-- TODO - opisy-->
     <string name="title_faq_dialog">FAQ</string>
-    <string name="application_description_faq_dialog"><!-- TODO -->  Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
-    <string name="github_link">You can find project at <a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
-    <string name="licence_link">You can find projects licence <a href="https://github.com/dandudzi/SoundMeterPG/blob/master/licence">here</a></string>
-    <string name="soundmeterpg_link">Application  <a href="http://www.wp.pl">web page</a></string>
-    <string name="help_link">If you need help click <a href="http://www.wp.pl">here</a></string>
+    <string name="application_description_faq_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
+
+    <string name="github_description">You can find project at</string>
+    <string name="github_url">https://github.com/dandudzi/SoundMeterPG/</string>
+    <string name="github_link"><a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
+
+    <string name="licence_description">You can find projects licence</string>
+    <string name="licence_url">https://github.com/dandudzi/SoundMeterPG/blob/master/licence</string>
+    <string name="licence_link"><a href="https://github.com/dandudzi/SoundMeterPG/blob/master/licence">here</a></string>
+
+    <string name="soundmeterpg_description">Application</string>
+    <string name="soundmeterpg_url">http://www.wp.pl</string>
+    <string name="soundmeterpg_link"><a href="http://www.wp.pl">web page</a></string>
+
+    <string name="help_description">If you need help click</string>
+    <string name="help_url">http://www.wp.pl</string>
+    <string name="help_link"><a href="http://www.wp.pl">here</a></string>
 </resources>

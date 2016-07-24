@@ -60,9 +60,23 @@ public class FAQDialogTest {
     }
 
     @Test
+    public void isGitHubDescriptionDisplayedCorrectly() {
+        ViewInteraction interaction = onView(withId(R.id.github_description_text_view_faq_dialog));
+        String text = context.getString(R.string.github_description);
+        TesterHelper.testSinglelineTextView(interaction,text);
+    }
+
+    @Test
     public void isGitHubDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.github_hyperlink_text_view_faq_dialog));
         String text = context.getString(R.string.github_link);
+        TesterHelper.testSinglelineTextView(interaction,text);
+    }
+
+    @Test
+    public void isLicenceDescriptionDisplayedCorrectly() {
+        ViewInteraction interaction = onView(withId(R.id.licence_description_text_view_faq_dialog));
+        String text = context.getString(R.string.licence_description);
         TesterHelper.testSinglelineTextView(interaction,text);
     }
 
@@ -74,9 +88,23 @@ public class FAQDialogTest {
     }
 
     @Test
+    public void isWebPageDescriptionDisplayedCorrectly() {
+        ViewInteraction interaction = onView(withId(R.id.soundmeterpg_description_text_view_faq_dialog));
+        String text = context.getString(R.string.soundmeterpg_description);
+        TesterHelper.testSinglelineTextView(interaction,text);
+    }
+
+    @Test
     public void isWebPageDisplayedCorrectly(){
         ViewInteraction interaction = onView(withId(R.id.soundmeterpg_hyperlink_text_view_faq_dialog));
         String text = context.getString(R.string.soundmeterpg_link);
+        TesterHelper.testSinglelineTextView(interaction,text);
+    }
+
+    @Test
+    public void isHelpDescriptionDisplayedCorrectly() {
+        ViewInteraction interaction = onView(withId(R.id.help_description_text_view_faq_dialog));
+        String text = context.getString(R.string.help_description);
         TesterHelper.testSinglelineTextView(interaction,text);
     }
 
@@ -92,17 +120,25 @@ public class FAQDialogTest {
         Matcher icon = withId(R.id.icon_faq_dialog);
         Matcher title = withId(R.id.title_main_faq_dialog);
         Matcher description = withId(R.id.description_faq_dialog);
+        Matcher githubDescription = withId(R.id.github_description_text_view_faq_dialog);
         Matcher github = withId(R.id.github_hyperlink_text_view_faq_dialog);
+        Matcher licenceDescription = withId(R.id.licence_description_text_view_faq_dialog);
         Matcher licence = withId(R.id.licence_hyperlink_text_view_faq_dialog);
+        Matcher soundmeterpgDescription = withId(R.id.soundmeterpg_description_text_view_faq_dialog);
         Matcher soundmeterpg = withId(R.id.soundmeterpg_hyperlink_text_view_faq_dialog);
+        Matcher helpDescription = withId(R.id.help_description_text_view_faq_dialog);
         Matcher help = withId(R.id.help_hyperlink_text_view_faq_dialog);
 
         onView(icon).check(isLeftOf(title));
         onView(icon).check(isAbove(description));
-        onView(description).check(isAbove(github));
-        onView(github).check(isAbove(licence));
-        onView(licence).check(isAbove(soundmeterpg));
-        onView(soundmeterpg).check(isAbove(help));
+        onView(description).check(isAbove(githubDescription));
+        onView(githubDescription).check(isLeftOf(github));
+        onView(githubDescription).check(isAbove(licenceDescription));
+        onView(licenceDescription).check(isLeftOf(licence));
+        onView(licenceDescription).check(isAbove(soundmeterpgDescription));
+        onView(soundmeterpgDescription).check(isLeftOf(soundmeterpg));
+        onView(soundmeterpgDescription).check(isAbove(helpDescription));
+        onView(helpDescription).check(isLeftOf(help));
     }
 
 }
