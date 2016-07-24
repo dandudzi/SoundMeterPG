@@ -2,15 +2,10 @@ package pl.gda.pg.eti.kask.soundmeterpg;
 
 
 import android.content.Context;
-import android.preference.Preference;
 import android.support.test.espresso.DataInteraction;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageView;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import org.junit.Before;
@@ -18,33 +13,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.PositionAssertions.isLeftOf;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
-import static android.support.test.espresso.matcher.PreferenceMatchers.withSummaryText;
-import static android.support.test.espresso.matcher.PreferenceMatchers.withTitle;
-import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
-import static android.support.test.espresso.matcher.PreferenceMatchers.withSummary;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 /**
  * Created by Daniel on 19.07.2016 :).
  */
 @RunWith(AndroidJUnit4.class)
-public class SettingsActivityTest {
+public class SettingsActivityCorrectDisplayTest {
     private Context context;
     @Rule
     public ActivityTestRule<SettingsActivity> mActivityRule = new ActivityTestRule<>(
@@ -126,7 +108,7 @@ public class SettingsActivityTest {
         String iconName = AppCompatImageView.class.getName();
         String relativeLayoutName = RelativeLayout.class.getName();
 
-        DataInteraction interaction = getDataInteraction(key, titleId, summaryId);
+        DataInteraction interaction = TesterHelper.getDataInteractionPreferences(key, titleId, summaryId);
 
         interaction.check(matches(isCompletelyDisplayed()));
 
@@ -144,21 +126,9 @@ public class SettingsActivityTest {
 
         interaction.onChildView(withId(android.R.id.widget_frame)).check(matches(isCompletelyDisplayed()));
 
-        DataInteraction checkBox  = getCheckbox(interaction);
+        DataInteraction checkBox  = TesterHelper.getCheckboxPreferences(interaction);
         checkBox.check(matches(isCompletelyDisplayed()));
     }
 
-    private DataInteraction getDataInteraction(String key, int titleId, int summaryId) {
-        return onData(allOf(
-                is(instanceOf(Preference.class)),
-                withKey(key),
-                withTitle(titleId),
-                withSummary(summaryId)));
-    }
-
-    private DataInteraction getCheckbox(DataInteraction interaction){
-        return interaction.onChildView(withId(android.R.id.widget_frame))
-                .onChildView(withClassName(is(AppCompatCheckBox.class.getName())));
-    }
 
 }

@@ -64,6 +64,7 @@
         android:title="@string/title_internal_storage_preference"
         android:summary="@string/summary_internal_storage_preference"
         android:defaultValue="true"
+        android:dependency="@string/key_recording_audio_preference"
         android:id="@+id/access_to_internal_storage_check_box_preference"
         android:layout="@layout/checkbox_preference_layout"
        />

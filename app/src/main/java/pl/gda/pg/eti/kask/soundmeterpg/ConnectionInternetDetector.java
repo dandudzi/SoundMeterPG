@@ -15,6 +15,7 @@ class ConnectionInternetDetector implements InternetManager {
         this.context = context;
     }
 
+    @Override
     public boolean isConnectingToInternet(){
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {

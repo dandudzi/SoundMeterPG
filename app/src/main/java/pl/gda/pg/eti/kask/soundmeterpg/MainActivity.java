@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -31,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
     public void onResume()
     {
         super.onResume();
     }
 
+    @Override
     public void onPause()
     {
         super.onPause();

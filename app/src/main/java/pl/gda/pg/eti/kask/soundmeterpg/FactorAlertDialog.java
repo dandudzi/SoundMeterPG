@@ -1,5 +1,6 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -34,7 +36,7 @@ class FactorAlertDialog {
 
 
     public static AlertDialog createNoInternetDialog(final Activity ownerDialog, final Fragment ownerFragment){
-        Intent intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+        Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
         InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_INTERNET,R.layout.no_internet_dialog);
         return createCustomDialog(info);
     }
@@ -47,12 +49,14 @@ class FactorAlertDialog {
 
         dialog.setCancelable(false);
         dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+            @Override
+            public void onClick( final DialogInterface dialog,  final int id) {
                 info.ownerFragment.startActivityForResult(info.intent,info.requestCode);
             }
         });
         dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+            @Override
+            public void onClick(final DialogInterface dialog,  final int id) {
                 dialog.cancel();
             }
         });
@@ -67,7 +71,7 @@ class FactorAlertDialog {
 
         LayoutInflater inflater = ownerDialog.getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.about_dialog, null);
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.about_dialog, null);
 
         String version = getVersionOfApplication(ownerContext);
         setTextView(dialogView,R.id.version_about_dialog,version );
@@ -93,9 +97,9 @@ class FactorAlertDialog {
             ZipFile file = new ZipFile(appInfo.sourceDir);
             ZipEntry entry = file.getEntry("classes.dex");
             long time = entry.getTime();
-            lastBuild = SimpleDateFormat.getInstance().format(new java.util.Date(time));
+            lastBuild = SimpleDateFormat.getInstance().format(new Date(time));
         } catch (PackageManager.NameNotFoundException | IOException e) {
-            Log.e("Last build", e.getLocalizedMessage() + "\n" + e.getMessage());
+            Log.e("Last build", e.getLocalizedMessage() + '\n' + e.getMessage());
         }
 
         return lastBuild;
@@ -106,7 +110,7 @@ class FactorAlertDialog {
         try {
              version =  ownerContext.getPackageManager().getPackageInfo(ownerContext.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e("Package version", e.getLocalizedMessage() + "\n" + e.getMessage());
+            Log.e("Package version", e.getLocalizedMessage() + '\n' + e.getMessage());
         }
         return version;
     }
