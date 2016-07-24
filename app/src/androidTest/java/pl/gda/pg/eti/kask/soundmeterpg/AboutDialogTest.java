@@ -28,7 +28,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 @RunWith(AndroidJUnit4.class)
-public class FactorAlertDialogTest {
+public class AboutDialogTest {
     private Context context;
 
     @Rule

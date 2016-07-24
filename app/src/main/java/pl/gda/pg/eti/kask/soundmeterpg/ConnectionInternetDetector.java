@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 /**
  * Created by Daniel on 18.07.2016 :).
  */
-class ConnectionInternetDetector implements InternetManager {
+public class ConnectionInternetDetector implements InternetManager {
 
     private final Context context;
 

@@ -1,6 +1,5 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -10,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +24,7 @@ import java.util.zip.ZipFile;
 /**
  * Created by Daniel on 03.07.2016 :).
  */
-class FactorAlertDialog {
+public class FactorAlertDialog {
     public static final int REQUEST_CODE_INTERNET =4991 ;
     public static final int REQUEST_CODE_GPS =1994 ;
 
@@ -71,7 +71,7 @@ class FactorAlertDialog {
 
         LayoutInflater inflater = ownerDialog.getLayoutInflater();
 
-        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.about_dialog, null);
+         View dialogView = inflater.inflate(R.layout.about_dialog, null);
 
         String version = getVersionOfApplication(ownerContext);
         setTextView(dialogView,R.id.version_about_dialog,version );
@@ -116,6 +116,30 @@ class FactorAlertDialog {
     }
 
 
+    public static AlertDialog createFAQDialog(MainActivity ownerDialog) {
+        AlertDialog.Builder aboutDialog = new AlertDialog.Builder(ownerDialog);
+        Context ownerContext = ownerDialog.getBaseContext();
+
+        LayoutInflater inflater = ownerDialog.getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.faq_dialog, null);
+
+        TextView tmp = (TextView) dialogView.findViewById(R.id.github_hyperlink_text_view_faq_dialog);
+        tmp.setMovementMethod(LinkMovementMethod.getInstance());
+
+        tmp = (TextView) dialogView.findViewById(R.id.help_hyperlink_text_view_faq_dialog);
+        tmp.setMovementMethod(LinkMovementMethod.getInstance());
+
+        tmp = (TextView) dialogView.findViewById(R.id.soundmeterpg_hyperlink_text_view_faq_dialog);
+        tmp.setMovementMethod(LinkMovementMethod.getInstance());
+
+        tmp = (TextView) dialogView.findViewById(R.id.licence_hyperlink_text_view_faq_dialog);
+        tmp.setMovementMethod(LinkMovementMethod.getInstance());
+
+        aboutDialog.setView(dialogView);
+        aboutDialog.setPositiveButton("OK",null);
+        return aboutDialog.create();
+    }
 }
 
 

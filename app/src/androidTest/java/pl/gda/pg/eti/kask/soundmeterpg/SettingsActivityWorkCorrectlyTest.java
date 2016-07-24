@@ -29,7 +29,7 @@ import static pl.gda.pg.eti.kask.soundmeterpg.TesterHelper.uncheckPreference;
  * Created by Daniel on 24.07.2016 :).
  */
 @RunWith(AndroidJUnit4.class)
-public class SettingsActivityWorkCorrectly {
+public class SettingsActivityWorkCorrectlyTest {
     private Context context;
     private SharedPreferences prefs;
     @Rule

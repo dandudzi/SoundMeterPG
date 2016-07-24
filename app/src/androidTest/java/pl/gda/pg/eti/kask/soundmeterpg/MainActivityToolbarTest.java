@@ -56,6 +56,16 @@ public class MainActivityToolbarTest {
 
     }
 
+    @Test
+    public void isFAQShow(){
+        openContextualActionModeOverflowMenu();
+        onView(withText(R.string.title_faq_dialog)).perform(click());
+        onView(withText(R.string.application_description_faq_dialog)).check(matches(isCompletelyDisplayed()));
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withText(R.string.application_description_faq_dialog)).check(doesNotExist());
+
+    }
+
 
 }
 

@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
                 aboutAlert.show();
                 return true;
 
+            case R.id.faq_action:
+                AlertDialog faqAlert = FactorAlertDialog.createFAQDialog(this);
+                faqAlert.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
 

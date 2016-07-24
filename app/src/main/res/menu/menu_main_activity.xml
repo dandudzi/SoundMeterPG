@@ -11,4 +11,8 @@
         android:title="@string/title_about_dialog"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/faq_action"
+        android:title="@string/title_faq_dialog"
+        app:showAsAction="never"/>
+
 </menu>
