@@ -2,7 +2,6 @@ package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
 
 import android.content.Context;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -45,7 +44,7 @@ public class MainActivityIntentsTest {
     @Test
     public void isSettingsIntentSendCorrectly(){
         openContextualActionModeOverflowMenu();
-        onView(ViewMatchers.withText(R.string.title_settings)).perform(click());
+        onView(withText(R.string.title_settings)).perform(click());
         intended(allOf(hasComponent(hasClassName(SettingsActivity.class.getName())),toPackage("pl.gda.pg.eti.kask.soundmeterpg")));
     }
 

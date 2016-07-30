@@ -79,11 +79,8 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog aboutAlert = null;
         try {
             aboutAlert = FactorAlertDialog.createAboutDialog(this);
-        } catch (VersionException e) {
+        } catch (VersionException | LastDateException e) {
             e.printStackTrace();
-        } catch (LastDateException e) {
-            e.printStackTrace();
-
         }
         if(aboutAlert!=null)
             aboutAlert.show();

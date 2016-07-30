@@ -62,7 +62,7 @@ public class FactorAlertDialog {
         dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog,  final int id) {
-                Log.i("Cancel activityForResul","With request code: "+info.requestCode+" intent:" + info.intent.getAction());
+                Log.i("CancelActivityForResult","With request code: "+info.requestCode+" intent:" + info.intent.getAction());
                 dialog.cancel();
             }
         });
@@ -101,7 +101,7 @@ public class FactorAlertDialog {
     }
 
     public static String getLastDateBuildApplication(Context ownerContext) throws LastDateException {
-        String lastBuild = "null";
+        String lastBuild;
         ApplicationInfo appInfo ;
         try {
             appInfo = ownerContext.getPackageManager().getApplicationInfo(ownerContext.getPackageName(), 0);
@@ -118,7 +118,7 @@ public class FactorAlertDialog {
     }
 
     public static String getVersionOfApplication(Context ownerContext) throws VersionException{
-        String version = "null";
+        String version;
         try {
              version =  ownerContext.getPackageManager().getPackageInfo(ownerContext.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
@@ -131,7 +131,6 @@ public class FactorAlertDialog {
 
     public static AlertDialog createFAQDialog(MainActivity ownerDialog) {
         AlertDialog.Builder aboutDialog = new AlertDialog.Builder(ownerDialog);
-        Context ownerContext = ownerDialog.getBaseContext();
 
         LayoutInflater inflater = ownerDialog.getLayoutInflater();
 

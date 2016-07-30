@@ -3,7 +3,6 @@ package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
 
 import android.content.Context;
 import android.support.test.espresso.DataInteraction;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.AppCompatImageView;
@@ -44,7 +43,7 @@ public class SettingsActivityCorrectDisplayTest {
 
     @Test
     public void isApplicationSettingsDisplayCorrectly() {
-        onView(ViewMatchers.withText(R.string.application_settings)).check(matches(isCompletelyDisplayed()));
+        onView(withText(R.string.application_settings)).check(matches(isCompletelyDisplayed()));
     }
 
     @Test

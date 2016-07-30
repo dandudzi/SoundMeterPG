@@ -26,7 +26,7 @@ public class ConnectionInternetDetector implements InternetManager {
             if(networkInfo!=null && networkInfo.isConnected())
                 return true;
         }
-        Log.e("Internet","Cant check internet status "+this.getClass().getName());
+        Log.e("Internet","Cant check internet status "+getClass().getName());
         return false;
     }
 }

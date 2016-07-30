@@ -4,7 +4,6 @@ package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
  * Created by Daniel on 09.07.2016.
  */
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -44,7 +43,7 @@ public class MainActivityToolbarTest {
     @Test
     public void isAboutDialogShow() {
         openContextualActionModeOverflowMenu();
-        onView(ViewMatchers.withText(R.string.title_about_dialog)).perform(click());
+        onView(withText(R.string.title_about_dialog)).perform(click());
         onView(withText(R.string.author_about_dialog)).check(matches(isCompletelyDisplayed()));
         onView(withId(android.R.id.button1)).perform(click());
         onView(withText(R.string.author_about_dialog)).check(doesNotExist());
