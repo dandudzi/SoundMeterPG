@@ -1,9 +1,10 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
 
 /**
  * Created by Daniel on 09.07.2016.
  */
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -12,6 +13,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
@@ -40,7 +44,7 @@ public class MainActivityToolbarTest {
     @Test
     public void isAboutDialogShow() {
         openContextualActionModeOverflowMenu();
-        onView(withText(R.string.title_about_dialog)).perform(click());
+        onView(ViewMatchers.withText(R.string.title_about_dialog)).perform(click());
         onView(withText(R.string.author_about_dialog)).check(matches(isCompletelyDisplayed()));
         onView(withId(android.R.id.button1)).perform(click());
         onView(withText(R.string.author_about_dialog)).check(doesNotExist());

@@ -1,7 +1,8 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Dialogs;
 
 import android.content.Context;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -10,6 +11,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
+import pl.gda.pg.eti.kask.soundmeterpg.FactorAlertDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.TesterHelper;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
@@ -39,7 +47,7 @@ public class AboutDialogTest {
     @Before
     public  void initDialog(){
         openContextualActionModeOverflowMenu();
-        onView(withText(R.string.title_about_dialog)).perform(click());
+        onView(ViewMatchers.withText(R.string.title_about_dialog)).perform(click());
         context = mActivityRule.getActivity().getBaseContext();
     }
 
@@ -86,7 +94,12 @@ public class AboutDialogTest {
     @Test
     public void isVersionDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.version_about_dialog));
-        String text = FactorAlertDialog.getVersionOfApplication(mActivityRule.getActivity().getBaseContext());
+        String text = null;
+        try {
+            text = FactorAlertDialog.getVersionOfApplication(mActivityRule.getActivity().getBaseContext());
+        } catch (VersionException e) {
+            e.printStackTrace();
+        }
         TesterHelper.testSinglelineTextView(interaction,text);
     }
 
@@ -100,7 +113,12 @@ public class AboutDialogTest {
     @Test
     public void isLastBuildDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.last_build_about_dialog));
-        String text = FactorAlertDialog.getLastDateBuildApplication(mActivityRule.getActivity().getBaseContext());
+        String text = null;
+        try {
+            text = FactorAlertDialog.getLastDateBuildApplication(mActivityRule.getActivity().getBaseContext());
+        } catch (LastDateException e) {
+            e.printStackTrace();
+        }
         TesterHelper.testSinglelineTextView(interaction,text);
     }
 

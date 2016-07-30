@@ -21,6 +21,10 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
+
 /**
  * Created by Daniel on 03.07.2016 :).
  */
@@ -51,12 +55,14 @@ public class FactorAlertDialog {
         dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick( final DialogInterface dialog,  final int id) {
+                Log.i("Open activityForResult","With request code: "+info.requestCode+" intent:" + info.intent.getAction());
                 info.ownerFragment.startActivityForResult(info.intent,info.requestCode);
             }
         });
         dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog,  final int id) {
+                Log.i("Cancel activityForResul","With request code: "+info.requestCode+" intent:" + info.intent.getAction());
                 dialog.cancel();
             }
         });
@@ -64,7 +70,7 @@ public class FactorAlertDialog {
         return dialog.create();
     }
 
-    public static AlertDialog createAboutDialog(Activity ownerDialog) {
+    public static AlertDialog createAboutDialog(Activity ownerDialog) throws VersionException, LastDateException {
 
         AlertDialog.Builder aboutDialog = new AlertDialog.Builder(ownerDialog);
         Context ownerContext = ownerDialog.getBaseContext();
@@ -80,7 +86,12 @@ public class FactorAlertDialog {
         setTextView(dialogView,R.id.last_build_about_dialog,lastBuild );
 
         aboutDialog.setView(dialogView);
-        aboutDialog.setPositiveButton("OK",null);
+        aboutDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.i("AboutDialog","Press Ok");
+            }
+        });
         return aboutDialog.create();
     }
 
@@ -89,7 +100,7 @@ public class FactorAlertDialog {
         tmp.setText(text);
     }
 
-    public static String getLastDateBuildApplication(Context ownerContext) {
+    public static String getLastDateBuildApplication(Context ownerContext) throws LastDateException {
         String lastBuild = "null";
         ApplicationInfo appInfo ;
         try {
@@ -100,17 +111,19 @@ public class FactorAlertDialog {
             lastBuild = SimpleDateFormat.getInstance().format(new Date(time));
         } catch (PackageManager.NameNotFoundException | IOException e) {
             Log.e("Last build", e.getLocalizedMessage() + '\n' + e.getMessage());
+            throw new LastDateException(e.getMessage());
         }
 
         return lastBuild;
     }
 
-    public static String getVersionOfApplication(Context ownerContext) {
+    public static String getVersionOfApplication(Context ownerContext) throws VersionException{
         String version = "null";
         try {
              version =  ownerContext.getPackageManager().getPackageInfo(ownerContext.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             Log.e("Package version", e.getLocalizedMessage() + '\n' + e.getMessage());
+            throw new VersionException(e.getMessage());
         }
         return version;
     }
@@ -137,7 +150,12 @@ public class FactorAlertDialog {
         tmp.setMovementMethod(LinkMovementMethod.getInstance());
 
         aboutDialog.setView(dialogView);
-        aboutDialog.setPositiveButton("OK",null);
+        aboutDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.i("FAQ Dialog","Press OK");
+            }
+        });
         return aboutDialog.create();
     }
 }

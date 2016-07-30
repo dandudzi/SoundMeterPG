@@ -1,4 +1,4 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,11 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.FactorAlertDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
 
 /**
  * Created by Daniel on 14.07.2016.
@@ -144,6 +149,7 @@ public class SettingsFragment extends PreferenceFragment {
                 if(newValue.toString().equals("true")) {
                     if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         AlertDialog alert = FactorAlertDialog.createNoGPSDialog(activity, SettingsFragment.this);
+                        Log.i("NoGPSDialog","Opening Dialog");
                         alert.show();
                         return false;
                     }
@@ -161,6 +167,7 @@ public class SettingsFragment extends PreferenceFragment {
                 if(newValue.toString().equals("true")) {
                     if (!internetDetector.isConnectingToInternet()) {
                         AlertDialog alert = FactorAlertDialog.createNoInternetDialog(activity, SettingsFragment.this);
+                        Log.i("NoInternetDialog","Opening Dialog");
                         alert.show();
                         return false;
                     }

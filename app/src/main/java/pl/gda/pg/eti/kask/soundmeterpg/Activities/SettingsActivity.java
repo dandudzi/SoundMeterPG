@@ -1,14 +1,18 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.Fragments.SettingsFragment;
 
 /**
  * Created by Daniel on 10.07.2016.
  */
-public class SettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,7 @@ public class SettingsActivity extends ActionBarActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
+        Log.i("Settings","Click menu item with id:"+item.getItemId());
 
         return super.onOptionsItemSelected(item);
     }

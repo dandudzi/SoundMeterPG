@@ -1,4 +1,4 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 
 import android.content.Intent;
@@ -7,9 +7,15 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
+import pl.gda.pg.eti.kask.soundmeterpg.FactorAlertDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,16 +54,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings_action:
+                Log.i("Toolbar","Opening settings");
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
 
             case R.id.about_action:
-                AlertDialog aboutAlert = FactorAlertDialog.createAboutDialog(this);
-                aboutAlert.show();
+                Log.i("Toolbar","Opening about dialog");
+                showAlertDialog();
                 return true;
 
             case R.id.faq_action:
+                Log.i("Toolbar","Opening FAQ");
                 AlertDialog faqAlert = FactorAlertDialog.createFAQDialog(this);
                 faqAlert.show();
                 return true;
@@ -65,6 +73,20 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void showAlertDialog() {
+        AlertDialog aboutAlert = null;
+        try {
+            aboutAlert = FactorAlertDialog.createAboutDialog(this);
+        } catch (VersionException e) {
+            e.printStackTrace();
+        } catch (LastDateException e) {
+            e.printStackTrace();
+
+        }
+        if(aboutAlert!=null)
+            aboutAlert.show();
     }
 
 }
