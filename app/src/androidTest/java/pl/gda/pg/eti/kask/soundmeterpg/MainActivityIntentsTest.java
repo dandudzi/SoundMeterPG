@@ -35,19 +35,19 @@ public class MainActivityIntentsTest {
             MainActivity.class);
 
     @Before
-    public void init(){
+    public void init() {
         context = mActivityRule.getActivity().getBaseContext();
     }
 
     @Test
-    public void isSettingsIntentSendCorrectly(){
+    public void isSettingsIntentSendCorrectly() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_settings)).perform(click());
-        intended(allOf(hasComponent(hasClassName(SettingsActivity.class.getName())),toPackage("pl.gda.pg.eti.kask.soundmeterpg")));
+        intended(allOf(hasComponent(hasClassName(SettingsActivity.class.getName())), toPackage("pl.gda.pg.eti.kask.soundmeterpg")));
     }
 
     @Test
-    public void isFAQIntentGitHubSendCorrectly(){
+    public void isFAQIntentGitHubSendCorrectly() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_faq_dialog)).perform(click());
         onView(withId(R.id.github_hyperlink_text_view_faq_dialog)).perform(click());
@@ -56,7 +56,7 @@ public class MainActivityIntentsTest {
     }
 
     @Test
-    public void isFAQIntentLicenceSendCorrectly(){
+    public void isFAQIntentLicenceSendCorrectly() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_faq_dialog)).perform(click());
         onView(withId(R.id.licence_hyperlink_text_view_faq_dialog)).perform(click());
@@ -66,7 +66,7 @@ public class MainActivityIntentsTest {
 
 
     @Test
-    public void isFAQIntentSoundMeterPGSendCorrectly(){
+    public void isFAQIntentSoundMeterPGSendCorrectly() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_faq_dialog)).perform(click());
         onView(withId(R.id.soundmeterpg_hyperlink_text_view_faq_dialog)).perform(click());
@@ -76,7 +76,7 @@ public class MainActivityIntentsTest {
 
 
     @Test
-    public void isFAQIntentHelpSendCorrectly(){
+    public void isFAQIntentHelpSendCorrectly() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_faq_dialog)).perform(click());
         onView(withId(R.id.help_hyperlink_text_view_faq_dialog)).perform(click());

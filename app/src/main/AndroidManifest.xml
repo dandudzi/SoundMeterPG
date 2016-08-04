@@ -3,18 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pl.gda.pg.eti.kask.soundmeterpg">
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.ACCESS_MOCK_LOCATION"
+        tools:ignore="MockLocation" />
+    />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <service android:name=".NoiseLevel" />
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -25,9 +32,7 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="Preferences"
-            >
-        </activity>
+            android:label="Preferences"></activity>
 
     </application>
 

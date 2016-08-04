@@ -32,34 +32,34 @@ import static org.hamcrest.Matchers.not;
  */
 public class TesterHelper {
 
-    public static void testMultilineTextView(ViewInteraction interaction, String text){
-        testTextView(interaction,text);
+    public static void testMultilineTextView(ViewInteraction interaction, String text) {
+        testTextView(interaction, text);
         interaction.check(matches(hasMultilineText()));
     }
 
-    public static void testSinglelineTextView(ViewInteraction interaction, String text){
-        testTextView(interaction,text);
+    public static void testSinglelineTextView(ViewInteraction interaction, String text) {
+        testTextView(interaction, text);
         interaction.check(matches(not(hasMultilineText())));
     }
 
-    private static void testTextView(ViewInteraction interaction, String text){
+    private static void testTextView(ViewInteraction interaction, String text) {
         interaction.perform(scrollTo());
         interaction.check(matches(isCompletelyDisplayed()));
         interaction.check(matches(withText(text)));
         interaction.check(matches(not(hasEllipsizedText())));
     }
 
-    public static void testMultilineTextView(DataInteraction interaction, String text){
-        testTextView(interaction,text);
+    public static void testMultilineTextView(DataInteraction interaction, String text) {
+        testTextView(interaction, text);
         interaction.check(matches(hasMultilineText()));
     }
 
-    public static void testSinglelineTextView(DataInteraction interaction, String text){
-        testTextView(interaction,text);
+    public static void testSinglelineTextView(DataInteraction interaction, String text) {
+        testTextView(interaction, text);
         interaction.check(matches(not(hasMultilineText())));
     }
 
-    private static void testTextView(DataInteraction interaction, String text){
+    private static void testTextView(DataInteraction interaction, String text) {
         interaction.check(matches(isCompletelyDisplayed()));
         interaction.check(matches(withText(text)));
         interaction.check(matches(not(hasEllipsizedText())));
@@ -73,7 +73,7 @@ public class TesterHelper {
                 withSummary(summaryId)));
     }
 
-    public static DataInteraction getCheckboxPreferences(DataInteraction interaction){
+    public static DataInteraction getCheckboxPreferences(DataInteraction interaction) {
         return interaction.onChildView(withId(android.R.id.widget_frame))
                 .onChildView(withClassName(is(AppCompatCheckBox.class.getName())));
     }
@@ -104,26 +104,26 @@ public class TesterHelper {
     }
 
     public static void selectPreference(int keyId, SharedPreferences prefs, Context context) {
-        DataInteraction interaction = getDataInteraction(keyId,context);
+        DataInteraction interaction = getDataInteraction(keyId, context);
         DataInteraction checkBox = getCheckboxPreferences(interaction);
-        Boolean isChecked  = prefs.getBoolean(context.getString(keyId),true);
-        if(!isChecked)
+        Boolean isChecked = prefs.getBoolean(context.getString(keyId), true);
+        if (!isChecked)
             checkBox.check(matches(not(isChecked()))).perform(click());
     }
 
     public static void uncheckPreference(int keyId, SharedPreferences prefs, Context context) {
-        DataInteraction interaction = getDataInteraction(keyId,context);
+        DataInteraction interaction = getDataInteraction(keyId, context);
         DataInteraction checkBox = getCheckboxPreferences(interaction);
-        Boolean isChecked  = prefs.getBoolean(context.getString(keyId),true);
-        if(isChecked)
+        Boolean isChecked = prefs.getBoolean(context.getString(keyId), true);
+        if (isChecked)
             checkBox.check(matches(isChecked())).perform(click());
     }
 
-    private static DataInteraction getDataInteraction(int keyId, Context context){
+    private static DataInteraction getDataInteraction(int keyId, Context context) {
         int titleId;
         int summaryId;
         String key = context.getString(keyId);
-        switch(keyId){
+        switch (keyId) {
             case R.string.key_private_data_preference:
                 titleId = R.string.title_private_data_preference;
                 summaryId = R.string.summary_private_data_preference;
@@ -154,7 +154,7 @@ public class TesterHelper {
                 break;
         }
 
-        return getDataInteractionPreferences(key,titleId,summaryId);
+        return getDataInteractionPreferences(key, titleId, summaryId);
     }
 
 

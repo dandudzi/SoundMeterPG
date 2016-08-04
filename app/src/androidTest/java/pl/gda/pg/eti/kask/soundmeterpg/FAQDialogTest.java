@@ -34,7 +34,7 @@ public class FAQDialogTest {
 
 
     @Before
-    public  void initDialog(){
+    public void initDialog() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_faq_dialog)).perform(click());
         context = mActivityRule.getActivity().getBaseContext();
@@ -49,74 +49,74 @@ public class FAQDialogTest {
     public void isTitleDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.title_main_faq_dialog));
         String text = context.getString(R.string.title_faq_dialog);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isDescriptionDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.description_faq_dialog));
         String text = context.getString(R.string.application_description_faq_dialog);
-        TesterHelper.testMultilineTextView(interaction,text);
+        TesterHelper.testMultilineTextView(interaction, text);
     }
 
     @Test
     public void isGitHubDescriptionDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.github_description_text_view_faq_dialog));
         String text = context.getString(R.string.github_description);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isGitHubDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.github_hyperlink_text_view_faq_dialog));
         String text = context.getString(R.string.github_link);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isLicenceDescriptionDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.licence_description_text_view_faq_dialog));
         String text = context.getString(R.string.licence_description);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
-    public void isLicenceDisplayedCorrectly(){
+    public void isLicenceDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.licence_hyperlink_text_view_faq_dialog));
         String text = context.getString(R.string.licence_link);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isWebPageDescriptionDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.soundmeterpg_description_text_view_faq_dialog));
         String text = context.getString(R.string.soundmeterpg_description);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
-    public void isWebPageDisplayedCorrectly(){
+    public void isWebPageDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.soundmeterpg_hyperlink_text_view_faq_dialog));
         String text = context.getString(R.string.soundmeterpg_link);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isHelpDescriptionDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.help_description_text_view_faq_dialog));
         String text = context.getString(R.string.help_description);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isHelpDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.help_hyperlink_text_view_faq_dialog));
         String text = context.getString(R.string.help_link);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
-    public void testRelativePosition(){
+    public void testRelativePosition() {
         Matcher icon = withId(R.id.icon_faq_dialog);
         Matcher title = withId(R.id.title_main_faq_dialog);
         Matcher description = withId(R.id.description_faq_dialog);

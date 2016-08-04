@@ -3,6 +3,7 @@ package pl.gda.pg.eti.kask.soundmeterpg;
 /**
  * Created by Daniel on 09.07.2016.
  */
+
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -33,7 +34,7 @@ public class MainActivityToolbarTest {
             MainActivity.class);
 
     @Before
-    public void setDeviceReadyForTesting(){
+    public void setDeviceReadyForTesting() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
@@ -47,7 +48,7 @@ public class MainActivityToolbarTest {
     }
 
     @Test
-    public void isSettingsShow(){
+    public void isSettingsShow() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_settings)).perform(click());
         onView(withText(R.string.title_recording_audio_preference)).check(matches(isCompletelyDisplayed()));
@@ -57,7 +58,7 @@ public class MainActivityToolbarTest {
     }
 
     @Test
-    public void isFAQShow(){
+    public void isFAQShow() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_faq_dialog)).perform(click());
         onView(withText(R.string.application_description_faq_dialog)).check(matches(isCompletelyDisplayed()));

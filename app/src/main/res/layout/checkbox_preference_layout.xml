@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2011 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -9,8 +8,7 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<!-- Layout for a Preference in a PreferenceActivity. The
+--><!-- Layout for a Preference in a PreferenceActivity. The
      Preference is able to place a specific widget for its particular
      type in the "widget_frame" layout. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,14 +17,15 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
-    android:paddingRight="?android:attr/scrollbarSize"
-    >
+    android:paddingRight="?android:attr/scrollbarSize">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
 
         android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/image_view_preference"
             android:layout_width="wrap_content"
@@ -37,6 +36,7 @@
             android:contentDescription="settings_icon"
             tools:ignore="HardcodedText" />
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +47,8 @@
         android:layout_weight="1"
         android:id="@+id/daj">
 
-        <TextView android:id="@+android:id/title"
+        <TextView
+            android:id="@+android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -56,7 +57,8 @@
             android:fadingEdge="horizontal"
             android:textStyle="bold" />
 
-        <TextView android:id="@+android:id/summary"
+        <TextView
+            android:id="@+android:id/summary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/title"
@@ -64,10 +66,11 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
             android:maxLines="4"
-            android:ellipsize="end"/>
+            android:ellipsize="end" />
     </RelativeLayout>
     <!-- Preference should place its actual preference widget here. -->
-    <LinearLayout android:id="@+android:id/widget_frame"
+    <LinearLayout
+        android:id="@+android:id/widget_frame"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
 

@@ -26,7 +26,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  */
 
 
-
 @RunWith(AndroidJUnit4.class)
 public class AboutDialogTest {
     private Context context;
@@ -37,7 +36,7 @@ public class AboutDialogTest {
 
 
     @Before
-    public  void initDialog(){
+    public void initDialog() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_about_dialog)).perform(click());
         context = mActivityRule.getActivity().getBaseContext();
@@ -52,60 +51,60 @@ public class AboutDialogTest {
     public void isTitleDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.title_main_about_dialog));
         String text = context.getString(R.string.title_about_dialog);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isAuthorDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.author_about_dialog));
         String text = context.getString(R.string.author_about_dialog);
-        TesterHelper.testMultilineTextView(interaction,text);
+        TesterHelper.testMultilineTextView(interaction, text);
     }
 
     @Test
-    public void isContactTitleDisplayedCorrectly(){
+    public void isContactTitleDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.title_contact_about_dialog));
         String text = context.getString(R.string.title_contact_us_about_dialog);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isContactDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.contact_about_dialog));
         String text = context.getString(R.string.email_contact);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
-    public void isVersionTitleDisplayedCorrectly(){
+    public void isVersionTitleDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.title_version_about_dialog));
         String text = context.getString(R.string.title_version_about_dialog);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isVersionDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.version_about_dialog));
         String text = FactorAlertDialog.getVersionOfApplication(mActivityRule.getActivity().getBaseContext());
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
-    public void isLastTitleBuildDisplayedCorrectly(){
+    public void isLastTitleBuildDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.title_last_build_about_dialog));
         String text = context.getString(R.string.title_last_build_about_dialog);
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
     public void isLastBuildDisplayedCorrectly() {
         ViewInteraction interaction = onView(withId(R.id.last_build_about_dialog));
         String text = FactorAlertDialog.getLastDateBuildApplication(mActivityRule.getActivity().getBaseContext());
-        TesterHelper.testSinglelineTextView(interaction,text);
+        TesterHelper.testSinglelineTextView(interaction, text);
     }
 
     @Test
-    public void testRelativePosition(){
+    public void testRelativePosition() {
         Matcher icon = withId(R.id.icon_about_dialog);
         Matcher title = withId(R.id.title_main_about_dialog);
         Matcher author = withId(R.id.author_about_dialog);

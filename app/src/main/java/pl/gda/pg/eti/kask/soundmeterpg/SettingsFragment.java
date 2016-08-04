@@ -15,7 +15,7 @@ import android.support.v7.app.AlertDialog;
  * Created by Daniel on 14.07.2016.
  */
 public class SettingsFragment extends PreferenceFragment {
-    
+
 
     private CheckBoxPreference internalStoragePreference;
     private CheckBoxPreference workingInBackground;
@@ -39,10 +39,10 @@ public class SettingsFragment extends PreferenceFragment {
         setDependencyForAccessToInternalStoragePreference(listener);
         setAvailabilityForAccessToInternalStoragePreference();
 
-        listener =  createPreferenceChangeListenerAccessToGPS();
+        listener = createPreferenceChangeListenerAccessToGPS();
         GPSPreference.setOnPreferenceChangeListener(listener);
 
-        listener =  createPreferenceChangeListenerAccessToInternet();
+        listener = createPreferenceChangeListenerAccessToInternet();
         internetPreference.setOnPreferenceChangeListener(listener);
 
         activity = getActivity();
@@ -63,7 +63,7 @@ public class SettingsFragment extends PreferenceFragment {
                     setGPSCheckboxSelectBasedOnResultUserAction();
                     break;
 
-                case  FactorAlertDialog.REQUEST_CODE_INTERNET:
+                case FactorAlertDialog.REQUEST_CODE_INTERNET:
                     setInternetCheckboxSelectBasedOnResultUserAction();
                     break;
             }
@@ -72,14 +72,14 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setInternetCheckboxSelectBasedOnResultUserAction() {
-        if(internetDetector.isConnectingToInternet())
+        if (internetDetector.isConnectingToInternet())
             internetPreference.setChecked(true);
         else
             internetPreference.setChecked(false);
     }
 
     private void setGPSCheckboxSelectBasedOnResultUserAction() {
-        if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
             GPSPreference.setChecked(true);
         else
             GPSPreference.setChecked(false);
@@ -94,8 +94,8 @@ public class SettingsFragment extends PreferenceFragment {
         String keyAccessToInternet = resources.getString(R.string.key_internet_preference);
 
         internalStoragePreference = (CheckBoxPreference) findPreference(keyAccessToInternalStorage);
-        workingInBackground = (CheckBoxPreference)findPreference(workingInBackgroundKey);
-        privateDataPreference = (CheckBoxPreference)findPreference(privateDataKey);
+        workingInBackground = (CheckBoxPreference) findPreference(workingInBackgroundKey);
+        privateDataPreference = (CheckBoxPreference) findPreference(privateDataKey);
         GPSPreference = (CheckBoxPreference) findPreference(keyAccessToGPS);
         internetPreference = (CheckBoxPreference) findPreference(keyAccessToInternet);
     }
@@ -109,12 +109,12 @@ public class SettingsFragment extends PreferenceFragment {
                 CheckBoxPreference changedPreference = (CheckBoxPreference) preference;
 
                 String keyChangedPreference = changedPreference.getKey();
-                if(newValue.toString().equals("true"))
+                if (newValue.toString().equals("true"))
                     internalStoragePreference.setEnabled(true);
-                else if(keyChangedPreference.equals(privateDataKey)) {
+                else if (keyChangedPreference.equals(privateDataKey)) {
                     if (!workingInBackground.isChecked())
                         internalStoragePreference.setEnabled(false);
-                }else if(keyChangedPreference.equals(workingInBackgroundKey)) {
+                } else if (keyChangedPreference.equals(workingInBackgroundKey)) {
                     if (!privateDataPreference.isChecked())
                         internalStoragePreference.setEnabled(false);
                 }
@@ -130,18 +130,18 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setAvailabilityForAccessToInternalStoragePreference() {
-        if(workingInBackground.isChecked() || privateDataPreference.isChecked())
+        if (workingInBackground.isChecked() || privateDataPreference.isChecked())
             internalStoragePreference.setEnabled(true);
         else
             internalStoragePreference.setEnabled(false);
     }
 
-    private Preference.OnPreferenceChangeListener createPreferenceChangeListenerAccessToGPS(){
+    private Preference.OnPreferenceChangeListener createPreferenceChangeListenerAccessToGPS() {
         return new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if(newValue.toString().equals("true")) {
+                if (newValue.toString().equals("true")) {
                     if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         AlertDialog alert = FactorAlertDialog.createNoGPSDialog(activity, SettingsFragment.this);
                         alert.show();
@@ -158,7 +158,7 @@ public class SettingsFragment extends PreferenceFragment {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if(newValue.toString().equals("true")) {
+                if (newValue.toString().equals("true")) {
                     if (!internetDetector.isConnectingToInternet()) {
                         AlertDialog alert = FactorAlertDialog.createNoInternetDialog(activity, SettingsFragment.this);
                         alert.show();
@@ -171,12 +171,12 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setCheckboxInternetAndGpsStartingValueDependentOnAccessToService() {
-        if(internetDetector.isConnectingToInternet() && internetPreference.isChecked())
+        if (internetDetector.isConnectingToInternet() && internetPreference.isChecked())
             internetPreference.setChecked(true);
         else
             internetPreference.setChecked(false);
 
-        if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )&& GPSPreference.isChecked())
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && GPSPreference.isChecked())
             GPSPreference.setChecked(true);
         else
             GPSPreference.setChecked(false);

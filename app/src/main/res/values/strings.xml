@@ -5,39 +5,39 @@
     <!--Settings MainActivity-->
     <string name="title_settings">Settings</string>
 
-        <!--Settings Application-->
-        <string name="application_settings">Application Settings</string>
+    <!--Settings Application-->
+    <string name="application_settings">Application Settings</string>
 
-            <!--Preference Application-->
-            <string name="key_private_data_preference">processing_private_data</string>
-            <string name="title_private_data_preference">Allow processing private data</string>
-            <string name="summary_private_data_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <!--Preference Application-->
+    <string name="key_private_data_preference">processing_private_data</string>
+    <string name="title_private_data_preference">Allow processing private data</string>
+    <string name="summary_private_data_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
-            <string name="key_working_in_background_preference">working_in_background</string>
-            <string name="title_working_in_background_preference">Allow working in background</string>
-            <string name="summary_working_in_background_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <string name="key_working_in_background_preference">working_in_background</string>
+    <string name="title_working_in_background_preference">Allow working in background</string>
+    <string name="summary_working_in_background_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
-        <!--Settings Device-->
-        <string name="device_settings">Device Settings</string>
+    <!--Settings Device-->
+    <string name="device_settings">Device Settings</string>
 
-            <!--Preference Device-->
-            <string name="key_recording_audio_preference">recording_audio</string>
-            <string name="title_recording_audio_preference">Allow recording audio</string>
-            <string name="summary_recording_audio_preference"><!-- TODO --> 4Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <!--Preference Device-->
+    <string name="key_recording_audio_preference">recording_audio</string>
+    <string name="title_recording_audio_preference">Allow recording audio</string>
+    <string name="summary_recording_audio_preference"><!-- TODO --> 4Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
-            <string name="key_gps_preference">access_to_gps</string>
-            <string name="title_gps_preference">Allow access to GPS </string>
-            <string name="summary_gps_preference"><!-- TODO --> 3Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-            <string name="text_no_gps_dialog"><!-- TODO --> Nie ma GPS. Chcesz włączyć?</string>
+    <string name="key_gps_preference">access_to_gps</string>
+    <string name="title_gps_preference">Allow access to GPS </string>
+    <string name="summary_gps_preference"><!-- TODO --> 3Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <string name="text_no_gps_dialog"><!-- TODO --> Nie ma GPS. Chcesz włączyć?</string>
 
-            <string name="key_internet_preference">access_to_internet</string>
-            <string name="title_internet_preference">Allow access to Internet </string>
-            <string name="summary_internet_preference"><!-- TODO --> 2Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-            <string name="text_no_internet_dialog"><!-- TODO --> Nie ma Internetu. Chcesz włączyć?</string>
+    <string name="key_internet_preference">access_to_internet</string>
+    <string name="title_internet_preference">Allow access to Internet </string>
+    <string name="summary_internet_preference"><!-- TODO --> 2Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <string name="text_no_internet_dialog"><!-- TODO --> Nie ma Internetu. Chcesz włączyć?</string>
 
-            <string name="key_internal_storage_preference">access_to_internal_storage</string>
-            <string name="title_internal_storage_preference">Allow access to internal storage </string>
-            <string name="summary_internal_storage_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <string name="key_internal_storage_preference">access_to_internal_storage</string>
+    <string name="title_internal_storage_preference">Allow access to internal storage </string>
+    <string name="summary_internal_storage_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
 
     <!-- About Dialog MainActivity-->

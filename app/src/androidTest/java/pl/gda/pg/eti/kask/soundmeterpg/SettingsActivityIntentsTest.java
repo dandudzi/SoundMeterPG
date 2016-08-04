@@ -31,6 +31,7 @@ import static pl.gda.pg.eti.kask.soundmeterpg.TesterHelper.isPreferenceEnabled;
 import static pl.gda.pg.eti.kask.soundmeterpg.TesterHelper.isPreferenceNotChecked;
 import static pl.gda.pg.eti.kask.soundmeterpg.TesterHelper.selectPreference;
 import static pl.gda.pg.eti.kask.soundmeterpg.TesterHelper.uncheckPreference;
+
 /**
  * Created by Daniel on 24.07.2016 :).
  */
@@ -52,56 +53,56 @@ public class SettingsActivityIntentsTest {
     }
 
     @Test
-    public void isGPSWorksCorrectly(){
-        selectPreference(R.string.key_recording_audio_preference,prefs,context);
-        selectPreference(R.string.key_private_data_preference,prefs,context);
-        selectPreference(R.string.key_working_in_background_preference,prefs,context);
+    public void isGPSWorksCorrectly() {
+        selectPreference(R.string.key_recording_audio_preference, prefs, context);
+        selectPreference(R.string.key_private_data_preference, prefs, context);
+        selectPreference(R.string.key_working_in_background_preference, prefs, context);
 
-        isPreferenceEnabled(R.string.key_gps_preference,context);
+        isPreferenceEnabled(R.string.key_gps_preference, context);
 
-        uncheckPreference(R.string.key_gps_preference,prefs,context);
-        isPreferenceNotChecked(R.string.key_gps_preference,context);
+        uncheckPreference(R.string.key_gps_preference, prefs, context);
+        isPreferenceNotChecked(R.string.key_gps_preference, context);
 
-        selectPreference(R.string.key_gps_preference,prefs,context);
+        selectPreference(R.string.key_gps_preference, prefs, context);
         LocationManager locationManager = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
-            isPreferenceChecked(R.string.key_gps_preference,context);
-        else{
-            Intent resultData =  new Intent();
-            Instrumentation.ActivityResult result =  new Instrumentation.ActivityResult(0,resultData);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            isPreferenceChecked(R.string.key_gps_preference, context);
+        else {
+            Intent resultData = new Intent();
+            Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(0, resultData);
 
             onView(withText(R.string.text_no_gps_dialog)).check(matches(isCompletelyDisplayed()));
             onView(withId(android.R.id.button1)).perform(click());
             intending(allOf(hasAction("Settings.ACTION_LOCATION_SOURCE_SETTINGS"))).respondWith(result);
             device.pressBack();
-            isPreferenceNotChecked(R.string.key_gps_preference,context);
+            isPreferenceNotChecked(R.string.key_gps_preference, context);
         }
     }
 
     @Test
-    public void isInternetWorksCorrectly(){
-        selectPreference(R.string.key_recording_audio_preference,prefs,context);
-        selectPreference(R.string.key_private_data_preference,prefs,context);
-        selectPreference(R.string.key_working_in_background_preference,prefs,context);
+    public void isInternetWorksCorrectly() {
+        selectPreference(R.string.key_recording_audio_preference, prefs, context);
+        selectPreference(R.string.key_private_data_preference, prefs, context);
+        selectPreference(R.string.key_working_in_background_preference, prefs, context);
 
-        isPreferenceEnabled(R.string.key_internet_preference,context);
+        isPreferenceEnabled(R.string.key_internet_preference, context);
 
-        uncheckPreference(R.string.key_internet_preference,prefs,context);
-        isPreferenceNotChecked(R.string.key_internet_preference,context);
+        uncheckPreference(R.string.key_internet_preference, prefs, context);
+        isPreferenceNotChecked(R.string.key_internet_preference, context);
 
-        selectPreference(R.string.key_internet_preference,prefs,context);
+        selectPreference(R.string.key_internet_preference, prefs, context);
         ConnectionInternetDetector detector = new ConnectionInternetDetector(context);
-        if(detector.isConnectingToInternet())
-            isPreferenceChecked(R.string.key_internet_preference,context);
-        else{
-            Intent resultData =  new Intent();
-            Instrumentation.ActivityResult result =  new Instrumentation.ActivityResult(0,resultData);
+        if (detector.isConnectingToInternet())
+            isPreferenceChecked(R.string.key_internet_preference, context);
+        else {
+            Intent resultData = new Intent();
+            Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(0, resultData);
 
             onView(withText(R.string.text_no_internet_dialog)).check(matches(isCompletelyDisplayed()));
             onView(withId(android.R.id.button1)).perform(click());
             intending(allOf(hasAction("Settings.ACTION_WIRELESS_SETTINGS"))).respondWith(result);
             device.pressBack();
-            isPreferenceNotChecked(R.string.key_internet_preference,context);
+            isPreferenceNotChecked(R.string.key_internet_preference, context);
         }
     }
 }

@@ -11,16 +11,16 @@ public class ConnectionInternetDetector implements InternetManager {
 
     private final Context context;
 
-    public ConnectionInternetDetector(Context context){
+    public ConnectionInternetDetector(Context context) {
         this.context = context;
     }
 
     @Override
-    public boolean isConnectingToInternet(){
+    public boolean isConnectingToInternet() {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
-            if(networkInfo!=null && networkInfo.isConnected())
+            if (networkInfo != null && networkInfo.isConnected())
                 return true;
         }
         return false;

@@ -264,6 +264,7 @@
       <option name="CHECK_METHOD_BODY" value="true" />
     </inspection_tool>
     <inspection_tool class="DefaultNotLastCaseInSwitch" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="Deprecation" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="DeserializableClassInSecureContext" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DivideByZero" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DollarSignInName" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -822,6 +823,7 @@
       <option name="ignoreLazyOperators" value="true" />
       <option name="ignoreObscureOperators" value="false" />
     </inspection_tool>
+    <inspection_tool class="ResourceType" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="ResultOfObjectAllocationIgnored" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ResultSetIndexZero" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReturnNull" enabled="true" level="WARNING" enabled_by_default="true">
@@ -1053,6 +1055,11 @@
       <option name="ignoreReferencesToLocalInnerClasses" value="false" />
     </inspection_tool>
     <inspection_tool class="UnsecureRandomNumberGeneration" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnusedAssignment" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="REPORT_PREFIX_EXPRESSIONS" value="false" />
+      <option name="REPORT_POSTFIX_EXPRESSIONS" value="true" />
+      <option name="REPORT_REDUNDANT_INITIALIZER" value="true" />
+    </inspection_tool>
     <inspection_tool class="UnusedCatchParameter" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_ignoreCatchBlocksWithComments" value="false" />
       <option name="m_ignoreTestCases" value="false" />

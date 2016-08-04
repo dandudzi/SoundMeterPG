@@ -28,7 +28,7 @@
                         android:layout_height="120dp"
                         android:id="@+id/icon_about_dialog"
                         android:src="@mipmap/ic_politechnika"
-                        android:contentDescription="@string/politechnika_gdanska"/>
+                        android:contentDescription="@string/politechnika_gdanska" />
 
                     <TextView
                         android:layout_width="wrap_content"

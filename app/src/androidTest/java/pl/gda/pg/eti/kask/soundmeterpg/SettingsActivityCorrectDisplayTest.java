@@ -48,7 +48,7 @@ public class SettingsActivityCorrectDisplayTest {
         int summaryId = R.string.summary_private_data_preference;
         String key = context.getString(R.string.key_private_data_preference);
 
-        isPreferenceDisplayCorrectly(key,titleId,summaryId);
+        isPreferenceDisplayCorrectly(key, titleId, summaryId);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class SettingsActivityCorrectDisplayTest {
         int titleId = R.string.title_working_in_background_preference;
         int summaryId = R.string.summary_working_in_background_preference;
         String key = context.getString(R.string.key_working_in_background_preference);
-        isPreferenceDisplayCorrectly(key,titleId,summaryId);
+        isPreferenceDisplayCorrectly(key, titleId, summaryId);
     }
 
 
@@ -71,7 +71,7 @@ public class SettingsActivityCorrectDisplayTest {
         int summaryId = R.string.summary_recording_audio_preference;
         String key = context.getString(R.string.key_recording_audio_preference);
 
-        isPreferenceDisplayCorrectly(key,titleId,summaryId);
+        isPreferenceDisplayCorrectly(key, titleId, summaryId);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class SettingsActivityCorrectDisplayTest {
         int summaryId = R.string.summary_gps_preference;
         String key = context.getString(R.string.key_gps_preference);
 
-        isPreferenceDisplayCorrectly(key,titleId,summaryId);
+        isPreferenceDisplayCorrectly(key, titleId, summaryId);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class SettingsActivityCorrectDisplayTest {
         int summaryId = R.string.summary_internet_preference;
         String key = context.getString(R.string.key_internet_preference);
 
-        isPreferenceDisplayCorrectly(key,titleId,summaryId);
+        isPreferenceDisplayCorrectly(key, titleId, summaryId);
     }
 
     @Test
@@ -98,10 +98,10 @@ public class SettingsActivityCorrectDisplayTest {
         int summaryId = R.string.summary_internal_storage_preference;
         String key = context.getString(R.string.key_internal_storage_preference);
 
-        isPreferenceDisplayCorrectly(key,titleId,summaryId);
+        isPreferenceDisplayCorrectly(key, titleId, summaryId);
     }
 
-    private void isPreferenceDisplayCorrectly(String key, int titleId, int summaryId){
+    private void isPreferenceDisplayCorrectly(String key, int titleId, int summaryId) {
 
         String title = context.getString(titleId);
         String summary = context.getString(summaryId);
@@ -126,7 +126,7 @@ public class SettingsActivityCorrectDisplayTest {
 
         interaction.onChildView(withId(android.R.id.widget_frame)).check(matches(isCompletelyDisplayed()));
 
-        DataInteraction checkBox  = TesterHelper.getCheckboxPreferences(interaction);
+        DataInteraction checkBox = TesterHelper.getCheckboxPreferences(interaction);
         checkBox.check(matches(isCompletelyDisplayed()));
     }
 

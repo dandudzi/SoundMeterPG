@@ -25,23 +25,23 @@ import java.util.zip.ZipFile;
  * Created by Daniel on 03.07.2016 :).
  */
 public class FactorAlertDialog {
-    public static final int REQUEST_CODE_INTERNET =4991 ;
-    public static final int REQUEST_CODE_GPS =1994 ;
+    public static final int REQUEST_CODE_INTERNET = 4991;
+    public static final int REQUEST_CODE_GPS = 1994;
 
-    public static AlertDialog createNoGPSDialog(final Activity ownerDialog, final Fragment ownerFragment){
-        Intent intent =new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_GPS,R.layout.no_gps_dialog);
+    public static AlertDialog createNoGPSDialog(final Activity ownerDialog, final Fragment ownerFragment) {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        InformationToCreateDialog info = new InformationToCreateDialog(intent, ownerDialog, ownerFragment, REQUEST_CODE_GPS, R.layout.no_gps_dialog);
         return createCustomDialog(info);
     }
 
 
-    public static AlertDialog createNoInternetDialog(final Activity ownerDialog, final Fragment ownerFragment){
+    public static AlertDialog createNoInternetDialog(final Activity ownerDialog, final Fragment ownerFragment) {
         Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-        InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_INTERNET,R.layout.no_internet_dialog);
+        InformationToCreateDialog info = new InformationToCreateDialog(intent, ownerDialog, ownerFragment, REQUEST_CODE_INTERNET, R.layout.no_internet_dialog);
         return createCustomDialog(info);
     }
 
-    private static AlertDialog createCustomDialog(final InformationToCreateDialog info){
+    private static AlertDialog createCustomDialog(final InformationToCreateDialog info) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(info.ownerDialog);
         LayoutInflater inflater = info.ownerDialog.getLayoutInflater();
 
@@ -50,13 +50,13 @@ public class FactorAlertDialog {
         dialog.setCancelable(false);
         dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick( final DialogInterface dialog,  final int id) {
-                info.ownerFragment.startActivityForResult(info.intent,info.requestCode);
+            public void onClick(final DialogInterface dialog, final int id) {
+                info.ownerFragment.startActivityForResult(info.intent, info.requestCode);
             }
         });
         dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(final DialogInterface dialog,  final int id) {
+            public void onClick(final DialogInterface dialog, final int id) {
                 dialog.cancel();
             }
         });
@@ -71,27 +71,27 @@ public class FactorAlertDialog {
 
         LayoutInflater inflater = ownerDialog.getLayoutInflater();
 
-         View dialogView = inflater.inflate(R.layout.about_dialog, null);
+        View dialogView = inflater.inflate(R.layout.about_dialog, null);
 
         String version = getVersionOfApplication(ownerContext);
-        setTextView(dialogView,R.id.version_about_dialog,version );
+        setTextView(dialogView, R.id.version_about_dialog, version);
 
-        String lastBuild =  getLastDateBuildApplication(ownerContext);
-        setTextView(dialogView,R.id.last_build_about_dialog,lastBuild );
+        String lastBuild = getLastDateBuildApplication(ownerContext);
+        setTextView(dialogView, R.id.last_build_about_dialog, lastBuild);
 
         aboutDialog.setView(dialogView);
-        aboutDialog.setPositiveButton("OK",null);
+        aboutDialog.setPositiveButton("OK", null);
         return aboutDialog.create();
     }
 
-    private static void setTextView(View view, int dialogID, String text){
+    private static void setTextView(View view, int dialogID, String text) {
         TextView tmp = (TextView) view.findViewById(dialogID);
         tmp.setText(text);
     }
 
     public static String getLastDateBuildApplication(Context ownerContext) {
         String lastBuild = "null";
-        ApplicationInfo appInfo ;
+        ApplicationInfo appInfo;
         try {
             appInfo = ownerContext.getPackageManager().getApplicationInfo(ownerContext.getPackageName(), 0);
             ZipFile file = new ZipFile(appInfo.sourceDir);
@@ -108,7 +108,7 @@ public class FactorAlertDialog {
     public static String getVersionOfApplication(Context ownerContext) {
         String version = "null";
         try {
-             version =  ownerContext.getPackageManager().getPackageInfo(ownerContext.getPackageName(), 0).versionName;
+            version = ownerContext.getPackageManager().getPackageInfo(ownerContext.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             Log.e("Package version", e.getLocalizedMessage() + '\n' + e.getMessage());
         }
@@ -137,13 +137,13 @@ public class FactorAlertDialog {
         tmp.setMovementMethod(LinkMovementMethod.getInstance());
 
         aboutDialog.setView(dialogView);
-        aboutDialog.setPositiveButton("OK",null);
+        aboutDialog.setPositiveButton("OK", null);
         return aboutDialog.create();
     }
 }
 
 
-class InformationToCreateDialog{
+class InformationToCreateDialog {
     int layout;
     int requestCode;
     final Intent intent;
