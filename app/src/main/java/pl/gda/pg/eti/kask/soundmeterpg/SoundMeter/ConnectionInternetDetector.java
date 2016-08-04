@@ -8,7 +8,7 @@ import android.util.Log;
 import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.InternetManager;
 
 /**
- * Created by Daniel on 18.07.2016 :).
+ * Created by Daniel
  */
 public class ConnectionInternetDetector implements InternetManager {
 

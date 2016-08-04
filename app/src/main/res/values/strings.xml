@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">SoundMeterPG</string>
+    <string name="main_icon_description">SoundMeterPGIcon</string>
     <string name="email_contact">soundmeterpg@gmail.com</string>
 
     <!--Settings MainActivity-->
@@ -9,62 +10,63 @@
         <string name="application_settings">Application Settings</string>
 
             <!--Preference Application-->
-            <string name="key_private_data_preference">processing_private_data</string>
-            <string name="title_private_data_preference">Allow processing private data</string>
-            <string name="summary_private_data_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+            <string name="private_data_key_preference">processing_private_data</string>
+            <string name="private_data_title_preference">Allow processing private data</string>
+            <string name="private_data_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
-            <string name="key_working_in_background_preference">working_in_background</string>
-            <string name="title_working_in_background_preference">Allow working in background</string>
-            <string name="summary_working_in_background_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+            <string name="working_in_background_key_preference">working_in_background</string>
+            <string name="working_in_background_title_preference">Allow working in background</string>
+            <string name="working_in_background_summary_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
         <!--Settings Device-->
         <string name="device_settings">Device Settings</string>
 
             <!--Preference Device-->
-            <string name="key_recording_audio_preference">recording_audio</string>
-            <string name="title_recording_audio_preference">Allow recording audio</string>
-            <string name="summary_recording_audio_preference"><!-- TODO --> 4Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+            <string name="recording_audio_key_preference">recording_audio</string>
+            <string name="recording_audio_title_preference">Allow recording audio</string>
+            <string name="recording_audio_summary_preference"><!-- TODO --> 4Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
-            <string name="key_gps_preference">access_to_gps</string>
-            <string name="title_gps_preference">Allow access to GPS </string>
-            <string name="summary_gps_preference"><!-- TODO --> 3Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-            <string name="text_no_gps_dialog"><!-- TODO --> Nie ma GPS. Chcesz włączyć?</string>
+            <string name="gps_key_preference">access_to_gps</string>
+            <string name="gps_title_preference">Allow access to GPS </string>
+            <string name="gps_summary_preference"><!-- TODO --> 3Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+            <string name="no_gps_text_dialog"><!-- TODO --> Nie ma GPS. Chcesz włączyć?</string>
 
-            <string name="key_internet_preference">access_to_internet</string>
-            <string name="title_internet_preference">Allow access to Internet </string>
-            <string name="summary_internet_preference"><!-- TODO --> 2Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-            <string name="text_no_internet_dialog"><!-- TODO --> Nie ma Internetu. Chcesz włączyć?</string>
+            <string name="internet_key_preference">access_to_internet</string>
+            <string name="internet_title_preference">Allow access to Internet </string>
+            <string name="internet_summary_preference"><!-- TODO --> 2Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+            <string name="no_internet_text_dialog"><!-- TODO --> Nie ma Internetu. Chcesz włączyć?</string>
 
-            <string name="key_internal_storage_preference">access_to_internal_storage</string>
-            <string name="title_internal_storage_preference">Allow access to internal storage </string>
-            <string name="summary_internal_storage_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+            <string name="internal_storage_key_preference">access_to_internal_storage</string>
+            <string name="internal_storage_title_preference">Allow access to internal storage </string>
+            <string name="internal_storage_summary_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
 
     <!-- About Dialog MainActivity-->
     <string name="title_about_dialog">About</string>
     <string name="author_about_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
-    <string name="politechnika_gdanska">Politechnika Gdańska</string>
-    <string name="title_contact_us_about_dialog">Contact us:</string>
-    <string name="title_version_about_dialog">Version:</string>
-    <string name="title_last_build_about_dialog">Last Build:</string>
+    <string name="icon_description_about_dialog">Politechnika Gdańska</string>
+    <string name="contact_us_title_about_dialog">Contact us:</string>
+    <string name="version_about_title_dialog">Version:</string>
+    <string name="last_build_about_title_dialog">Last Build:</string>
 
     <!--FAQ Dialog MainActivity--><!-- TODO - opisy-->
     <string name="title_faq_dialog">FAQ</string>
     <string name="application_description_faq_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
+    <string name="icon_description_faq_dialog">Politechnika Gdańska</string>
 
-    <string name="github_description">You can find project at</string>
-    <string name="github_url">https://github.com/dandudzi/SoundMeterPG/</string>
-    <string name="github_link"><a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
+    <string name="github_description_faq_dialog">You can find project at</string>
+    <string name="github_url_faq_dialog">https://github.com/dandudzi/SoundMeterPG/</string>
+    <string name="github_link_faq_dialog"><a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
 
-    <string name="licence_description">You can find projects licence</string>
-    <string name="licence_url">https://github.com/dandudzi/SoundMeterPG/blob/master/licence</string>
-    <string name="licence_link"><a href="https://github.com/dandudzi/SoundMeterPG/blob/master/licence">here</a></string>
+    <string name="licence_description_faq_dialog">You can find projects licence</string>
+    <string name="licence_url_faq_dialog">https://github.com/dandudzi/SoundMeterPG/blob/master/licence</string>
+    <string name="licence_link_faq_dialog"><a href="https://github.com/dandudzi/SoundMeterPG/blob/master/licence">here</a></string>
 
-    <string name="soundmeterpg_description">Application</string>
-    <string name="soundmeterpg_url">http://www.wp.pl</string>
-    <string name="soundmeterpg_link"><a href="http://www.wp.pl">web page</a></string>
+    <string name="website_description_faq_dialog">Application</string>
+    <string name="website_url_faq_dialog">http://www.wp.pl</string>
+    <string name="website_link_faq_dialog"><a href="http://www.wp.pl">web page</a></string>
 
-    <string name="help_description">If you need help click</string>
-    <string name="help_url">http://www.wp.pl</string>
-    <string name="help_link"><a href="http://www.wp.pl">here</a></string>
+    <string name="help_description_faq_dialog">If you need help click</string>
+    <string name="help_url_faq_dialog">http://www.wp.pl</string>
+    <string name="help_link_faq_dialog"><a href="http://www.wp.pl">here</a></string>
 </resources>

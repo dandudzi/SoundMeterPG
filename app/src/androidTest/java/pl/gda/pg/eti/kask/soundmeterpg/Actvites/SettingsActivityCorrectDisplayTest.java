@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.SettingsActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.TesterHelper;
+import pl.gda.pg.eti.kask.soundmeterpg.TextViewTestHelper;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -25,15 +25,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.*;
 
 /**
- * Created by Daniel on 19.07.2016 :).
+ * Created by Daniel on 19.07.2016 :) at 12:12 :).
  */
 @RunWith(AndroidJUnit4.class)
 public class SettingsActivityCorrectDisplayTest {
     private Context context;
     @Rule
-    public ActivityTestRule<SettingsActivity> mActivityRule = new ActivityTestRule<>(
+    public final ActivityTestRule<SettingsActivity> mActivityRule = new ActivityTestRule<>(
             SettingsActivity.class);
 
     @Before
@@ -48,18 +49,18 @@ public class SettingsActivityCorrectDisplayTest {
 
     @Test
     public void isPrivateDataDisplayCorrectly() {
-        int titleId = R.string.title_private_data_preference;
-        int summaryId = R.string.summary_private_data_preference;
-        String key = context.getString(R.string.key_private_data_preference);
+        int titleId = R.string.private_data_title_preference;
+        int summaryId = R.string.private_data_summary_preference;
+        String key = context.getString(R.string.private_data_key_preference);
 
         isPreferenceDisplayCorrectly(key,titleId,summaryId);
     }
 
     @Test
     public void isWorkingInBackgroundDisplayCorrectly() {
-        int titleId = R.string.title_working_in_background_preference;
-        int summaryId = R.string.summary_working_in_background_preference;
-        String key = context.getString(R.string.key_working_in_background_preference);
+        int titleId = R.string.working_in_background_title_preference;
+        int summaryId = R.string.working_in_background_summary_preference;
+        String key = context.getString(R.string.working_in_background_key_preference);
         isPreferenceDisplayCorrectly(key,titleId,summaryId);
     }
 
@@ -71,36 +72,36 @@ public class SettingsActivityCorrectDisplayTest {
 
     @Test
     public void isRecordingAudioDisplayCorrectly() {
-        int titleId = R.string.title_recording_audio_preference;
-        int summaryId = R.string.summary_recording_audio_preference;
-        String key = context.getString(R.string.key_recording_audio_preference);
+        int titleId = R.string.recording_audio_title_preference;
+        int summaryId = R.string.recording_audio_summary_preference;
+        String key = context.getString(R.string.recording_audio_key_preference);
 
         isPreferenceDisplayCorrectly(key,titleId,summaryId);
     }
 
     @Test
     public void isGPSDisplayCorrectly() {
-        int titleId = R.string.title_gps_preference;
-        int summaryId = R.string.summary_gps_preference;
-        String key = context.getString(R.string.key_gps_preference);
+        int titleId = R.string.gps_title_preference;
+        int summaryId = R.string.gps_summary_preference;
+        String key = context.getString(R.string.gps_key_preference);
 
         isPreferenceDisplayCorrectly(key,titleId,summaryId);
     }
 
     @Test
     public void isInternetDisplayCorrectly() {
-        int titleId = R.string.title_internet_preference;
-        int summaryId = R.string.summary_internet_preference;
-        String key = context.getString(R.string.key_internet_preference);
+        int titleId = R.string.internet_title_preference;
+        int summaryId = R.string.internet_summary_preference;
+        String key = context.getString(R.string.internet_key_preference);
 
         isPreferenceDisplayCorrectly(key,titleId,summaryId);
     }
 
     @Test
     public void isAccessToInternalStorageDisplayCorrectly() {
-        int titleId = R.string.title_internal_storage_preference;
-        int summaryId = R.string.summary_internal_storage_preference;
-        String key = context.getString(R.string.key_internal_storage_preference);
+        int titleId = R.string.internal_storage_title_preference;
+        int summaryId = R.string.internal_storage_summary_preference;
+        String key = context.getString(R.string.internal_storage_key_preference);
 
         isPreferenceDisplayCorrectly(key,titleId,summaryId);
     }
@@ -112,7 +113,7 @@ public class SettingsActivityCorrectDisplayTest {
         String iconName = AppCompatImageView.class.getName();
         String relativeLayoutName = RelativeLayout.class.getName();
 
-        DataInteraction interaction = TesterHelper.getDataInteractionPreferences(key, titleId, summaryId);
+        DataInteraction interaction = findPreferencesOnView(key, titleId, summaryId);
 
         interaction.check(matches(isCompletelyDisplayed()));
 
@@ -123,14 +124,14 @@ public class SettingsActivityCorrectDisplayTest {
                 .check(matches(isCompletelyDisplayed()));
 
         DataInteraction interactionTitle = interaction.onChildView(withText(title));
-        TesterHelper.testSinglelineTextView(interactionTitle, title);
+        TextViewTestHelper.testSinglelineTextView(interactionTitle, title);
 
         DataInteraction interactionSummary = interaction.onChildView(withText(summary));
-        TesterHelper.testMultilineTextView(interactionSummary, summary);
+        TextViewTestHelper.testMultilineTextView(interactionSummary, summary);
 
         interaction.onChildView(withId(android.R.id.widget_frame)).check(matches(isCompletelyDisplayed()));
 
-        DataInteraction checkBox  = TesterHelper.getCheckboxPreferences(interaction);
+        DataInteraction checkBox  = getCheckbox(interaction);
         checkBox.check(matches(isCompletelyDisplayed()));
     }
 

@@ -12,12 +12,13 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
-import pl.gda.pg.eti.kask.soundmeterpg.FactorAlertDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoGPSDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoInternetDialog;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 
 /**
- * Created by Daniel on 14.07.2016.
+ * Created by Daniel on 14.07.2016 at 12:11 :).
  */
 public class SettingsFragment extends PreferenceFragment {
     
@@ -40,7 +41,7 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
         initialCheckBoxesAndKeysPreference();
 
-        Preference.OnPreferenceChangeListener listener = createNewPreferenceChangeListenerAccessToInternalStorageOn();
+        Preference.OnPreferenceChangeListener listener = createNewPreferenceChangeListenerAccessToInternalStorage();
         setDependencyForAccessToInternalStoragePreference(listener);
         setAvailabilityForAccessToInternalStoragePreference();
 
@@ -55,8 +56,6 @@ public class SettingsFragment extends PreferenceFragment {
         internetDetector = new ConnectionInternetDetector(activity.getBaseContext());
 
         setCheckboxInternetAndGpsStartingValueDependentOnAccessToService();
-
-
     }
 
     @Override
@@ -64,11 +63,11 @@ public class SettingsFragment extends PreferenceFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 0) {
             switch (requestCode) {
-                case FactorAlertDialog.REQUEST_CODE_GPS:
+                case NoGPSDialog.REQUEST_CODE_GPS:
                     setGPSCheckboxSelectBasedOnResultUserAction();
                     break;
 
-                case  FactorAlertDialog.REQUEST_CODE_INTERNET:
+                case  NoInternetDialog.REQUEST_CODE_INTERNET:
                     setInternetCheckboxSelectBasedOnResultUserAction();
                     break;
             }
@@ -92,11 +91,11 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void initialCheckBoxesAndKeysPreference() {
         Resources resources = getResources();
-        String keyAccessToInternalStorage = resources.getString(R.string.key_internal_storage_preference);
-        privateDataKey = resources.getString(R.string.key_private_data_preference);
-        workingInBackgroundKey = resources.getString(R.string.key_working_in_background_preference);
-        String keyAccessToGPS = resources.getString(R.string.key_gps_preference);
-        String keyAccessToInternet = resources.getString(R.string.key_internet_preference);
+        String keyAccessToInternalStorage = resources.getString(R.string.internal_storage_key_preference);
+        privateDataKey = resources.getString(R.string.private_data_key_preference);
+        workingInBackgroundKey = resources.getString(R.string.working_in_background_key_preference);
+        String keyAccessToGPS = resources.getString(R.string.gps_key_preference);
+        String keyAccessToInternet = resources.getString(R.string.internet_key_preference);
 
         internalStoragePreference = (CheckBoxPreference) findPreference(keyAccessToInternalStorage);
         workingInBackground = (CheckBoxPreference)findPreference(workingInBackgroundKey);
@@ -105,7 +104,7 @@ public class SettingsFragment extends PreferenceFragment {
         internetPreference = (CheckBoxPreference) findPreference(keyAccessToInternet);
     }
 
-    private Preference.OnPreferenceChangeListener createNewPreferenceChangeListenerAccessToInternalStorageOn() {
+    private Preference.OnPreferenceChangeListener createNewPreferenceChangeListenerAccessToInternalStorage() {
         return new Preference.OnPreferenceChangeListener() {
 
             @Override
@@ -148,7 +147,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
                     if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        AlertDialog alert = FactorAlertDialog.createNoGPSDialog(activity, SettingsFragment.this);
+                        AlertDialog alert = NoGPSDialog.create(activity, SettingsFragment.this);
                         Log.i("NoGPSDialog","Opening Dialog");
                         alert.show();
                         return false;
@@ -166,7 +165,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
                     if (!internetDetector.isConnectingToInternet()) {
-                        AlertDialog alert = FactorAlertDialog.createNoInternetDialog(activity, SettingsFragment.this);
+                        AlertDialog alert = NoInternetDialog.create(activity, SettingsFragment.this);
                         Log.i("NoInternetDialog","Opening Dialog");
                         alert.show();
                         return false;

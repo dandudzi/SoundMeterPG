@@ -28,7 +28,7 @@
                         android:layout_height="120dp"
                         android:id="@+id/icon_about_dialog"
                         android:src="@mipmap/ic_politechnika"
-                        android:contentDescription="@string/politechnika_gdanska"/>
+                        android:contentDescription="@string/icon_description_about_dialog"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:singleLine="true"
-                android:text="@string/title_contact_us_about_dialog"
+                android:text="@string/contact_us_title_about_dialog"
                 android:ellipsize="end" />
 
             <TextView
@@ -97,7 +97,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:singleLine="true"
-                android:text="@string/title_version_about_dialog"
+                android:text="@string/version_about_title_dialog"
                 android:ellipsize="end" />
 
             <TextView
@@ -123,7 +123,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:singleLine="true"
-                android:text="@string/title_last_build_about_dialog"
+                android:text="@string/last_build_about_title_dialog"
                 android:ellipsize="end" />
 
             <TextView

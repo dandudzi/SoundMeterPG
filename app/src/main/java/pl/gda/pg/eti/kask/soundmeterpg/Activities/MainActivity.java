@@ -12,21 +12,31 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.AboutDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQDialog;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
-import pl.gda.pg.eti.kask.soundmeterpg.FactorAlertDialog;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(myToolbar);
 
+        //noinspection ConstantConditions
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //TODO ikona
+        getSupportActionBar().setIcon(R.mipmap.ic_politechnika);
+        //TODO by nacisnąć ikonę
+        //getSupportActionBar().setHomeActionContentDescription(R.string.main_icon_description);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     }
@@ -66,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.faq_action:
                 Log.i("Toolbar","Opening FAQ");
-                AlertDialog faqAlert = FactorAlertDialog.createFAQDialog(this);
+                AlertDialog faqAlert = FAQDialog.create(this);
                 faqAlert.show();
                 return true;
             default:
@@ -78,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private void showAlertDialog() {
         AlertDialog aboutAlert = null;
         try {
-            aboutAlert = FactorAlertDialog.createAboutDialog(this);
+            aboutAlert = AboutDialog.create(this);
         } catch (VersionException | LastDateException e) {
             e.printStackTrace();
         }

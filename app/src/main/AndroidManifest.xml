@@ -26,6 +26,7 @@
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="Preferences"
+            android:parentActivityName=".Activities.MainActivity"
             >
         </activity>
 

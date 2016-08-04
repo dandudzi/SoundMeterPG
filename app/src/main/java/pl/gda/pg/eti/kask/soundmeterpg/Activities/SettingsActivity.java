@@ -10,13 +10,14 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.SettingsFragment;
 
 /**
- * Created by Daniel on 10.07.2016.
+ * Created by Daniel on 10.07.2016 at 12:12 :).
  */
 public class SettingsActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_layout);
+        setContentView(R.layout.settings);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         setSupportActionBar(myToolbar);
@@ -25,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .replace(R.id.settings_content_frame, new SettingsFragment())
                 .commit();
 
+        //noinspection ConstantConditions
         getSupportActionBar().setTitle(getString(R.string.title_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
