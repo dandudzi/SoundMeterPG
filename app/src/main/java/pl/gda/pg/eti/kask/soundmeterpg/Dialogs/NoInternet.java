@@ -11,7 +11,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 /**
  * Created by Daniel on 04.08.2016 at 11:54 :) at 12:12 :).
  */
-public class NoInternetDialog {
+public class NoInternet {
     public static final int REQUEST_CODE_INTERNET =4991 ;
 
     public static AlertDialog create(final Activity ownerDialog, final Fragment ownerFragment){

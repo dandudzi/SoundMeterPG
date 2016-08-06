@@ -11,7 +11,7 @@
 
             <!--Preference Application-->
             <string name="private_data_key_preference">processing_private_data</string>
-            <string name="private_data_title_preference">Allow processing private data</string>
+            <string name="private_data_title_preference">Allow processing private displayIteam</string>
             <string name="private_data_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
             <string name="working_in_background_key_preference">working_in_background</string>
@@ -69,4 +69,8 @@
     <string name="help_description_faq_dialog">If you need help click</string>
     <string name="help_url_faq_dialog">http://www.wp.pl</string>
     <string name="help_link_faq_dialog"><a href="http://www.wp.pl">here</a></string>
+
+    <!-- Navigation Drawer -->
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">close drawer</string>
 </resources>

@@ -35,7 +35,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 
 @RunWith(AndroidJUnit4.class)
-public class AboutDialogTest {
+public class AboutTest {
     private Context context;
 
     @Rule

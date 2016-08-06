@@ -96,6 +96,12 @@ public class SettingsActivityIntentsTest {
             onView(withText(stringTextNoService)).check(matches(isCompletelyDisplayed()));
             onView(withId(android.R.id.button1)).perform(click());
             intending(allOf(hasAction(action))).respondWith(result);
+            try {
+                //Trzeba trochę poczekąć aż nowa aktywność się otworzy :(
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             device.pressBack();
             isPreferenceNotChecked(stringKey,context);
         }

@@ -42,20 +42,17 @@ public class MainActivityToolbarTest {
     }
 
     @Test
-    public void isIconShowCorrectly(){
-        //TODO sprawdź czy dobrze klika
-        // w ikonę bo nie wiadomo czy dobrze będziemy srpawdzać ze dobrze sie wyświetla :)
-        onView(withContentDescription(R.string.main_icon_description)).perform(click());
-        //.check(matches(isCompletelyDisplayed()));
+    public void isToolbarShowsCorrectly(){
+        onView(withContentDescription(R.string.main_icon_description)).check(matches(isCompletelyDisplayed()));
     }
 
     @Test
-    public void isTitleShowCorrectly(){
+    public void isTitleShowsCorrectly(){
         onView(withText(R.string.app_name)).check(matches(isCompletelyDisplayed()));
     }
 
     @Test
-    public void isAboutDialogShowCorrectly() {
+    public void isAboutDialogShowsCorrectly() {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_about_dialog)).check(matches(isCompletelyDisplayed()));
         onView(withText(R.string.title_about_dialog)).perform(click());
@@ -65,7 +62,7 @@ public class MainActivityToolbarTest {
     }
 
     @Test
-    public void isSettingsShowCorrectly(){
+    public void isSettingsShowsCorrectly(){
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_settings)).check(matches(isCompletelyDisplayed()));
         onView(withText(R.string.title_settings)).perform(click());
@@ -76,7 +73,7 @@ public class MainActivityToolbarTest {
     }
 
     @Test
-    public void isFAQShowCorrectly(){
+    public void isFAQShowsCorrectly(){
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_faq_dialog)).check(matches(isCompletelyDisplayed()));
         onView(withText(R.string.title_faq_dialog)).perform(click());

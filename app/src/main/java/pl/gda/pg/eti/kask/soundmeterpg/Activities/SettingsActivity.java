@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.Fragments.SettingsFragment;
+import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Settings;
 
 /**
  * Created by Daniel on 10.07.2016 at 12:12 :).
@@ -23,7 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.settings_content_frame, new SettingsFragment())
+                .replace(R.id.settings_content_frame, new Settings())
                 .commit();
 
         //noinspection ConstantConditions

@@ -12,17 +12,15 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoGPSDialog;
-import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoInternetDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoGPS;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoInternet;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 
 /**
  * Created by Daniel on 14.07.2016 at 12:11 :).
  */
-public class SettingsFragment extends PreferenceFragment {
-    
-
+public class Settings extends PreferenceFragment {
     private CheckBoxPreference internalStoragePreference;
     private CheckBoxPreference workingInBackground;
     private CheckBoxPreference privateDataPreference;
@@ -41,14 +39,14 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
         initialCheckBoxesAndKeysPreference();
 
-        Preference.OnPreferenceChangeListener listener = createNewPreferenceChangeListenerAccessToInternalStorage();
+        Preference.OnPreferenceChangeListener listener = createListenerAccessToInternalStorage();
         setDependencyForAccessToInternalStoragePreference(listener);
         setAvailabilityForAccessToInternalStoragePreference();
 
-        listener =  createPreferenceChangeListenerAccessToGPS();
+        listener =  createListenerAccessToGPS();
         GPSPreference.setOnPreferenceChangeListener(listener);
 
-        listener =  createPreferenceChangeListenerAccessToInternet();
+        listener =  createListenerAccessToInternet();
         internetPreference.setOnPreferenceChangeListener(listener);
 
         activity = getActivity();
@@ -63,11 +61,11 @@ public class SettingsFragment extends PreferenceFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 0) {
             switch (requestCode) {
-                case NoGPSDialog.REQUEST_CODE_GPS:
+                case NoGPS.REQUEST_CODE_GPS:
                     setGPSCheckboxSelectBasedOnResultUserAction();
                     break;
 
-                case  NoInternetDialog.REQUEST_CODE_INTERNET:
+                case  NoInternet.REQUEST_CODE_INTERNET:
                     setInternetCheckboxSelectBasedOnResultUserAction();
                     break;
             }
@@ -104,7 +102,7 @@ public class SettingsFragment extends PreferenceFragment {
         internetPreference = (CheckBoxPreference) findPreference(keyAccessToInternet);
     }
 
-    private Preference.OnPreferenceChangeListener createNewPreferenceChangeListenerAccessToInternalStorage() {
+    private Preference.OnPreferenceChangeListener createListenerAccessToInternalStorage() {
         return new Preference.OnPreferenceChangeListener() {
 
             @Override
@@ -140,15 +138,15 @@ public class SettingsFragment extends PreferenceFragment {
             internalStoragePreference.setEnabled(false);
     }
 
-    private Preference.OnPreferenceChangeListener createPreferenceChangeListenerAccessToGPS(){
+    private Preference.OnPreferenceChangeListener createListenerAccessToGPS(){
         return new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
                     if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        AlertDialog alert = NoGPSDialog.create(activity, SettingsFragment.this);
-                        Log.i("NoGPSDialog","Opening Dialog");
+                        AlertDialog alert = NoGPS.create(activity, Settings.this);
+                        Log.i("NoGPS","Opening Dialog");
                         alert.show();
                         return false;
                     }
@@ -158,15 +156,15 @@ public class SettingsFragment extends PreferenceFragment {
         };
     }
 
-    private Preference.OnPreferenceChangeListener createPreferenceChangeListenerAccessToInternet() {
+    private Preference.OnPreferenceChangeListener createListenerAccessToInternet() {
         return new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
                     if (!internetDetector.isConnectingToInternet()) {
-                        AlertDialog alert = NoInternetDialog.create(activity, SettingsFragment.this);
-                        Log.i("NoInternetDialog","Opening Dialog");
+                        AlertDialog alert = NoInternet.create(activity, Settings.this);
+                        Log.i("NoInternet","Opening Dialog");
                         alert.show();
                         return false;
                     }
