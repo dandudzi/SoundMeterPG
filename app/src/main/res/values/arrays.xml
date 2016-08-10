@@ -2,8 +2,9 @@
 <resources>
 
     <string-array name="rows_list_drawer">
-        <item>Settings</item>
+        <item>Measure</item>
         <item>Measurements</item>
+        <item>Settings</item>
         <item>Log in</item>
     </string-array>
 

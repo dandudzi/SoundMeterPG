@@ -1,4 +1,4 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Drawer;
 
 /**
  * Created by Daniel on 06.08.2016 at 14:42 :).
