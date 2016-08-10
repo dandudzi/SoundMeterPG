@@ -9,6 +9,8 @@ import android.media.MediaRecorder;
 import android.os.IBinder;
 import android.util.Log;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+
 /**
  * Created by Filip Gierlowski and Daniel Dudziak
  */
@@ -82,6 +84,8 @@ public class NoiseLevel extends Service {
                         //
                         //TODO kumulowanie danych,estymacja,zapisywanie na dysk,wysylanie na sewer
                     } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (OverrangeException e) {
                         e.printStackTrace();
                     }
                 }

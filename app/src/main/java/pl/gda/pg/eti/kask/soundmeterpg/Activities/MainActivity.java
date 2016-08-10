@@ -11,6 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -106,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showGPS(View w) {
+        DataBaseHandler dataBaseHandler = new DataBaseHandler(getBaseContext());
+        try {
+            dataBaseHandler.insert(new Probe(32.3, 322.23, 12.11));
+        } catch (NullRecordException e) {
+            e.printStackTrace();
+        } catch (OverrangeException e) {
+            e.printStackTrace();
+        }
           /*  _gps = new Localization(MainActivity.this);
 
             if(_gps.canGetLocation()) {
