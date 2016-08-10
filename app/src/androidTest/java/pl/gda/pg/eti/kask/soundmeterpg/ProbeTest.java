@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+
 /**
  * Created by gierl on 27.07.2016.
  */
@@ -19,7 +21,11 @@ public class ProbeTest {
 
     @Before
     public void initialize() {
-        _probe = new Probe(EXPECTED_NOISE, EXPECTED_LATITUDE, EXPECTED_LONGITUDE);
+        try {
+            _probe = new Probe(EXPECTED_NOISE, EXPECTED_LATITUDE, EXPECTED_LONGITUDE);
+        } catch (OverrangeException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -35,6 +41,18 @@ public class ProbeTest {
     @Test
     public void isCorrectLongitude() {
         Assert.assertEquals(EXPECTED_LONGITUDE, _probe.getLongitude(), 0.0);
+    }
+
+    @Test
+    public void overrangeParametrTest() {
+        Throwable throwable = null;
+        try {
+            Probe probe = new Probe(EXPECTED_NOISE, Probe.MAX_LATITUDE + EXPECTED_LATITUDE, EXPECTED_LONGITUDE);
+        } catch (Throwable e) {
+            throwable = e;
+        }
+        Assert.assertTrue(throwable instanceof OverrangeException);
+
     }
 
 

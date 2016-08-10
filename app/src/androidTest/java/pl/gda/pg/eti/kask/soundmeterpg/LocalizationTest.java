@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.test.RenamingDelegatingContext;
 import android.util.Log;
 
 import org.junit.Assert;
@@ -34,7 +35,6 @@ public class LocalizationTest {
     private static List<Double> _longitude;
     @ClassRule
     public static IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<>(MainActivity.class);
-
     @BeforeClass
     public static void randomizeArrayList() {
         _context = mActivityRule.getActivity().getApplication().getBaseContext();
