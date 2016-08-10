@@ -4,25 +4,27 @@
 
   <PreferenceCategory
       android:title="@string/application_settings"
-      android:id="@+id/application_settings_preferences">
+      android:id="@+id/application_settings_preferences"
+      >
 
     <CheckBoxPreference
-        android:key="@string/key_private_data_preference"
-        android:title="@string/title_private_data_preference"
-        android:summary="@string/summary_private_data_preference"
+        android:key="@string/private_data_key_preference"
+        android:title="@string/private_data_title_preference"
+        android:summary="@string/private_data_summary_preference"
         android:defaultValue="true"
-        android:dependency="@string/key_recording_audio_preference"
+        android:dependency="@string/recording_audio_key_preference"
         android:id="@+id/private_data_check_box_preference"
-        android:layout="@layout/checkbox_preference_layout" />
+        android:layout="@layout/checkbox_preference"
+        />
 
     <CheckBoxPreference
-        android:key="@string/key_working_in_background_preference"
-        android:title="@string/title_working_in_background_preference"
-        android:summary="@string/summary_working_in_background_preference"
+        android:key="@string/working_in_background_key_preference"
+        android:title="@string/working_in_background_title_preference"
+        android:summary="@string/working_in_background_summary_preference"
         android:defaultValue="true"
-        android:dependency="@string/key_recording_audio_preference"
+        android:dependency="@string/recording_audio_key_preference"
         android:id="@+id/working_in_background_check_box_preference"
-        android:layout="@layout/checkbox_preference_layout" />
+        android:layout="@layout/checkbox_preference"/>
 
   </PreferenceCategory>
 
@@ -30,41 +32,42 @@
       android:title="@string/device_settings"
       android:id="@+id/device_settings_preferences">
 
-
     <CheckBoxPreference
-        android:key="@string/key_recording_audio_preference"
-        android:title="@string/title_recording_audio_preference"
-        android:summary="@string/summary_recording_audio_preference"
+        android:key="@string/recording_audio_key_preference"
+        android:title="@string/recording_audio_title_preference"
+        android:summary="@string/recording_audio_summary_preference"
         android:defaultValue="true"
         android:id="@+id/recording_audio_check_box_preference"
-        android:layout="@layout/checkbox_preference_layout" />
+        android:layout="@layout/checkbox_preference"
+        />
 
     <CheckBoxPreference
-        android:key="@string/key_gps_preference"
-        android:title="@string/title_gps_preference"
-        android:summary="@string/summary_gps_preference"
+        android:key="@string/gps_key_preference"
+        android:title="@string/gps_title_preference"
+        android:summary="@string/gps_summary_preference"
         android:defaultValue="false"
-        android:dependency="@string/key_private_data_preference"
+        android:dependency="@string/private_data_key_preference"
         android:id="@+id/access_to_gps_check_box_preference"
-        android:layout="@layout/checkbox_preference_layout" />
+        android:layout="@layout/checkbox_preference"/>
 
     <CheckBoxPreference
-        android:key="@string/key_internet_preference"
-        android:title="@string/title_internet_preference"
-        android:summary="@string/summary_internet_preference"
+        android:key="@string/internet_key_preference"
+        android:title="@string/internet_title_preference"
+        android:summary="@string/internet_summary_preference"
         android:defaultValue="false"
-        android:dependency="@string/key_private_data_preference"
+        android:dependency="@string/private_data_key_preference"
         android:id="@+id/access_to_internet_check_box_preference"
-        android:layout="@layout/checkbox_preference_layout" />
+        android:layout="@layout/checkbox_preference"/>
 
     <CheckBoxPreference
-        android:key="@string/key_internal_storage_preference"
-        android:title="@string/title_internal_storage_preference"
-        android:summary="@string/summary_internal_storage_preference"
+        android:key="@string/internal_storage_key_preference"
+        android:title="@string/internal_storage_title_preference"
+        android:summary="@string/internal_storage_summary_preference"
         android:defaultValue="true"
-        android:dependency="@string/key_recording_audio_preference"
+        android:dependency="@string/recording_audio_key_preference"
         android:id="@+id/access_to_internal_storage_check_box_preference"
-        android:layout="@layout/checkbox_preference_layout" />
+        android:layout="@layout/checkbox_preference"
+       />
 
   </PreferenceCategory>
 

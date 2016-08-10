@@ -1,11 +1,14 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+
+import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.InternetManager;
 
 /**
- * Created by Daniel on 18.07.2016 :).
+ * Created by Daniel
  */
 public class ConnectionInternetDetector implements InternetManager {
 
@@ -23,6 +26,7 @@ public class ConnectionInternetDetector implements InternetManager {
             if (networkInfo != null && networkInfo.isConnected())
                 return true;
         }
+        Log.e("Internet","Cant check internet status "+getClass().getName());
         return false;
     }
 }

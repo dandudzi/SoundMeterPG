@@ -10,6 +10,7 @@
         tools:ignore="MockLocation" />
     />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -23,7 +24,7 @@
 
         <service android:name=".NoiseLevel" />
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,6 +32,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Activities.SettingsActivity"
+            android:label="Preferences"
+            android:parentActivityName=".Activities.MainActivity"
+            >
+        </activity>
             android:name=".SettingsActivity"
             android:label="Preferences"></activity>
 

@@ -6,27 +6,28 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(myToolbar);
 
+        //noinspection ConstantConditions
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //TODO ikona
+        getSupportActionBar().setIcon(R.mipmap.ic_politechnika);
+        //TODO by nacisnąć ikonę
+        //getSupportActionBar().setHomeActionContentDescription(R.string.main_icon_description);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     }
@@ -54,24 +55,36 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings_action:
+                Log.i("Toolbar","Opening settings");
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
 
             case R.id.about_action:
-                AlertDialog aboutAlert = FactorAlertDialog.createAboutDialog(this);
-                aboutAlert.show();
+                Log.i("Toolbar","Opening about dialog");
+                showAlertDialog();
                 return true;
 
             case R.id.faq_action:
-                AlertDialog faqAlert = FactorAlertDialog.createFAQDialog(this);
+                Log.i("Toolbar","Opening FAQ");
+                AlertDialog faqAlert = FAQDialog.create(this);
                 faqAlert.show();
                 return true;
             default:
-
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void showAlertDialog() {
+        AlertDialog aboutAlert = null;
+        try {
+            aboutAlert = AboutDialog.create(this);
+        } catch (VersionException | LastDateException e) {
+            e.printStackTrace();
+        }
+        if(aboutAlert!=null)
+            aboutAlert.show();
     }
 
     public void startMyService(View v) {

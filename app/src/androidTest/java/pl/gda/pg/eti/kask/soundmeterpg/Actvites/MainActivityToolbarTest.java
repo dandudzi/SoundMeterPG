@@ -1,9 +1,8 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
 
 /**
- * Created by Daniel on 09.07.2016.
+ * Created by Daniel on 09.07.2016 at 12:12 :).
  */
-
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -14,12 +13,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -34,13 +37,27 @@ public class MainActivityToolbarTest {
             MainActivity.class);
 
     @Before
-    public void setDeviceReadyForTesting() {
+    public void setDeviceReadyForTesting(){
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
     @Test
-    public void isAboutDialogShow() {
+    public void isIconShowCorrectly(){
+        //TODO sprawdź czy dobrze klika
+        // w ikonę bo nie wiadomo czy dobrze będziemy srpawdzać ze dobrze sie wyświetla :)
+        onView(withContentDescription(R.string.main_icon_description)).perform(click());
+        //.check(matches(isCompletelyDisplayed()));
+    }
+
+    @Test
+    public void isTitleShowCorrectly(){
+        onView(withText(R.string.app_name)).check(matches(isCompletelyDisplayed()));
+    }
+
+    @Test
+    public void isAboutDialogShowCorrectly() {
         openContextualActionModeOverflowMenu();
+        onView(withText(R.string.title_about_dialog)).check(matches(isCompletelyDisplayed()));
         onView(withText(R.string.title_about_dialog)).perform(click());
         onView(withText(R.string.author_about_dialog)).check(matches(isCompletelyDisplayed()));
         onView(withId(android.R.id.button1)).perform(click());
@@ -48,18 +65,20 @@ public class MainActivityToolbarTest {
     }
 
     @Test
-    public void isSettingsShow() {
+    public void isSettingsShowCorrectly(){
         openContextualActionModeOverflowMenu();
+        onView(withText(R.string.title_settings)).check(matches(isCompletelyDisplayed()));
         onView(withText(R.string.title_settings)).perform(click());
-        onView(withText(R.string.title_recording_audio_preference)).check(matches(isCompletelyDisplayed()));
+        onView(withText(R.string.recording_audio_title_preference)).check(matches(isCompletelyDisplayed()));
         device.pressBack();
-        onView(withText(R.string.title_recording_audio_preference)).check(doesNotExist());
+        onView(withText(R.string.recording_audio_title_preference)).check(doesNotExist());
 
     }
 
     @Test
-    public void isFAQShow() {
+    public void isFAQShowCorrectly(){
         openContextualActionModeOverflowMenu();
+        onView(withText(R.string.title_faq_dialog)).check(matches(isCompletelyDisplayed()));
         onView(withText(R.string.title_faq_dialog)).perform(click());
         onView(withText(R.string.application_description_faq_dialog)).check(matches(isCompletelyDisplayed()));
         onView(withId(android.R.id.button1)).perform(click());
