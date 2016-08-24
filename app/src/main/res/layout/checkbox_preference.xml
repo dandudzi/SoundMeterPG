@@ -19,61 +19,62 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
-    android:paddingRight="?android:attr/scrollbarSize"
-    >
+    android:paddingEnd="?android:attr/scrollbarSize"
+    android:paddingStart="?android:attr/scrollbarSize">
+
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
-
-        android:orientation="horizontal">
+        android:gravity="center">
         <!-- ToDO dla każdego checkboxa własny layout z własną ikoną-->
         <ImageView
-            android:id="@+id/image_view_preference"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/image_view_preference"
             android:layout_gravity="center"
             android:minWidth="48dp"
             android:src="@mipmap/ic_politechnika"
             android:contentDescription="settings_icon"
             tools:ignore="HardcodedText" />
     </LinearLayout>
+
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dip"
-        android:layout_marginRight="8dip"
-        android:layout_marginTop="6dip"
-        android:layout_marginBottom="6dip"
         android:layout_weight="1"
-        android:id="@+id/daj">
+        android:layout_marginStart="16dip"
+        android:layout_marginEnd="8dip"
+        android:layout_marginTop="6dip"
+        android:layout_marginBottom="6dip">
 
-        <TextView android:id="@+android:id/title"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
+            android:id="@+android:id/title"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:ellipsize="end"
+            android:textStyle="bold"
             android:fadingEdge="horizontal"
-            android:textStyle="bold" />
+            android:singleLine="true"
+            android:ellipsize="end"/>
 
-        <!--suppress AndroidDomInspection -->
-        <TextView android:id="@+android:id/summary"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+android:id/summary"
             android:layout_below="@android:id/title"
-            android:layout_alignLeft="@android:id/title"
+            android:layout_alignStart="@android:id/title"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
             android:maxLines="4"
             android:ellipsize="end"/>
     </RelativeLayout>
-    <!-- Preference should place its actual preference widget here. -->
-    <!--suppress AndroidDomInspection -->
-    <LinearLayout android:id="@+android:id/widget_frame"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-
+        android:id="@+android:id/widget_frame"
         android:gravity="center"
-        android:orientation="vertical" />
+         />
 </LinearLayout>

@@ -6,7 +6,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,7 +24,6 @@ import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
-import pl.gda.pg.eti.kask.soundmeterpg.Fragments.LogIn;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
@@ -40,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         setFragmentContent(new Measure());
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         setUpDrawer(myToolbar);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
     }
 
     private void setUpDrawer(final Toolbar myToolbar) {
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.settings_action:
                 Log.i("Toolbar","Opening settings");
-                startSettingsActivity();
+                startActivity(SettingsActivity.class);
                 return true;
 
             case R.id.about_action:
@@ -115,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void startSettingsActivity() {
-        Intent intent = new Intent(this, SettingsActivity.class);
+    private void startActivity(Class _class) {
+        Intent intent = new Intent(this, _class);
         startActivity(intent);
     }
 
@@ -192,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     private void actionSelectItem(String choseOption) {
         switch(choseOption){
             case "Settings":
-                startSettingsActivity();
+                startActivity(SettingsActivity.class);
                 break;
             case "Measure":
                 setFragmentContent(new Measure());
@@ -201,10 +200,11 @@ public class MainActivity extends AppCompatActivity {
                 setFragmentContent(new Measurements());
                 break;
             case "Log in":
-                setFragmentContent(new LogIn());
+                startActivity(LoginActivity.class);
                 break;
         }
     }
+
 
 
 }

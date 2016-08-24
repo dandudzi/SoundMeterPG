@@ -97,8 +97,8 @@ public class SettingsActivityIntentsTest {
             onView(withId(android.R.id.button1)).perform(click());
             intending(allOf(hasAction(action))).respondWith(result);
             try {
-                //Trzeba trochę poczekąć aż nowa aktywność się otworzy :(
-                Thread.sleep(1000);
+                //Trzeba trochę poczekać aż nowa aktywność się otworzy :(
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

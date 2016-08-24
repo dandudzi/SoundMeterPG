@@ -47,4 +47,8 @@ public class InformationAboutThisApplication {
         return version;
     }
 
+    public static String getMACAddress(){
+        return "02:00:00:00:00:00";
+    }
+
 }

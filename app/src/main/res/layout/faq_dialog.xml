@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
@@ -33,31 +35,33 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/title_faq_dialog"
                         android:id="@+id/title_main_faq_dialog"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="0.8"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/title_faq_dialog"
                         android:textStyle="bold"
                         android:textSize="30sp"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:ellipsize="end"/>
                 </TableRow>
             </TableLayout>
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/application_description_faq_dialog"
                 android:id="@+id/description_faq_dialog"
                 android:layout_weight="0.05"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/application_description_faq_dialog"
+                android:textStyle="bold"
+                android:textSize="20sp"
                 android:ellipsize="none"
-                android:singleLine="false" />
+                android:singleLine="false"
+                tools:ignore="InefficientWeight" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -67,29 +71,28 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:id="@+id/github_description_text_view_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="10dp"
-                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/github_description_faq_dialog"
-                    android:ellipsize="end"
-                    />
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:id="@+id/github_hyperlink_text_view_faq_dialog"
                     android:layout_weight="0.05"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="10dp"
-                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/github_link_faq_dialog"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="true"
                     android:ellipsize="end" />
             </LinearLayout>
 
@@ -98,99 +101,98 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/licence_description_text_view_faq_dialog"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:singleLine="true"
-                android:text="@string/licence_description_faq_dialog"
-                android:ellipsize="end"
-                 />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/licence_description_text_view_faq_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/licence_description_faq_dialog"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/licence_hyperlink_text_view_faq_dialog"
-                android:layout_weight="0.05"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="5dp"
-                android:singleLine="true"
-                android:text="@string/licence_link_faq_dialog"
-                android:ellipsize="end" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/licence_hyperlink_text_view_faq_dialog"
+                    android:layout_weight="0.05"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/licence_link_faq_dialog"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
+            </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/soundmeterpg_description_text_view_faq_dialog"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/soundmeterpg_description_text_view_faq_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/website_description_faq_dialog"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
 
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:singleLine="true"
-                android:text="@string/website_description_faq_dialog"
-                android:ellipsize="end" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/soundmeterpg_hyperlink_text_view_faq_dialog"
+                    android:layout_weight="0.05"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/website_link_faq_dialog"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/soundmeterpg_hyperlink_text_view_faq_dialog"
-                android:layout_weight="0.05"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="5dp"
-                android:singleLine="true"
-                android:text="@string/website_link_faq_dialog"
-                android:ellipsize="end" />
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/help_description_text_view_faq_dialog"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:singleLine="true"
-                android:text="@string/help_description_faq_dialog"
-                android:ellipsize="end" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/help_description_text_view_faq_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/help_description_faq_dialog"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/help_hyperlink_text_view_faq_dialog"
-                android:layout_weight="0.05"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:singleLine="true"
-                android:text="@string/help_link_faq_dialog"
-                android:ellipsize="end" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/help_hyperlink_text_view_faq_dialog"
+                    android:layout_weight="0.05"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/help_link_faq_dialog"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

@@ -27,7 +27,6 @@ import static android.support.test.espresso.contrib.DrawerActions.closeDrawer;
 import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
@@ -55,7 +54,6 @@ public class MainActivityToolbarTest {
         onView(withText(firstRow)).check(matches(isCompletelyDisplayed()));
         closeDrawer(R.id.drawer_layout);
         onView(withText(firstRow)).check(matches(not(isDisplayed())));
-
     }
 
     @Test

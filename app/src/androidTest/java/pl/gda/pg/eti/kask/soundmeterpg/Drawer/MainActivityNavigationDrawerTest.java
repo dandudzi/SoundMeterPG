@@ -7,21 +7,21 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
-import pl.gda.pg.eti.kask.soundmeterpg.Actvites.MainActivityToolbarTest;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.RowsDrawerException;
-import pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SettingsTestHelper;
-import pl.gda.pg.eti.kask.soundmeterpg.TextViewTestHelper;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.PositionAssertions.isAbove;
+import static android.support.test.espresso.assertion.PositionAssertions.isRightOf;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.closeDrawer;
 import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
@@ -85,18 +85,17 @@ public class MainActivityNavigationDrawerTest {
     @Test
     public void isSettingsRowWorksCorrectly() throws Exception{
         int position = findPositionInRows("Settings");
-        isRowWorksCorrectly(position);
+        clickOnDisplayRow(position);
         SettingsTestHelper.isSettingDisplay();
         SettingsTestHelper.backFromSettings(device);
         isRowNotDisplay(position);
     }
 
 
-
     @Test
     public void isMeasurementsRowWorksCorrectly() throws Exception{
         int position = findPositionInRows("Measurements");
-        isRowWorksCorrectly(position);
+        clickOnDisplayRow(position);
         onView(withText("measurements")).check(matches(isCompletelyDisplayed()));
         isRowNotDisplay(position);
     }
@@ -104,18 +103,36 @@ public class MainActivityNavigationDrawerTest {
     @Test
     public void isLogInRowWorksCorrectly() throws Exception{
         int position = findPositionInRows("Log in");
-        isRowWorksCorrectly(position);
-        onView(withText("log in")).check(matches(isCompletelyDisplayed()));
+        clickOnDisplayRow(position);
+        onView(withId(R.id.skip_button_login_activity)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.skip_button_login_activity)).perform(click());
         isRowNotDisplay(position);
     }
 
     @Test
     public void isMeasureRowWorksCorrectly() throws Exception{
         int position = findPositionInRows("Measure");
-        isRowWorksCorrectly(position);
-       onView(withText("measure")).check(matches(isCompletelyDisplayed()));
+        clickOnDisplayRow(position);
+        onView(withText("measure")).check(matches(isCompletelyDisplayed()));
         isRowNotDisplay(position);
     }
+
+    @Test
+    public void relativePositionTest(){
+        openDrawer(R.id.drawer_layout);
+        String[] rows = context.getResources().getStringArray(R.array.rows_list_drawer);
+        Matcher upRow = withText(rows[0]);
+        Matcher downRow;
+        for(int i =1;i<rows.length;i++){
+            downRow = withText(rows[i]);
+            onView(upRow).check(isAbove(downRow));
+            getIcon(rows[i-1]).check(isRightOf(upRow));
+            upRow = downRow;
+        }
+        getIcon(rows[rows.length-1]).check(isRightOf(upRow));
+        closeDrawer(R.id.drawer_layout);
+    }
+
 
     private ViewInteraction getIcon(String siblingTextView) {
         return onView(allOf(withId(R.id.icon_drawer_row),hasSibling(withText(siblingTextView))));
@@ -129,7 +146,7 @@ public class MainActivityNavigationDrawerTest {
         throw new RowsDrawerException("Not found row "+rowName);
     }
 
-    private void isRowWorksCorrectly(int position) {
+    private void clickOnDisplayRow(int position) {
         String row = rows[position];
         openDrawer(R.id.drawer_layout);
         onView(withText(row)).check(matches(isCompletelyDisplayed()));

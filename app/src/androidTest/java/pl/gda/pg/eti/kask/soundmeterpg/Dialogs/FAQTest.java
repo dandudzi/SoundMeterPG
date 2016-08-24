@@ -120,7 +120,7 @@ public class FAQTest {
     }
 
     @Test
-    public void testRelativePosition(){
+    public void relativePositionTest(){
         Matcher icon = withId(R.id.icon_faq_dialog);
         Matcher title = withId(R.id.title_main_faq_dialog);
         Matcher description = withId(R.id.description_faq_dialog);

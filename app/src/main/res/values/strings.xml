@@ -6,39 +6,39 @@
     <!--Settings MainActivity-->
     <string name="title_settings">Settings</string>
 
-        <!--Settings Application-->
-        <string name="application_settings">Application Settings</string>
+    <!--Settings Application-->
+    <string name="application_settings">Application Settings</string>
 
-            <!--Preference Application-->
-            <string name="private_data_key_preference">processing_private_data</string>
-            <string name="private_data_title_preference">Allow processing private displayIteam</string>
-            <string name="private_data_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <!--Preference Application-->
+    <string name="private_data_key_preference">processing_private_data</string>
+    <string name="private_data_title_preference">Allow processing private data</string>
+    <string name="private_data_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
-            <string name="working_in_background_key_preference">working_in_background</string>
-            <string name="working_in_background_title_preference">Allow working in background</string>
-            <string name="working_in_background_summary_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <string name="working_in_background_key_preference">working_in_background</string>
+    <string name="working_in_background_title_preference">Allow working in background</string>
+    <string name="working_in_background_summary_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
-        <!--Settings Device-->
-        <string name="device_settings">Device Settings</string>
+    <!--Settings Device-->
+    <string name="device_settings">Device Settings</string>
 
-            <!--Preference Device-->
-            <string name="recording_audio_key_preference">recording_audio</string>
-            <string name="recording_audio_title_preference">Allow recording audio</string>
-            <string name="recording_audio_summary_preference"><!-- TODO --> 4Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <!--Preference Device-->
+    <string name="recording_audio_key_preference">recording_audio</string>
+    <string name="recording_audio_title_preference">Allow recording audio</string>
+    <string name="recording_audio_summary_preference"><!-- TODO --> 4Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
-            <string name="gps_key_preference">access_to_gps</string>
-            <string name="gps_title_preference">Allow access to GPS </string>
-            <string name="gps_summary_preference"><!-- TODO --> 3Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-            <string name="no_gps_text_dialog"><!-- TODO --> Nie ma GPS. Chcesz włączyć?</string>
+    <string name="gps_key_preference">access_to_gps</string>
+    <string name="gps_title_preference">Allow access to GPS </string>
+    <string name="gps_summary_preference"><!-- TODO --> 3Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <string name="no_gps_text_dialog"><!-- TODO --> Nie ma GPS. Chcesz włączyć?</string>
 
-            <string name="internet_key_preference">access_to_internet</string>
-            <string name="internet_title_preference">Allow access to Internet </string>
-            <string name="internet_summary_preference"><!-- TODO --> 2Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-            <string name="no_internet_text_dialog"><!-- TODO --> Nie ma Internetu. Chcesz włączyć?</string>
+    <string name="internet_key_preference">access_to_internet</string>
+    <string name="internet_title_preference">Allow access to Internet </string>
+    <string name="internet_summary_preference"><!-- TODO --> 2Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <string name="no_internet_text_dialog"><!-- TODO --> Nie ma Internetu. Chcesz włączyć?</string>
 
-            <string name="internal_storage_key_preference">access_to_internal_storage</string>
-            <string name="internal_storage_title_preference">Allow access to internal storage </string>
-            <string name="internal_storage_summary_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    <string name="internal_storage_key_preference">access_to_internal_storage</string>
+    <string name="internal_storage_title_preference">Allow access to internal storage </string>
+    <string name="internal_storage_summary_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
 
     <!-- About Dialog MainActivity-->
@@ -70,7 +70,26 @@
     <string name="help_url_faq_dialog">http://www.wp.pl</string>
     <string name="help_link_faq_dialog"><a href="http://www.wp.pl">here</a></string>
 
-    <!-- Navigation Drawer -->
-    <string name="drawer_open">open drawer</string>
-    <string name="drawer_close">close drawer</string>
+    <!-- Drawer Activity -->
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
+
+    <!-- Login Activity-->
+    <string name="login_button_text">Login</string>
+    <string name="skip_button_text_login_activity">Skip</string>
+    <string name="password_hint">Password</string>
+    <string name="login_hint">Login</string>
+    <string name="registration_link_login_activity">http://www.wp.pl</string>
+    <string name="registration_text_login_activity"><a href="http://www.wp.pl">If you don\'t have account, register here.</a></string>
+    <string name="title_activity_login">Login</string>
+    <string name="logging_text_login_activity">Logging…</string>
+    <string name="timeout_error_message_login_activity">! Time out !</string>
+    <string name="incorrect_credentials_login_activity">! Login or password is incorrect !</string>
+
+    <!-- Login Dialog-->
+    <string name="cookies_link_login_dialog">http://www.wp.pl</string>
+    <string name="cookies_information_login_dialog">This application uses cookies. Logując się zgadzasz się na naszą politykę związaną z ich wykorzystaniem. Find out more </string>
+    <string name="cookies_hyperlink_login_dialog"><a href="http://www.wp.pl">here</a>.</string>
+    <string name="title_login_dialog">Achtung!</string>
+
 </resources>

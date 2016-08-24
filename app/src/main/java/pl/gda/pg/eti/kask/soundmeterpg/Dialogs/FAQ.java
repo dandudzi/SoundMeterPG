@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 
 /**
