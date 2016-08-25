@@ -25,13 +25,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
-import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.*;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.findPreferencesOnView;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.getCheckbox;
 
 /**
  * Created by Daniel on 19.07.2016 :) at 12:12 :).
  */
 @RunWith(AndroidJUnit4.class)
-public class SettingsActivityCorrectDisplayTest {
+public class SettingsActivityDisplayCorrectlyTest {
     private Context context;
     @Rule
     public final ActivityTestRule<SettingsActivity> mActivityRule = new ActivityTestRule<>(
@@ -106,6 +107,7 @@ public class SettingsActivityCorrectDisplayTest {
         isPreferenceDisplayCorrectly(key,titleId,summaryId);
     }
 
+
     private void isPreferenceDisplayCorrectly(String key, int titleId, int summaryId){
 
         String title = context.getString(titleId);
@@ -134,6 +136,8 @@ public class SettingsActivityCorrectDisplayTest {
         DataInteraction checkBox  = getCheckbox(interaction);
         checkBox.check(matches(isCompletelyDisplayed()));
     }
+
+
 
 
 }

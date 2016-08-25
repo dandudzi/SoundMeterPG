@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.allOf;
  * Created by Daniel on 03.08.2016 :) at 12:13 :).
  */
 @RunWith(AndroidJUnit4.class)
-public class FAQDialogIntentTest {
+public class FAQIntentTest {
 
     private Context context;
     private UiDevice device;

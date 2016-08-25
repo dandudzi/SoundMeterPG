@@ -6,16 +6,16 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/settings_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:id="@+id/settings_toolbar"
         android:background="#6a64d9"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <FrameLayout
-        android:id="@+id/settings_content_frame"
-        android:layout_below="@+id/settings_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/settings_content_frame"
+        android:layout_below="@+id/settings_toolbar" />
 </RelativeLayout>

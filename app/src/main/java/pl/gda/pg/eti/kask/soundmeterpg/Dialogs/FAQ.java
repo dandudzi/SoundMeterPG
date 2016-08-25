@@ -1,6 +1,7 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Dialogs;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.method.LinkMovementMethod;
@@ -9,14 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 
 /**
  * Created by Daniel on 04.08.2016 at 12:00 :) at 12:13 :).
  */
-public class FAQDialog {
-    public static AlertDialog create(MainActivity ownerDialog) {
+public class FAQ {
+    public static AlertDialog create(Activity ownerDialog) {
         AlertDialog.Builder aboutDialog = new AlertDialog.Builder(ownerDialog);
 
         LayoutInflater inflater = ownerDialog.getLayoutInflater();

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:id="@+id/icon_login_dialog"
+                        android:src="@mipmap/ic_politechnika"
+                        android:contentDescription="@string/icon_description_faq_dialog"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/title_login_dialog"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/title_login_dialog"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:singleLine="true"
+                        android:ellipsize="end"/>
+                </TableRow>
+            </TableLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cookies_warning_login_dialog"
+                    android:layout_weight="0.5"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/cookies_information_login_dialog"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:singleLine="false"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cookies_hyperlink_login_dialog"
+                    android:layout_gravity="bottom"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/cookies_hyperlink_login_dialog"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

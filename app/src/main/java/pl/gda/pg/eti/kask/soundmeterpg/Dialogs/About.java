@@ -18,7 +18,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 /**
  * Created by Daniel on 04.08.2016 at 11:59 :) at 12:13 :).
  */
-public class AboutDialog {
+public class About {
 
     public static AlertDialog create(Activity ownerDialog) throws VersionException, LastDateException {
 
@@ -39,7 +39,7 @@ public class AboutDialog {
         aboutDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Log.i("AboutDialog","Press Ok");
+                Log.i("About","Press Ok");
             }
         });
         return aboutDialog.create();

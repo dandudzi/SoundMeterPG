@@ -11,7 +11,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 /**
  * Created by Daniel on 04.08.2016 at 11:49 :) at 12:12 :).
  */
-public class NoGPSDialog {
+public class NoGPS {
     public static final int REQUEST_CODE_GPS =1994 ;
 
     public static AlertDialog create(final Activity ownerDialog, final Fragment ownerFragment){

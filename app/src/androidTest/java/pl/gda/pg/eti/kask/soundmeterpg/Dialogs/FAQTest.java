@@ -29,7 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  * Created by Daniel on 24.07.2016 :) at 12:13 :).
  */
 @RunWith(AndroidJUnit4.class)
-public class FAQDialogTest {
+public class FAQTest {
     private Context context;
 
     @Rule
@@ -120,7 +120,7 @@ public class FAQDialogTest {
     }
 
     @Test
-    public void testRelativePosition(){
+    public void relativePositionTest(){
         Matcher icon = withId(R.id.icon_faq_dialog);
         Matcher title = withId(R.id.title_main_faq_dialog);
         Matcher description = withId(R.id.description_faq_dialog);

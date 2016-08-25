@@ -6,6 +6,8 @@ import android.preference.Preference;
 import android.support.test.espresso.DataInteraction;
 import android.support.v7.widget.AppCompatCheckBox;
 
+import org.hamcrest.Matcher;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -105,11 +107,15 @@ public class PreferenceTestHelper {
     }
 
     public static DataInteraction findPreferencesOnView(String key, int titleId, int summaryId) {
-        return onData(allOf(
+        return onData(getDataMatcher(key, titleId, summaryId));
+    }
+
+    private static Matcher getDataMatcher(String key, int titleId, int summaryId) {
+        return allOf(
                 is(instanceOf(Preference.class)),
                 withKey(key),
                 withTitle(titleId),
-                withSummary(summaryId)));
+                withSummary(summaryId));
     }
 
     public static DataInteraction getCheckbox(DataInteraction interaction){

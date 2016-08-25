@@ -1,13 +1,14 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.Fragments.SettingsFragment;
+import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Settings;
 
 /**
  * Created by Daniel on 10.07.2016 at 12:12 :).
@@ -19,11 +20,13 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         setSupportActionBar(myToolbar);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.settings_content_frame, new SettingsFragment())
+                .replace(R.id.settings_content_frame, new Settings())
                 .commit();
 
         //noinspection ConstantConditions
