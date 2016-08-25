@@ -11,6 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.RenamingDelegatingContext;
 import android.util.Log;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;

@@ -76,7 +76,7 @@ public class NoiseLevel extends Service {
                             Log.i("Avg in db", Double.toString(wynik));
                             if (_gps.canGetLocalization()) {
                                 Probe pr = new Probe(wynik, _gps.getLocalization().getLatitude(), _gps.getLocalization().getLongitude());
-                                new Insert().execute(pr);
+                                //  new Insert().execute(pr);
                             }
                         }
 

@@ -19,7 +19,7 @@ public class Probe {
     public Probe(double avgNoiseLevel, double latitude, double longitude) throws OverrangeException {
         if (avgNoiseLevel < MIN_NOISE_LEVEL || avgNoiseLevel > MAX_NOISE_LEVEL ||
                 latitude < MIN_LATITUDE || latitude > MAX_LATITUDE ||
-                longitude < MIN_LONGITUDE || longitude > MAX_LATITUDE)
+                longitude < MIN_LONGITUDE || longitude > MAX_LONGITUDE)
             throw new OverrangeException("One of argument is overrange, Latitude = " +
                     latitude + ", Longitude = " + longitude + ", AvgNoiseLevel = " + avgNoiseLevel);
         _avgNoiseLevel = avgNoiseLevel;

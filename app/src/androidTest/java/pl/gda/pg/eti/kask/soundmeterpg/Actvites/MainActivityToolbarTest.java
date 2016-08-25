@@ -39,6 +39,7 @@ public class MainActivityToolbarTest {
     @Before
     public void setDeviceReadyForTesting(){
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
     }
 
     @Test

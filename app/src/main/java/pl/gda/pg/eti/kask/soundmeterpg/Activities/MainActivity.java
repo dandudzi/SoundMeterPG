@@ -1,4 +1,4 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 
 import android.content.Intent;
@@ -7,19 +7,31 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
+import java.io.IOException;
+
+import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.AboutDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQDialog;
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
+import pl.gda.pg.eti.kask.soundmeterpg.NoiseLevel;
+import pl.gda.pg.eti.kask.soundmeterpg.Probe;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(myToolbar);
@@ -52,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
     public void onPause()
     {
         super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
     }
 
     @Override
