@@ -3,6 +3,7 @@ package pl.gda.pg.eti.kask.soundmeterpg;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +20,8 @@ import java.util.Random;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+
+import static junit.framework.Assert.fail;
 
 /**
  * Created by gierl on 04.08.2016.
@@ -40,9 +43,9 @@ public class DataBaseTest {
         Random rand = new Random();
         for (int i = 0; i < LIMIT_PROBE; i++) {
             try {
-                _probeMap.put(i, new Probe(MIN + (MAX - MIN) * rand.nextDouble(),
-                        MIN + (MAX - MIN) * rand.nextDouble(),
-                        MIN + (MAX - MIN) * rand.nextDouble()));
+                _probeMap.put(i, new Probe(Probe.MIN_NOISE_LEVEL + (Probe.MAX_NOISE_LEVEL - Probe.MIN_NOISE_LEVEL) * rand.nextDouble(),
+                        Probe.MIN_LATITUDE + (Probe.MAX_LATITUDE - Probe.MIN_LATITUDE) * rand.nextDouble(),
+                        Probe.MIN_LONGITUDE + (Probe.MAX_LONGITUDE - Probe.MIN_LONGITUDE) * rand.nextDouble()));
             } catch (OverrangeException e) {
                 e.printStackTrace();
             }
@@ -141,6 +144,20 @@ public class DataBaseTest {
             e = ex;
         }
         Assert.assertTrue(e instanceof NullRecordException);
+    }
+
+    @Test
+    public void insertOverageProbe() {
+        Probe pr = null;
+        try {
+            pr = new Probe(Probe.MAX_NOISE_LEVEL + 1, Probe.MAX_LATITUDE + 2, Probe.MAX_LONGITUDE + 22);
+            _db.insert(pr);
+            Assert.fail("Test should fail, should be exception");
+        } catch (OverrangeException e) {
+            e.printStackTrace();
+        } catch (NullRecordException e) {
+            e.printStackTrace();
+        }
     }
 
 
