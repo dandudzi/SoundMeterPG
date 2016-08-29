@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.RegionIterator;
@@ -15,10 +16,12 @@ import android.os.IBinder;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.action.AdapterViewProtocol;
 import android.support.test.espresso.core.deps.guava.eventbus.AsyncEventBus;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
@@ -35,13 +38,17 @@ import java.util.List;
 import java.util.Random;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.Activities.SettingsActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 
 import static junit.framework.Assert.fail;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.selectPreference;
 
 /**
  * Created by gierl on 16.08.2016.
@@ -52,8 +59,10 @@ public class InsertTest {
     private static Context _context;
     private static Insert _insert;
     private static Intent _intent;
-    private static boolean _mBound;
     private static UiDevice _device;
+    private static SharedPreferences prefs;
+    private static ConnectionInternetDetector _connectionInternetDetector;
+    private static PreferenceParser _preferenceParser;
     protected static ServiceConnection _mConnection = new ServiceConnection() {
 
         @Override
@@ -62,17 +71,15 @@ public class InsertTest {
 
             Insert.LocalBinder binder = (Insert.LocalBinder) service;
             _insert = binder.getService();
-            _mBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            _mBound = false;
         }
     };
 
     @ClassRule
-    public static IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<>(MainActivity.class);
+    public static ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @BeforeClass
     public static void setUp() {
@@ -80,6 +87,9 @@ public class InsertTest {
         _intent = new Intent(_context, Insert.class);
         _context.bindService(_intent, _mConnection, Context.BIND_AUTO_CREATE);
         _device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        _connectionInternetDetector = new ConnectionInternetDetector(_context);
+        prefs = PreferenceManager.getDefaultSharedPreferences(_context);
+        _preferenceParser = new PreferenceParser(_context);
         Random rand = new Random();
         try {
             _probe = new Probe(Probe.MIN_NOISE_LEVEL + (Probe.MAX_NOISE_LEVEL - Probe.MIN_NOISE_LEVEL) * rand.nextDouble(),
@@ -89,15 +99,6 @@ public class InsertTest {
             e.printStackTrace();
         }
     }
-
-    @Test
-    public void isNetworkEnabled() {
-        _insert.enableNetwork();
-        Assert.assertTrue(_insert.getNetworkConnection());
-        _insert.disableNetwork();
-        Assert.assertFalse(_insert.getNetworkConnection());
-    }
-
     @Test
     public void isServiceRunning() {
         //Serwis jest zbindowany i powinien być uruchomiony.
@@ -128,7 +129,7 @@ public class InsertTest {
 
     @Test
     public void isConnectionWithServer() {
-        if (_insert.getNetworkConnection())
+        if (_connectionInternetDetector.isConnectingToInternet())
             Assert.assertTrue(_insert.isConnectionWithServer("soundmeterpg.cba.pl"));
         else
             Assert.assertFalse(_insert.isConnectionWithServer("soundmeterpg.cba.pl"));
@@ -137,12 +138,15 @@ public class InsertTest {
     }
 
     @Test
-    public void isSendingDataToServer() {
+    public void isSendingDataToServerCorrectly() {
+
+        //Ustawienie preferencji internetu
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(_context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(_context.getResources().getString(R.string.internet_key_preference), false);
         try {
-            if (_insert.getNetworkConnection())
+            if (_connectionInternetDetector.isConnectingToInternet() && _preferenceParser.hasPrivilegesToUseInternet())
                 Assert.assertTrue(_insert.insert(_probe));
-            else
-                Assert.assertFalse(_insert.insert(_probe));
         } catch (NullRecordException e) {
             e.printStackTrace();
         }
@@ -160,18 +164,11 @@ public class InsertTest {
         Assert.assertTrue(e instanceof NullRecordException);
     }
 
-    @Test
-    public void isConnectionStringCorrect() {
-        //  fail();
-        //  String connectionString = Insert.URL + _probe.getAvgNoiseLevel() + Insert.LATITUDE + _probe.getLatitude() + Insert.LONGITUDE + _probe.getLongitude();
-    }
-
     private void returnService() {
         //Uruchomienie aplikacji na nowo.
         final String launcherPackage = _device.getLauncherPackageName();
         assertThat(launcherPackage, notNullValue());
-        _device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), 1000);
-
+        _device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), 2000);
         Context ctx = InstrumentationRegistry.getContext();
         final Intent intent = ctx.getPackageManager().getLaunchIntentForPackage("pl.gda.pg.eti.kask.soundmeterpg");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

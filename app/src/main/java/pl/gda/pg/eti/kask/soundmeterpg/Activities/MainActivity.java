@@ -26,8 +26,8 @@ import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
 import java.io.IOException;
 
 import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
-import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.AboutDialog;
-import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQDialog;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
@@ -97,17 +97,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-    }
 
     @Override
     public void onDestroy() {
@@ -225,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             case "Measure":
                 setFragmentContent(new Measure());
                 break;
-            case "Measurements":
+            case "measurements":
                 setFragmentContent(new Measurements());
                 break;
             case "Log in":

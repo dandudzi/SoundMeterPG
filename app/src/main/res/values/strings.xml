@@ -92,4 +92,11 @@
     <string name="cookies_hyperlink_login_dialog"><a href="http://www.wp.pl">here</a>.</string>
     <string name="title_login_dialog">Achtung!</string>
 
+    <!-- Insert -->
+    <string name="confirmation_added_record"><!-- TODO -->Succesfuly added!\n</string>
+    <string name="site">http://soundmeterpg.cba.pl/insert.php/</string>
+    <string name="noiseDB_attribute">noiseDB=</string>
+    <string name="latitude_attribute">&amp;Latitude=</string>
+    <string name="longitude_attribute">&amp;Longitude=</string>
+
 </resources>

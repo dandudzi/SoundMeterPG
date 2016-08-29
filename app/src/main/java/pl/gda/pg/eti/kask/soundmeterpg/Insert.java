@@ -1,11 +1,11 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+import android.preference.PreferenceManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,66 +16,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 
 public class Insert extends Service {
 
-    public static final String SITE = "http://soundmeterpg.cba.pl/insert.php/";
-    public static final String NOISE = "noiseDB=";
-    public static final String LATITUDE = "&Latitude=";
-    public static final String LONGITUDE = "&Longitude=";
     private final IBinder mBinder = new LocalBinder();
-    private Context _context;
-    private boolean _networkEnabled;
-    private static boolean _runningService = false;
-    //public Insert(){};
-    // public Insert(Context context){
-    //     _context = context;
-    //  }
-
+    private ConnectionInternetDetector _connectionInternetDetector;
     public class LocalBinder extends Binder {
         Insert getService() {
             //zwracamy instancje serwisu, przez nią odwołamy się następnie do metod.
             return Insert.this;
         }
     }
-
     @Override
     public IBinder onBind(Intent intent) {
+        _connectionInternetDetector = new ConnectionInternetDetector(getBaseContext());
         return mBinder;
-    }
-
-
-/*
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if(!_runningService)
-        return START_STICKY;
-        return  super.onStartCommand(intent,flags,startId);
-    }
-    @Override
-    public void onDestroy() {
-        _runningService = false;
-        super.onDestroy();
-    }
-    */
-
-    public void enableNetwork() {
-        _networkEnabled = true;
-    }
-
-    ;
-
-    public void disableNetwork() {
-        _networkEnabled = false;
-    }
-
-    public boolean getNetworkConnection() {
-        return _networkEnabled;
     }
 
     public boolean isConnectionWithServer(String url) {
@@ -90,12 +46,11 @@ public class Insert extends Service {
             }
         } catch (InterruptedException ignore) {
             ignore.printStackTrace();
-            System.out.println(" Exception:" + ignore);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println(" Exception:" + e);
+        } finally {
+            return false;
         }
-        return false;
     }
 
     public boolean insert(Probe probe) throws NullRecordException {
@@ -106,9 +61,11 @@ public class Insert extends Service {
         URL url = null;
         OutputStreamWriter request = null;
         String response;
-        String parameters = NOISE + probe.getAvgNoiseLevel() + LATITUDE + probe.getLatitude() + LONGITUDE + probe.getLongitude();
+        String parameters = getResources().getString(R.string.noiseDB_attribute) + probe.getAvgNoiseLevel() +
+                getResources().getString(R.string.latitude_attribute) + probe.getLatitude() +
+                getResources().getString(R.string.longitude_attribute) + probe.getLongitude();
         try {
-            url = new URL(SITE);
+            url = new URL(getResources().getString(R.string.site));
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -127,7 +84,10 @@ public class Insert extends Service {
             response = sb.toString();
             isr.close();
             reader.close();
+            if (response.equals(getResources().getString(R.string.confirmation_added_record)))
             return true;
+            else
+                return false;
 
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
@@ -136,5 +96,6 @@ public class Insert extends Service {
             e1.printStackTrace();
             return false;
         }
+
     }
 }

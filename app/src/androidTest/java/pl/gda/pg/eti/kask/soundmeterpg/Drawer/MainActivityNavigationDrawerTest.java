@@ -94,7 +94,7 @@ public class MainActivityNavigationDrawerTest {
 
     @Test
     public void isMeasurementsRowWorksCorrectly() throws Exception{
-        int position = findPositionInRows("Measurements");
+        int position = findPositionInRows("measurements");
         clickOnDisplayRow(position);
         onView(withText("measurements")).check(matches(isCompletelyDisplayed()));
         isRowNotDisplay(position);
