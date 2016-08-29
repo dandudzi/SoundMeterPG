@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 
@@ -42,18 +43,19 @@ public class Localization extends Service implements LocationListener {
 
     private static final long MIN_DISTANCE = 10;
     private static final long MIN_TIME = 1000 * 60 * 1;
-    private boolean _canGetLocalization;
+    private final IBinder _mBinder = new LocalBinder();
     private LocationManager _locationManager;
+
     private Context _context;
     private ConnectionInternetDetector _connectionInternetDetector;
-    private PreferenceParser _preferencrParser;
+    private PreferenceParser _preferenceParser;
 
 
     public Localization(Context context) {
         try {
             _context = context;
             _locationManager = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
-            _preferencrParser = new PreferenceParser(_context);
+            _preferenceParser = new PreferenceParser(_context);
             _connectionInternetDetector = new ConnectionInternetDetector(_context);
 
         } catch (Exception e) {
@@ -81,7 +83,7 @@ public class Localization extends Service implements LocationListener {
             }
         }
         if (bestLocation == null)
-            throw new NullLocalizationException("Cannot get Localization, check if you have privileges to use GPS or Internet");
+            throw new NullLocalizationException("Cannot get Localization, check if you have privileges to use GPS or Internet provider");
         else return bestLocation;
     }
 
@@ -95,12 +97,12 @@ public class Localization extends Service implements LocationListener {
 
     private boolean canUseInternetProvider() {
         return (_locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) &&
-                _preferencrParser.hasPrivilegesToUseInternet());
+                _preferenceParser.hasPrivilegesToUseInternet());
     }
 
     private boolean canUseGpsProvider() {
         return (_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
-                _preferencrParser.hasPrivilegesToUseGPS());
+                _preferenceParser.hasPrivilegesToUseGPS());
     }
     @Override
     public void onLocationChanged(Location location) {
@@ -120,6 +122,14 @@ public class Localization extends Service implements LocationListener {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        _connectionInternetDetector = new ConnectionInternetDetector(getBaseContext());
+        return _mBinder;
+    }
+
+    private class LocalBinder extends Binder {
+        Localization getService() {
+            //zwracamy instancje serwisu, przez nią odwołamy się następnie do metod.
+            return Localization.this;
+        }
     }
 }
