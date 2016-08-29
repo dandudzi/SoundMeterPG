@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
 
 /**
  * Created by Filip Gierlowski and Daniel Dudziak
@@ -74,7 +75,7 @@ public class NoiseLevel extends Service {
                             wynik = 10 * Math.log10(wynik);
                             _counter = 0;
                             Log.i("Avg in db", Double.toString(wynik));
-                            if (_gps.canGetLocalization()) {
+                            if (_gps.canUseLocation()) {
                                 Probe pr = new Probe(wynik, _gps.getLocalization().getLatitude(), _gps.getLocalization().getLongitude());
                                 //  new Insert().execute(pr);
                             }
@@ -86,6 +87,8 @@ public class NoiseLevel extends Service {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (OverrangeException e) {
+                        e.printStackTrace();
+                    } catch (NullLocalizationException e) {
                         e.printStackTrace();
                     }
                 }
