@@ -1,6 +1,11 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
 import android.content.Context;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,6 +17,18 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.os.SystemClock;
+import android.preference.PreferenceManager;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.Until;
 import android.telephony.TelephonyManager;
 import android.test.RenamingDelegatingContext;
 import android.util.Log;
@@ -33,6 +50,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertThat;
+
 /**
  * Created by Filip Gierłowski and Daniel Dudziak
  */
@@ -42,17 +62,34 @@ public class LocalizationTest {
     private static final double MIN = 0.0001;
     private static final double MAX = 120.23;
     private static Context _context;
+    private static Intent _intent;
     private static List<Double> _latitude;
     private static List<Double> _longitude;
     private static SharedPreferences _preferences;
+    private static UiDevice _device;
     private static SharedPreferences.Editor _editor;
+    protected static ServiceConnection _mConnection = new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+
+            Localization.LocalBinder binder = (Localization.LocalBinder) service;
+            _localization = binder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+        }
+    };
     @ClassRule
-    public static IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<>(MainActivity.class);
+    public static ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
     @BeforeClass
     public static void randomizeArrayList() {
         _context = mActivityRule.getActivity().getApplication().getBaseContext();
-        _localization = new Localization(_context);
+        _intent = new Intent(_context, Localization.class);
+        _context.bindService(_intent, _mConnection, Context.BIND_AUTO_CREATE);
+        _device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         _latitude = new ArrayList<Double>(10);
         _longitude = new ArrayList<Double>(10);
         _preferences = PreferenceManager.getDefaultSharedPreferences(_context);
@@ -65,8 +102,31 @@ public class LocalizationTest {
     }
 
     @Test
-    public void isNotNullObject() {
-        Assert.assertNotNull(_localization);
+    public void isServiceRunning() {
+        //Serwis jest zbindowany i powinien być uruchomiony.
+        Assert.assertTrue(ServiceDetector.isMyServiceRunning(Localization.class, _context));
+        _context.unbindService(_mConnection);
+        Assert.assertFalse(ServiceDetector.isMyServiceRunning(Localization.class, _context));
+        //Zasymulowanie wcisnięcia przycisk home.
+        _context.bindService(_intent, _mConnection, Context.BIND_AUTO_CREATE);
+        _device.pressHome();
+        Assert.assertTrue(ServiceDetector.isMyServiceRunning(Localization.class, _context));
+        // Zasymulowanie zablokowanie telefonu i wyłączenie ekranu.
+        try {
+            _device.sleep();
+            Assert.assertTrue(ServiceDetector.isMyServiceRunning(Localization.class, _context));
+            _device.wakeUp();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        returnService();
+        Assert.assertTrue(ServiceDetector.isMyServiceRunning(Localization.class, _context));
+        _device.pressBack();
+        _device.pressBack();
+        mActivityRule.getActivity().finish();
+        _context.unbindService(_mConnection);
+        Assert.assertFalse("Should return false if app is closed", ServiceDetector.isMyServiceRunning(Localization.class, _context));
+        returnService();
     }
 
 
@@ -104,7 +164,7 @@ public class LocalizationTest {
     public void isCorrectLocalizationFromNetwork() throws InterruptedException {
         privilegesToUseInternet(true);
         privilegesToUseGps(false);
-        Handler mainHandler = new Handler(_context.getMainLooper());
+      /*  Handler mainHandler = new Handler(_context.getMainLooper());
         final CountDownLatch latch = new CountDownLatch(1);
         Runnable myRunnable = new Runnable() {
             @Override
@@ -132,12 +192,35 @@ public class LocalizationTest {
         mainHandler.post(myRunnable);
         latch.await();
         mainHandler.removeCallbacksAndMessages(null);
+<<<<<<< Updated upstream
+=======
+*/
+
+        MockLocationProvider _mockLocationProvider = new MockLocationProvider(LocationManager.NETWORK_PROVIDER, _context);
+        for (int i = 0; i < 10; i++) {
+            _mockLocationProvider.pushLocation(_latitude.get(i), _longitude.get(i));
+            Thread.sleep(1000);
+            Location l = null;
+            try {
+                l = _localization.getLocalization();
+            } catch (NullLocalizationException e) {
+                e.printStackTrace();
+            }
+            Assert.assertEquals(_latitude.get(i), l.getLatitude(), 0.0);
+            Assert.assertEquals(_longitude.get(i), l.getLongitude(), 0.0);
+        }
+        _mockLocationProvider.shutdown();
+        _localization.stopUsingGPS();
+
     }
 
     @Test
     public void isCorrectLocalizationFromGPS() throws InterruptedException {
         privilegesToUseGps(true);
         privilegesToUseInternet(false);
+
+        /*
+>>>>>>> Stashed changes
         Handler mainHandler = new Handler(_context.getMainLooper());
         final CountDownLatch latch = new CountDownLatch(1);
         Runnable myRunnable = new Runnable() {
@@ -166,6 +249,24 @@ public class LocalizationTest {
         mainHandler.post(myRunnable);
         latch.await();
         mainHandler.removeCallbacksAndMessages(null);
+
+        */
+
+        MockLocationProvider _mockLocationProvider = new MockLocationProvider(LocationManager.GPS_PROVIDER, _context);
+        ;
+        for (int i = 0; i < 10; i++) {
+            _mockLocationProvider.pushLocation(_latitude.get(i), _longitude.get(i));
+            Thread.sleep(1000);
+            Location l = null;
+            try {
+                l = _localization.getLocalization();
+            } catch (NullLocalizationException e) {
+                e.printStackTrace();
+            }
+            Assert.assertEquals(_latitude.get(i), l.getLatitude(), 0.0);
+            Assert.assertEquals(_longitude.get(i), l.getLongitude(), 0.0);
+        }
+        _mockLocationProvider.shutdown();
     }
 
     private void privilegesToUseInternet(boolean enabled) {
@@ -177,6 +278,18 @@ public class LocalizationTest {
     }
 
 
+    private void returnService() {
+        //Uruchomienie aplikacji na nowo.
+        final String launcherPackage = _device.getLauncherPackageName();
+        assertThat(launcherPackage, notNullValue());
+        _device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), 2000);
+        Context ctx = InstrumentationRegistry.getContext();
+        final Intent intent = ctx.getPackageManager().getLaunchIntentForPackage("pl.gda.pg.eti.kask.soundmeterpg");
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        ctx.startActivity(intent);
+        _device.wait(Until.hasObject(By.pkg("pl.gda.pg.eti.kask.soundmeterpg").depth(0)), 2000);
+        _context.bindService(_intent, _mConnection, Context.BIND_AUTO_CREATE);
+    }
 }
 
 class MockLocationProvider {

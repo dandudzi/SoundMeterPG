@@ -51,18 +51,6 @@ public class Localization extends Service implements LocationListener {
     private PreferenceParser _preferenceParser;
 
 
-    public Localization(Context context) {
-        try {
-            _context = context;
-            _locationManager = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
-            _preferenceParser = new PreferenceParser(_context);
-            _connectionInternetDetector = new ConnectionInternetDetector(_context);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public Location getLocalization() throws NullLocalizationException {
         List<String> providers = new ArrayList<String>();
         Location bestLocation = null;
@@ -122,11 +110,15 @@ public class Localization extends Service implements LocationListener {
 
     @Override
     public IBinder onBind(Intent intent) {
-        _connectionInternetDetector = new ConnectionInternetDetector(getBaseContext());
+        _context = getBaseContext();
+        _locationManager = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
+        _preferenceParser = new PreferenceParser(_context);
+        _connectionInternetDetector = new ConnectionInternetDetector(_context);
+        _connectionInternetDetector = new ConnectionInternetDetector(_context);
         return _mBinder;
     }
 
-    private class LocalBinder extends Binder {
+    public class LocalBinder extends Binder {
         Localization getService() {
             //zwracamy instancje serwisu, przez nią odwołamy się następnie do metod.
             return Localization.this;
