@@ -17,17 +17,28 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
+import java.io.IOException;
+
+import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
+import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
+import pl.gda.pg.eti.kask.soundmeterpg.NoiseLevel;
+import pl.gda.pg.eti.kask.soundmeterpg.Probe;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.Drawer.RowsDrawer;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -84,6 +95,13 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main_activity, menu);
         return true;
+    }
+
+
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
     }
 
     @Override
@@ -196,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             case "Measure":
                 setFragmentContent(new Measure());
                 break;
-            case "Measurements":
+            case "measurements":
                 setFragmentContent(new Measurements());
                 break;
             case "Log in":
@@ -207,4 +225,46 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    public void startMyService(View v) {
+        Intent serviceIntent = new Intent(this, NoiseLevel.class);
+        serviceIntent.addCategory("NoiseLevel");
+        startService(serviceIntent);
+    }
+
+    public void stopMyService(View v) {
+        Intent serviceIntent = new Intent(this, NoiseLevel.class);
+        serviceIntent.addCategory("NoiseLevel");
+        stopService(serviceIntent);
+    }
+
+
+    public void insertData(View btn) throws IOException {
+        //TODO to tylko bylo do prototypu
+        //new Insert(getBaseContext()).execute(tmpRecorder.soundDb(1.0));
+    }
+
+    public void showGPS(View w) {
+        DataBaseHandler dataBaseHandler = new DataBaseHandler(getBaseContext());
+        try {
+            dataBaseHandler.insert(new Probe(32.3, 322.23, 12.11));
+        } catch (NullRecordException e) {
+            e.printStackTrace();
+        } catch (OverrangeException e) {
+            e.printStackTrace();
+        }
+          /*  _gps = new Localization(MainActivity.this);
+
+            if(_gps.canGetLocation()) {
+                double latitude = _gps.getLatitude();
+                double longitude = _gps.getLongitude();
+
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Your Location is -\nLat: " + latitude + "\nLong: "
+                                + longitude, Toast.LENGTH_LONG).show();
+            } else {
+                _gps.showSettingsAlert();
+            }
+*/
+    }
 }
