@@ -10,7 +10,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 
 /**
  * Created by gierl on 13.07.2016.
@@ -35,48 +34,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
+
 public class Localization extends Service implements LocationListener {
 
     private static final long MIN_DISTANCE = 10;
     private static final long MIN_TIME = 1000 * 60 * 1;
-    private boolean _GPSEnabled;
-    private boolean _networkEnabled;
     private boolean _canGetLocalization;
     private LocationManager _locationManager;
     private Context _context;
+    private ConnectionInternetDetector _connectionInternetDetector;
+    private PreferenceParser _preferencrParser;
 
 
     public Localization(Context context) {
         try {
             _context = context;
             _locationManager = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
+            _preferencrParser = new PreferenceParser(_context);
+            _connectionInternetDetector = new ConnectionInternetDetector(_context);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void enableGPS() {
-        _GPSEnabled = true;
-    }
-
-    public void enableNetwork() {
-        _networkEnabled = true;
-    }
-
-    public void disableGPS() {
-        _GPSEnabled = false;
-    }
-
-    public void disableNetwork() {
-        _networkEnabled = false;
-    }
-
-    public Location getLocalization() {
+    public Location getLocalization() throws NullLocalizationException {
         List<String> providers = new ArrayList<String>();
         Location bestLocation = null;
-        if (_networkEnabled) providers.add(LocationManager.NETWORK_PROVIDER);
-        if (_GPSEnabled) providers.add(LocationManager.GPS_PROVIDER);
+        if (canUseInternetProvider()) providers.add(LocationManager.NETWORK_PROVIDER);
+
+        if (canUseGpsProvider()) providers.add(LocationManager.GPS_PROVIDER);
+
         for (String provider : providers) {
             Location l = null;
             try {
@@ -89,18 +80,28 @@ public class Localization extends Service implements LocationListener {
                 bestLocation = l;
             }
         }
-        return bestLocation;
+        if (bestLocation == null)
+            throw new NullLocalizationException("Cannot get Localization, check if you have privileges to use GPS or Internet");
+        else return bestLocation;
+    }
+
+    public boolean canUseLocation() {
+        return canUseGpsProvider() || canUseInternetProvider();
     }
 
     public void stopUsingGPS() {
         _locationManager.removeUpdates(Localization.this);
     }
 
-    public boolean canGetLocalization() {
-        _canGetLocalization = ((_GPSEnabled) || (_networkEnabled) ? true : false);
-        return _canGetLocalization;
+    private boolean canUseInternetProvider() {
+        return (_locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) &&
+                _preferencrParser.hasPrivilegesToUseInternet());
     }
 
+    private boolean canUseGpsProvider() {
+        return (_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                _preferencrParser.hasPrivilegesToUseGPS());
+    }
     @Override
     public void onLocationChanged(Location location) {
     }
