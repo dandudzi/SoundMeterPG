@@ -164,14 +164,13 @@ public class LocalizationTest {
     public void isCorrectLocalizationFromNetwork() throws InterruptedException {
         privilegesToUseInternet(true);
         privilegesToUseGps(false);
-      /*  Handler mainHandler = new Handler(_context.getMainLooper());
+        Handler mainHandler = new Handler(_context.getMainLooper());
         final CountDownLatch latch = new CountDownLatch(1);
         Runnable myRunnable = new Runnable() {
             @Override
             public void run() {
                 try {
                     MockLocationProvider _mockLocationProvider = new MockLocationProvider(LocationManager.NETWORK_PROVIDER, _context);
-                    _localization = new Localization(_context);
                     for (int i = 0; i < 10; i++) {
                         _mockLocationProvider.pushLocation(_latitude.get(i), _longitude.get(i));
                         Thread.sleep(1000);
@@ -192,25 +191,7 @@ public class LocalizationTest {
         mainHandler.post(myRunnable);
         latch.await();
         mainHandler.removeCallbacksAndMessages(null);
-<<<<<<< Updated upstream
-=======
-*/
 
-        MockLocationProvider _mockLocationProvider = new MockLocationProvider(LocationManager.NETWORK_PROVIDER, _context);
-        for (int i = 0; i < 10; i++) {
-            _mockLocationProvider.pushLocation(_latitude.get(i), _longitude.get(i));
-            Thread.sleep(1000);
-            Location l = null;
-            try {
-                l = _localization.getLocalization();
-            } catch (NullLocalizationException e) {
-                e.printStackTrace();
-            }
-            Assert.assertEquals(_latitude.get(i), l.getLatitude(), 0.0);
-            Assert.assertEquals(_longitude.get(i), l.getLongitude(), 0.0);
-        }
-        _mockLocationProvider.shutdown();
-        _localization.stopUsingGPS();
 
     }
 
@@ -218,9 +199,6 @@ public class LocalizationTest {
     public void isCorrectLocalizationFromGPS() throws InterruptedException {
         privilegesToUseGps(true);
         privilegesToUseInternet(false);
-
-        /*
->>>>>>> Stashed changes
         Handler mainHandler = new Handler(_context.getMainLooper());
         final CountDownLatch latch = new CountDownLatch(1);
         Runnable myRunnable = new Runnable() {
@@ -228,7 +206,6 @@ public class LocalizationTest {
             public void run() {
                 try {
                     MockLocationProvider _mockLocationProvider = new MockLocationProvider(LocationManager.GPS_PROVIDER, _context);
-                    _localization = new Localization(_context);
                     for (int i = 0; i < 10; i++) {
                         _mockLocationProvider.pushLocation(_latitude.get(i), _longitude.get(i));
                         Thread.sleep(1000);
@@ -249,32 +226,16 @@ public class LocalizationTest {
         mainHandler.post(myRunnable);
         latch.await();
         mainHandler.removeCallbacksAndMessages(null);
-
-        */
-
-        MockLocationProvider _mockLocationProvider = new MockLocationProvider(LocationManager.GPS_PROVIDER, _context);
-        ;
-        for (int i = 0; i < 10; i++) {
-            _mockLocationProvider.pushLocation(_latitude.get(i), _longitude.get(i));
-            Thread.sleep(1000);
-            Location l = null;
-            try {
-                l = _localization.getLocalization();
-            } catch (NullLocalizationException e) {
-                e.printStackTrace();
-            }
-            Assert.assertEquals(_latitude.get(i), l.getLatitude(), 0.0);
-            Assert.assertEquals(_longitude.get(i), l.getLongitude(), 0.0);
-        }
-        _mockLocationProvider.shutdown();
     }
 
     private void privilegesToUseInternet(boolean enabled) {
         _editor.putBoolean(_context.getResources().getString(R.string.internet_key_preference), enabled);
+        _editor.commit();
     }
 
     private void privilegesToUseGps(boolean enabled) {
         _editor.putBoolean(_context.getResources().getString(R.string.gps_key_preference), enabled);
+        _editor.commit();
     }
 
 

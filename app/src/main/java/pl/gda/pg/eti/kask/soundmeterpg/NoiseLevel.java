@@ -42,7 +42,7 @@ public class NoiseLevel extends Service {
         _avgDB = 0.0;
         Context ctx2 = getBaseContext();
         Context ctx3 = getApplication().getBaseContext();
-        _gps = new Localization(getBaseContext());
+        _gps = null;// TODO NAPRAWIC
     }
 
     @Override
