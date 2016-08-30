@@ -18,6 +18,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 /**
  * Created by Daniel on 04.08.2016 at 11:59 :) at 12:13 :).
  */
+
 public class About {
 
     public static AlertDialog create(Activity ownerDialog) throws VersionException, LastDateException {

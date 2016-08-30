@@ -15,7 +15,7 @@ import android.util.Log;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoGPS;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoInternet;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.Internet.ConnectionInternetDetector;
 
 /**
  * Created by Daniel on 14.07.2016 at 12:11 :).

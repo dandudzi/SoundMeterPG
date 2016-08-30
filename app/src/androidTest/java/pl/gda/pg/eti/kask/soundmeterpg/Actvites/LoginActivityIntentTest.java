@@ -4,7 +4,12 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
+import android.support.test.uiautomator.Until;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,15 +45,12 @@ public class LoginActivityIntentTest {
     }
 
     @Test
-    public void isRegistrationIntentSendCorrectly(){
-        onView(withId(R.id.registration_text_view_login_activity)).perform(click());
+    public void isRegistrationIntentSendCorrectly() throws UiObjectNotFoundException {
+        UiObject button = device.findObject(new UiSelector().text(context.getString(R.string.registration_text_login_activity)));
+        button.click();
         String data = context.getString(R.string.registration_link_login_activity);
         intended(allOf(hasData(data)));
-        try{
-            Thread.sleep(2000);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+        button.waitUntilGone(2000);
         device.pressBack();
     }
 }
