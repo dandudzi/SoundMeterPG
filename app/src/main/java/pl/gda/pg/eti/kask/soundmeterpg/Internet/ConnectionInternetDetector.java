@@ -1,4 +1,4 @@
-package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter;
+package pl.gda.pg.eti.kask.soundmeterpg.Internet;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -9,4 +9,5 @@ public interface AccountManager {
     void logOut();
     int getProgress();
     String getErrorMessage();
+    void stopLogInProcess();
 }
