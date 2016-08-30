@@ -95,19 +95,13 @@ public class SettingsActivityIntentsTest {
         else{
             Intent resultData =  new Intent();
             Instrumentation.ActivityResult result =  new Instrumentation.ActivityResult(0,resultData);
-            //TODO jezeli bedzie działac usun to co w komentarzach i dodaj w reszcie intentow uiatomatera
+
             onView(withText(stringTextNoService)).check(matches(isCompletelyDisplayed()));
-            //onView(withId(android.R.id.button1)).perform(click());
             UiObject button = device.findObject(new UiSelector().text("Yes"));
             button.click();
             intending(allOf(hasAction(action))).respondWith(result);
-            /*try {
-                //Trzeba trochę poczekać aż nowa aktywność się otworzy :(
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
             button.waitUntilGone(2000);
+
             device.pressBack();
             isPreferenceNotChecked(stringKey,context);
         }

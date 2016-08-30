@@ -5,6 +5,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,13 +47,11 @@ public class LoginIntentTest {
     public void isCookiesIntentSendCorrectly(){
         onView(withId(R.id.login_button_login_activity)).perform(click());
         String data = context.getString(R.string.cookies_link_login_dialog);
+        UiObject somethingInView = device.findObject(new UiSelector().resourceId("R.id.icon_login_dialog"));
+
         onView(withText(containsString(context.getString(R.string.cookies_hyperlink_login_dialog)))).perform(click());
         intended(allOf(hasData(data)));
-        try{
-            Thread.sleep(2000);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+        somethingInView.waitUntilGone(2000);
         device.pressBack();
     }
 }

@@ -46,19 +46,11 @@ public class LoginActivityIntentTest {
 
     @Test
     public void isRegistrationIntentSendCorrectly() throws UiObjectNotFoundException {
-        //onView(withId(R.id.registration_text_view_login_activity)).perform(click());
         UiObject button = device.findObject(new UiSelector().text(context.getString(R.string.registration_text_login_activity)));
         button.click();
         String data = context.getString(R.string.registration_link_login_activity);
         intended(allOf(hasData(data)));
-        //TODO jezeli bedzie działac usun to co w komentarzach
-        //device.wait(Until.hasObject(By.textContains("wp").maxDepth(10)),100);
         button.waitUntilGone(2000);
-      /*  try{
-            Thread.sleep(2000);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }*/
         device.pressBack();
     }
 }

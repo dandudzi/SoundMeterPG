@@ -44,7 +44,6 @@ public class LoginActivityTest {
         context = mActivityRule.getActivity().getBaseContext();
         openDrawer(R.id.drawer_layout);
         onView(withText("Log in")).perform(click());
-        onView(isRoot()).perform(orientationLandscape());
     }
 
     @Test
