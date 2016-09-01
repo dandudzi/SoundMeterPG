@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.Internet.ConnectionInternetDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 public class Localization extends Service implements LocationListener {

@@ -1,6 +1,6 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 
 /**
  * Created by gierl on 19.07.2016.
@@ -15,8 +15,9 @@ public class Probe {
     private double _avgNoiseLevel;
     private double _latitude;
     private double _longitude;
+    private boolean _storedOnServer = false;
 
-    public Probe(double avgNoiseLevel, double latitude, double longitude) throws OverrangeException {
+    public Probe(double avgNoiseLevel, double latitude, double longitude, int storedOnServer) throws OverrangeException {
         if (avgNoiseLevel < MIN_NOISE_LEVEL || avgNoiseLevel > MAX_NOISE_LEVEL ||
                 latitude < MIN_LATITUDE || latitude > MAX_LATITUDE ||
                 longitude < MIN_LONGITUDE || longitude > MAX_LONGITUDE)
@@ -25,6 +26,7 @@ public class Probe {
         _avgNoiseLevel = avgNoiseLevel;
         _latitude = latitude;
         _longitude = longitude;
+        _storedOnServer = (storedOnServer == 1) ? true : false;
     }
 
     public double getAvgNoiseLevel() {
@@ -37,5 +39,9 @@ public class Probe {
 
     public double getLongitude() {
         return _longitude;
+    }
+
+    public boolean getState() {
+        return _storedOnServer;
     }
 }

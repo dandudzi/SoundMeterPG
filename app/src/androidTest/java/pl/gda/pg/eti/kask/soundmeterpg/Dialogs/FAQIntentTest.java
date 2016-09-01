@@ -5,8 +5,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -72,12 +70,9 @@ public class FAQIntentTest {
     private void textViewIntentTest( int hyperlinkID, int urlID) {
         openContextualActionModeOverflowMenu();
         onView(withText(R.string.title_faq_dialog)).perform(click());
-        UiObject somethingInView = device.findObject(new UiSelector().resourceId("R.id.icon_faq_dialog"));
-        String data = context.getString(urlID);
-
         onView(withId(hyperlinkID)).perform(click());
+        String data = context.getString(urlID);
         intended(allOf(hasData(data)));
-        somethingInView.waitUntilGone(2000);
         device.pressBack();
     }
 }

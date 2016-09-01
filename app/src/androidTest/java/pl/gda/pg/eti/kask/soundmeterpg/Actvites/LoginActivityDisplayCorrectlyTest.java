@@ -1,13 +1,9 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.os.RemoteException;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -34,18 +30,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityDisplayCorrectlyTest {
     private Context context;
-
     @Rule
     public final ActivityTestRule<LoginActivity> mActivityRule = new ActivityTestRule<>(
             LoginActivity.class);
 
     @Before
-    public void setUp() throws RemoteException {
+    public void initSettings() {
         context = mActivityRule.getActivity().getBaseContext();
     }
 
     @Test
-    public void isBannerDisplayCorrectly() throws Exception {
+    public void isBannerDisplayCorrectly() {
         onView(withId(R.id.banner_login_activity)).check(matches(isCompletelyDisplayed()));
     }
 

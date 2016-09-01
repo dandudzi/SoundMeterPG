@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -26,10 +25,8 @@ import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
 import java.io.IOException;
 
 import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
-import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
-import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
-import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
@@ -240,13 +237,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void insertData(View btn) throws IOException {
         //TODO to tylko bylo do prototypu
-        //new Insert(getBaseContext()).execute(tmpRecorder.soundDb(1.0));
+        //new Sender(getBaseContext()).execute(tmpRecorder.soundDb(1.0));
     }
 
     public void showGPS(View w) {
-        DataBaseHandler dataBaseHandler = new DataBaseHandler(getBaseContext());
+        DataBaseHandler dataBaseHandler = new DataBaseHandler(getBaseContext(), getResources().getString(R.string.database_name));
         try {
-            dataBaseHandler.insert(new Probe(32.3, 322.23, 12.11));
+            dataBaseHandler.insert(new Probe(32.3, 322.23, 12.11, 0));
         } catch (NullRecordException e) {
             e.printStackTrace();
         } catch (OverrangeException e) {

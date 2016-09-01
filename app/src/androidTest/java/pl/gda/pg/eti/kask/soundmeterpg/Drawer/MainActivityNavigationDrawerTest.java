@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.RowsDrawerException;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SettingsTestHelper;
 
@@ -31,7 +32,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
-import static pl.gda.pg.eti.kask.soundmeterpg.DrawerTestHelper.*;
 
 
 /**
@@ -84,37 +84,37 @@ public class MainActivityNavigationDrawerTest {
 
     @Test
     public void isSettingsRowWorksCorrectly() throws Exception{
-        int position = findPositionInRows("Settings",rows);
-        clickOnDisplayRow(position,rows);
+        int position = findPositionInRows("Settings");
+        clickOnDisplayRow(position);
         SettingsTestHelper.isSettingDisplay();
         SettingsTestHelper.backFromSettings(device);
-        isDrawerNotDisplay(position,rows);
+        isRowNotDisplay(position);
     }
 
 
     @Test
     public void isMeasurementsRowWorksCorrectly() throws Exception{
-        int position = findPositionInRows("Measurements",rows);
-        clickOnDisplayRow(position,rows);
+        int position = findPositionInRows("measurements");
+        clickOnDisplayRow(position);
         onView(withText("measurements")).check(matches(isCompletelyDisplayed()));
-        isDrawerNotDisplay(position,rows);
+        isRowNotDisplay(position);
     }
 
     @Test
     public void isLogInRowWorksCorrectly() throws Exception{
-        int position = findPositionInRows("Log in",rows);
-        clickOnDisplayRow(position,rows);
+        int position = findPositionInRows("Log in");
+        clickOnDisplayRow(position);
         onView(withId(R.id.skip_button_login_activity)).check(matches(isCompletelyDisplayed()));
         onView(withId(R.id.skip_button_login_activity)).perform(click());
-        isDrawerNotDisplay(position,rows);
+        isRowNotDisplay(position);
     }
 
     @Test
     public void isMeasureRowWorksCorrectly() throws Exception{
-        int position = findPositionInRows("Measure",rows);
-        clickOnDisplayRow(position,rows);
+        int position = findPositionInRows("Measure");
+        clickOnDisplayRow(position);
         onView(withText("measure")).check(matches(isCompletelyDisplayed()));
-        isDrawerNotDisplay(position,rows);
+        isRowNotDisplay(position);
     }
 
     @Test
@@ -138,6 +138,24 @@ public class MainActivityNavigationDrawerTest {
         return onView(allOf(withId(R.id.icon_drawer_row),hasSibling(withText(siblingTextView))));
     }
 
+    private int findPositionInRows(String rowName) {
+        for (int i = 0; i < rows.length; i++) {
+            if (rowName.equals(rows[i]))
+                return i;
+        }
+        throw new RowsDrawerException("Not found row " + rowName);
+    }
 
+    private void clickOnDisplayRow(int position) {
+        String row = rows[position];
+        openDrawer(R.id.drawer_layout);
+        onView(withText(row)).check(matches(isCompletelyDisplayed()));
+        onView(withText(row)).perform(click());
+    }
+
+    private void isRowNotDisplay(int position) {
+        String row = rows[position];
+        onView(withText(row)).check(matches(not(isDisplayed())));
+    }
 
 }

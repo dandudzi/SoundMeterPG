@@ -24,10 +24,8 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static pl.gda.pg.eti.kask.soundmeterpg.OrientationChangeAction.orientationLandscape;
 
 /**
  * Created by Daniel on 22.08.2016 at 16:50 :).
@@ -40,7 +38,7 @@ public class LoginActivityTest {
             MainActivity.class);
 
     @Before
-    public void setUp() {
+    public void initSettings() {
         context = mActivityRule.getActivity().getBaseContext();
         openDrawer(R.id.drawer_layout);
         onView(withText("Log in")).perform(click());
@@ -92,7 +90,6 @@ public class LoginActivityTest {
 
     @Test
     public void timeOutLoginTest(){
-
         pressButton(withId(R.id.login_button_login_activity));
 
         pressButton(withId(android.R.id.button1));

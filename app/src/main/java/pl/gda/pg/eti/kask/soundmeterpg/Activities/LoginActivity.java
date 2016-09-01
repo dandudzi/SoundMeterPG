@@ -34,27 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     private View progressBarView;
     private ProgressBar progressBar;
     private TextView errorMessage;
-    private AsyncTask loginThread;
-
-
-    @Override
-    public void onPause() {
-        closeActivity();
-        super.onPause();
-        finish();
-    }
-
-    private void closeActivity() {
-        login.setText("");
-        password.setText("");
-        if(loginThread!=null) {
-            AsyncTask.Status status = loginThread.getStatus();
-            boolean isLogInRunning = isLogInTaskRunning(status);
-            if (isLogInRunning) {
-                manager.stopLogInProcess();
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("Login activity","Login button press");
-                onButtonSignIn();
+                logIn();
             }
         });
 
@@ -103,92 +82,61 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setMax(MyAccountManager.MAX_DURATION_OF_LOG_IN);
     }
 
-    private void onButtonSignIn(){
+    private void logIn() {
         AlertDialog dialog = Login.create(this, result);
-        Log.i("Login activity","Show login dialog");
         dialog.show();
     }
 
-    private void onLoginDialogResult(Object newValue) {
-        if (isUserAgreeWithCookiesCondition(newValue)) {
+    private void resultListener(Object newValue) {
+        if (newValue instanceof Boolean && newValue.equals(Boolean.TRUE)) {
             loginForm.setVisibility(View.GONE);
             progressBarView.setVisibility(View.VISIBLE);
+            AsyncTask loginThread = new LoggingTask();
 
-            startLogIn();
-            startNewTaskWhichUpdateProgressBar();
-            Log.i("Login activity","Log in and start thread progress bar");
-        }
-        Log.i("Login activity","User cancel login dialog");
-    }
+            String login = this.login.getText().toString();
+            String password = this.password.getText().toString();
+            String macAddress = InformationAboutThisApplication.getMACAddress();
+            this.login.setText("");
+            this.password.setText("");
 
-    private void startLogIn() {
-        String login = this.login.getText().toString();
-        String password = this.password.getText().toString();
-        String macAddress = InformationAboutThisApplication.getMACAddress();
-        this.login.setText("");
-        this.password.setText("");
-
-        manager.logIn(login,password,macAddress);
-    }
-
-    private void startNewTaskWhichUpdateProgressBar() {
-        loginThread = new LoggingTask();
-        loginThread.execute("Daj");
-    }
-
-    private boolean isUserAgreeWithCookiesCondition(Object newValue) {
-        return newValue instanceof Boolean && newValue.equals(Boolean.TRUE);
-    }
-
-    private boolean isLogInTaskRunning(AsyncTask.Status status) {
-        return status == AsyncTask.Status.RUNNING;
-    }
-
-    private void onLogInResult(Boolean result) {
-        if(result) {
-            Log.i("Login activity","User log in");
-            finish();
-        }
-        else {
-            String errorMsg = manager.getErrorMessage();
-            String endTaskErrorMsg = LoginActivity.this.getString(R.string.end_task_login_Activity);
-            boolean isLogInEndByUser = errorMsg.equals(endTaskErrorMsg);
-            if(isLogInEndByUser) {
-                Log.i("Login activity","User end task");
-                return;
-            }
-            Log.i("Login activity","User cannot log in with error " + manager.getErrorMessage());
-            errorMessage.setText(errorMsg);
+            manager.logIn(login, password, macAddress);
+            loginThread.execute("Daj");
         }
     }
+
 
     private class LoggingTask extends AsyncTask<Object, Integer,Boolean>{
 
         @Override
         protected Boolean doInBackground(Object... objects) {
-            while(manager.getProgress() < MyAccountManager.MAX_DURATION_OF_LOG_IN) {
+            int duration = 0;
+            while (!manager.isLogIn()) {
                 publishProgress(manager.getProgress());
+                if (duration >= MyAccountManager.MAX_DURATION_OF_LOG_IN)
+                    break;
                 try {
                     Thread.sleep(300);
+                    duration += 300;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            Log.i("Login activity","End log in");
             return manager.isLogIn();
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             progressBar.setProgress(values[0]);
-            Log.i("Login activity","Set progress to "+values[0]);
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
             progressBarView.setVisibility(View.GONE);
             loginForm.setVisibility(View.VISIBLE);
-            onLogInResult(result);
+            if (result)
+                finish();
+            else
+                errorMessage.setText(manager.getErrorMessage());
         }
     }
 
@@ -196,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-            onLoginDialogResult(propertyChangeEvent.getNewValue());
+            resultListener(propertyChangeEvent.getNewValue());
         }
     }
 }

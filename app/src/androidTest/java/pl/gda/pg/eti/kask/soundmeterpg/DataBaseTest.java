@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Exception.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 
 import static junit.framework.Assert.fail;
 
@@ -39,13 +39,13 @@ public class DataBaseTest {
 
     @BeforeClass
     public static void setUp() {
-        mActivityRule.getActivity().getBaseContext().deleteDatabase("noiseDataBase.db");
+        mActivityRule.getActivity().getBaseContext().deleteDatabase(mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
         Random rand = new Random();
         for (int i = 0; i < LIMIT_PROBE; i++) {
             try {
                 _probeMap.put(i, new Probe(Probe.MIN_NOISE_LEVEL + (Probe.MAX_NOISE_LEVEL - Probe.MIN_NOISE_LEVEL) * rand.nextDouble(),
                         Probe.MIN_LATITUDE + (Probe.MAX_LATITUDE - Probe.MIN_LATITUDE) * rand.nextDouble(),
-                        Probe.MIN_LONGITUDE + (Probe.MAX_LONGITUDE - Probe.MIN_LONGITUDE) * rand.nextDouble()));
+                        Probe.MIN_LONGITUDE + (Probe.MAX_LONGITUDE - Probe.MIN_LONGITUDE) * rand.nextDouble(), 0));
             } catch (OverrangeException e) {
                 e.printStackTrace();
             }
@@ -55,7 +55,7 @@ public class DataBaseTest {
 
     @Before
     public void tearUp() throws NullRecordException {
-        _db = new DataBaseHandler(mActivityRule.getActivity().getBaseContext());
+        _db = new DataBaseHandler(mActivityRule.getActivity().getBaseContext(), mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
         _db.getWritableDatabase();
         for (int i = 0; i < LIMIT_PROBE; i++) {
             _db.insert(_probeMap.get((Integer) i));
@@ -64,17 +64,17 @@ public class DataBaseTest {
 
     @After
     public void tearDown() {
-        mActivityRule.getActivity().getBaseContext().deleteDatabase("noiseDataBase.db");
+        mActivityRule.getActivity().getBaseContext().deleteDatabase(mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
     }
 
     @Test
     public void checkIfDataBaseExist() {
-        mActivityRule.getActivity().getBaseContext().deleteDatabase("noiseDataBase.db");
-        File dbPath = mActivityRule.getActivity().getBaseContext().getDatabasePath("noiseDataBase.db");
+        mActivityRule.getActivity().getBaseContext().deleteDatabase(mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
+        File dbPath = mActivityRule.getActivity().getBaseContext().getDatabasePath(mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
         Assert.assertFalse(dbPath.exists());
-        _db = new DataBaseHandler(mActivityRule.getActivity().getBaseContext());
+        _db = new DataBaseHandler(mActivityRule.getActivity().getBaseContext(), mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
         _db.getReadableDatabase();
-        dbPath = mActivityRule.getActivity().getBaseContext().getDatabasePath("noiseDataBase.db");
+        dbPath = mActivityRule.getActivity().getBaseContext().getDatabasePath(mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
         Assert.assertTrue(dbPath.exists());
     }
 
@@ -107,6 +107,7 @@ public class DataBaseTest {
             Assert.assertEquals(_probeMap.get(i).getLatitude(), pr.getLatitude(), 0.0);
             Assert.assertEquals(_probeMap.get(i).getLongitude(), pr.getLongitude(), 0.0);
             Assert.assertEquals(_probeMap.get(i).getAvgNoiseLevel(), pr.getAvgNoiseLevel(), 0.0);
+            Assert.assertFalse(_probeMap.get(i).getState());
         }
     }
 
@@ -150,11 +151,25 @@ public class DataBaseTest {
     public void insertOverageProbe() {
         Probe pr = null;
         try {
-            pr = new Probe(Probe.MAX_NOISE_LEVEL + 1, Probe.MAX_LATITUDE + 2, Probe.MAX_LONGITUDE + 22);
+            pr = new Probe(Probe.MAX_NOISE_LEVEL + 1, Probe.MAX_LATITUDE + 2, Probe.MAX_LONGITUDE + 22, 0);
             _db.insert(pr);
             Assert.fail("Test should fail, should be exception");
         } catch (OverrangeException e) {
             e.printStackTrace();
+        } catch (NullRecordException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void isStoredValueOnServer() {
+        _db.changeState(LIMIT_PROBE - 2 + 1, true);
+        _db.changeState(LIMIT_PROBE - 4 + 1, true);
+        _db.changeState(LIMIT_PROBE + LIMIT_PROBE * 2 + 1, true);
+        try {
+            Assert.assertTrue(_db.getProbeByID(LIMIT_PROBE - 2 + 1).getState());
+            Assert.assertTrue(_db.getProbeByID(LIMIT_PROBE - 4 + 1).getState());
+            Assert.assertFalse(_db.getProbeByID(LIMIT_PROBE + LIMIT_PROBE * 2 + 1).getState());
         } catch (NullRecordException e) {
             e.printStackTrace();
         }

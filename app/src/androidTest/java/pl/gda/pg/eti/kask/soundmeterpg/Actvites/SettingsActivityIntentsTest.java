@@ -10,9 +10,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiObjectNotFoundException;
-import android.support.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,7 +18,7 @@ import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.SettingsActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.Internet.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -55,7 +52,7 @@ public class SettingsActivityIntentsTest {
     }
 
     @Test
-    public void isGPSWorksCorrectly() throws UiObjectNotFoundException {
+    public void isGPSWorksCorrectly() {
         isPreferenceWorkCorrectly(R.string.gps_key_preference);
 
         LocationManager locationManager = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -66,7 +63,7 @@ public class SettingsActivityIntentsTest {
     }
 
     @Test
-    public void isInternetWorksCorrectly() throws UiObjectNotFoundException {
+    public void isInternetWorksCorrectly() {
         isPreferenceWorkCorrectly(R.string.internet_key_preference);
 
         ConnectionInternetDetector detector = new ConnectionInternetDetector(context);
@@ -89,7 +86,7 @@ public class SettingsActivityIntentsTest {
         selectPreference(stringKey,prefs,context);
     }
 
-    private void isIntentInPreferenceDialogWorksCorrectly(int stringKey, boolean isServiceEnable, int stringTextNoService, String action) throws UiObjectNotFoundException {
+    private void isIntentInPreferenceDialogWorksCorrectly(int stringKey, boolean isServiceEnable, int stringTextNoService, String action) {
         if(isServiceEnable)
             isPreferenceChecked(stringKey,context);
         else{
@@ -97,11 +94,14 @@ public class SettingsActivityIntentsTest {
             Instrumentation.ActivityResult result =  new Instrumentation.ActivityResult(0,resultData);
 
             onView(withText(stringTextNoService)).check(matches(isCompletelyDisplayed()));
-            UiObject button = device.findObject(new UiSelector().text("Yes"));
-            button.click();
+            onView(withId(android.R.id.button1)).perform(click());
             intending(allOf(hasAction(action))).respondWith(result);
-            button.waitUntilGone(2000);
-
+            try {
+                //Trzeba trochę poczekać aż nowa aktywność się otworzy :(
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             device.pressBack();
             isPreferenceNotChecked(stringKey,context);
         }

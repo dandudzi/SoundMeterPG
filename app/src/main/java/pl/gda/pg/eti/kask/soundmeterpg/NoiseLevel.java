@@ -9,8 +9,9 @@ import android.media.MediaRecorder;
 import android.os.IBinder;
 import android.util.Log;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Exception.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
+import pl.gda.pg.eti.kask.soundmeterpg.Services.Localization;
 
 /**
  * Created by Filip Gierlowski and Daniel Dudziak
@@ -37,7 +38,7 @@ public class NoiseLevel extends Service {
 
     @Override
     public void onCreate() {
-        _dataBaseHandler = new DataBaseHandler(this);
+        _dataBaseHandler = new DataBaseHandler(this, getResources().getString(R.string.database_name));
         super.onCreate();
         _avgDB = 0.0;
         Context ctx2 = getBaseContext();
@@ -76,8 +77,8 @@ public class NoiseLevel extends Service {
                             _counter = 0;
                             Log.i("Avg in db", Double.toString(wynik));
                             if (_gps.canUseLocation()) {
-                                Probe pr = new Probe(wynik, _gps.getLocalization().getLatitude(), _gps.getLocalization().getLongitude());
-                                //  new Insert().execute(pr);
+                                Probe pr = new Probe(wynik, _gps.getLocalization().getLatitude(), _gps.getLocalization().getLongitude(), 0);
+                                //  new Sender().execute(pr);
                             }
                         }
 

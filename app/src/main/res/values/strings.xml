@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SoundMeterPG</string>
-    <string name="app_description">SoundMeterPG app created for Politechnika Gdańska</string>
     <string name="main_icon_description">SoundMeterPGIcon</string>
     <string name="email_contact">soundmeterpg@gmail.com</string>
 
@@ -86,7 +85,6 @@
     <string name="logging_text_login_activity">Logging…</string>
     <string name="timeout_error_message_login_activity">! Time out !</string>
     <string name="incorrect_credentials_login_activity">! Login or password is incorrect !</string>
-    <string name="end_task_login_Activity">END TASK</string>
 
     <!-- Login Dialog-->
     <string name="cookies_link_login_dialog">http://www.wp.pl</string>
@@ -94,11 +92,21 @@
     <string name="cookies_hyperlink_login_dialog"><a href="http://www.wp.pl">here</a>.</string>
     <string name="title_login_dialog">Achtung!</string>
 
-    <!-- Insert -->
-    <string name="confirmation_added_record"><!-- TODO -->Succesfuly added!\n</string>
+    <!-- DataBaseHandler-->
+    <string name="database_name">noiseDataBase.db</string>
+    <string name="table">SAMPLES</string>
+    <!--Database for Tests-->
+    <string name="database_test">noiseDataBase_test.db</string>
+
+    <!-- Sender -->
+    <string name="confirmation_added_record"><!-- TODO -->Succesfuly added!</string>
     <string name="site">http://soundmeterpg.cba.pl/insert.php/</string>
-    <string name="noiseDB_attribute">noiseDB=</string>
-    <string name="latitude_attribute">&amp;Latitude=</string>
-    <string name="longitude_attribute">&amp;Longitude=</string>
+    <string name="ping_site">soundmeterpg.cba.pl</string>
+
+    <!-- Sender and DataBaseHandler-->
+    <string name="noise">Noise</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="stored">StoredOnServer</string>
 
 </resources>
