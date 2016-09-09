@@ -15,10 +15,13 @@ import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.openLinkWithUri;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -39,9 +42,11 @@ public class FAQIntentTest {
             MainActivity.class);
 
     @Before
-    public void initValues(){
+    public void setUp(){
         context = mActivityRule.getActivity().getBaseContext();
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        openContextualActionModeOverflowMenu();
+        onView(withText(R.string.title_faq_dialog)).perform(click());
     }
 
 
@@ -49,7 +54,6 @@ public class FAQIntentTest {
     public void isIntentGitHubSendCorrectly(){
         textViewIntentTest(R.id.github_hyperlink_text_view_faq_dialog,R.string.github_url_faq_dialog);
     }
-
 
 
     @Test
@@ -70,14 +74,12 @@ public class FAQIntentTest {
     }
 
     private void textViewIntentTest( int hyperlinkID, int urlID) {
-        openContextualActionModeOverflowMenu();
-        onView(withText(R.string.title_faq_dialog)).perform(click());
         UiObject somethingInView = device.findObject(new UiSelector().resourceId("R.id.icon_faq_dialog"));
-        String data = context.getString(urlID);
+        String link = context.getString(urlID);
 
-        onView(withId(hyperlinkID)).perform(click());
-        intended(allOf(hasData(data)));
-        somethingInView.waitUntilGone(2000);
+        onView(withId(hyperlinkID)).perform(scrollTo(), openLinkWithUri(link));
+        intended(allOf(hasData(link)));
+        somethingInView.waitUntilGone(UIAutomotorTestHelper.TIME_OUT);
         device.pressBack();
     }
 }

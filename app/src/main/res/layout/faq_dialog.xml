@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/faq_view"
     android:weightSum="1">
 
     <ScrollView
@@ -63,136 +64,59 @@
                 android:singleLine="false"
                 tools:ignore="InefficientWeight" />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/github_hyperlink_text_view_faq_dialog"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/github_link_faq_dialog"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/github_description_text_view_faq_dialog"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/github_description_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/github_hyperlink_text_view_faq_dialog"
-                    android:layout_weight="0.05"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/github_link_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/licence_hyperlink_text_view_faq_dialog"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/licence_link_faq_dialog"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/soundmeterpg_hyperlink_text_view_faq_dialog"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/website_link_faq_dialog"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/licence_description_text_view_faq_dialog"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/licence_description_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/help_hyperlink_text_view_faq_dialog"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/help_link_faq_dialog"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/licence_hyperlink_text_view_faq_dialog"
-                    android:layout_weight="0.05"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="5dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/licence_link_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/soundmeterpg_description_text_view_faq_dialog"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/website_description_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/soundmeterpg_hyperlink_text_view_faq_dialog"
-                    android:layout_weight="0.05"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="5dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/website_link_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/help_description_text_view_faq_dialog"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/help_description_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/help_hyperlink_text_view_faq_dialog"
-                    android:layout_weight="0.05"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/help_link_faq_dialog"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
-            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

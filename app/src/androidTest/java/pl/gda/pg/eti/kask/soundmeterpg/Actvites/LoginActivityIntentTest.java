@@ -4,12 +4,10 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.support.test.uiautomator.Until;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,12 +16,10 @@ import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.LoginActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 
 /**
@@ -50,7 +46,7 @@ public class LoginActivityIntentTest {
         button.click();
         String data = context.getString(R.string.registration_link_login_activity);
         intended(allOf(hasData(data)));
-        button.waitUntilGone(2000);
+        button.waitUntilGone(UIAutomotorTestHelper.TIME_OUT);
         device.pressBack();
     }
 }

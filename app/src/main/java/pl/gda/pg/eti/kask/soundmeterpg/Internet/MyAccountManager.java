@@ -117,12 +117,12 @@ public class MyAccountManager implements AccountManager {
             endTask = true;
     }
 
-    private void emulateLoggingInServer(int progressStep, int forTimesLoop, int timeToSleepInMilisecond) throws EndTaskException {
+    private void emulateLoggingInServer(int progressStep, int forTimesLoop, int timeToSleepInMilliseconds) throws EndTaskException {
         for(int i=0;i<forTimesLoop;i++){
             addToProgress(progressStep);
             endTaskIfNecessary();
             try {
-                Thread.sleep(timeToSleepInMilisecond);
+                Thread.sleep(timeToSleepInMilliseconds);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

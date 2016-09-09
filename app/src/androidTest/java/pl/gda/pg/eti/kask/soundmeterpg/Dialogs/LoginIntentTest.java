@@ -15,9 +15,12 @@ import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.LoginActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.openLinkWithUri;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -38,7 +41,7 @@ public class LoginIntentTest {
             LoginActivity.class);
 
     @Before
-    public void initValues(){
+    public void setUp(){
         context = mActivityRule.getActivity().getBaseContext();
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
@@ -46,12 +49,12 @@ public class LoginIntentTest {
     @Test
     public void isCookiesIntentSendCorrectly(){
         onView(withId(R.id.login_button_login_activity)).perform(click());
-        String data = context.getString(R.string.cookies_link_login_dialog);
+        String link = context.getString(R.string.cookies_link_login_dialog);
         UiObject somethingInView = device.findObject(new UiSelector().resourceId("R.id.icon_login_dialog"));
 
-        onView(withText(containsString(context.getString(R.string.cookies_hyperlink_login_dialog)))).perform(click());
-        intended(allOf(hasData(data)));
-        somethingInView.waitUntilGone(2000);
+        onView(withText(containsString(context.getString(R.string.cookies_information_login_dialog)))).perform(scrollTo(), openLinkWithUri(link));
+        intended(allOf(hasData(link)));
+        somethingInView.waitUntilGone(UIAutomotorTestHelper.TIME_OUT);
         device.pressBack();
     }
 }

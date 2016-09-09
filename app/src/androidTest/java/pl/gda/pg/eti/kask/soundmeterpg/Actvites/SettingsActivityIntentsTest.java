@@ -20,19 +20,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.SettingsActivity;
-import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.Internet.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.*;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.isPreferenceChecked;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.isPreferenceEnabled;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.isPreferenceNotChecked;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.selectPreference;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.uncheckPreference;
 
 /**
  * Created by Daniel on 24.07.2016 :) at 12:11 :).
@@ -100,7 +103,7 @@ public class SettingsActivityIntentsTest {
             UiObject button = device.findObject(new UiSelector().text("Yes"));
             button.click();
             intending(allOf(hasAction(action))).respondWith(result);
-            button.waitUntilGone(2000);
+            button.waitUntilGone(UIAutomotorTestHelper.TIME_OUT);
 
             device.pressBack();
             isPreferenceNotChecked(stringKey,context);
