@@ -10,6 +10,9 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,19 +20,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.SettingsActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.Internet.ConnectionInternetDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.*;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.isPreferenceChecked;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.isPreferenceEnabled;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.isPreferenceNotChecked;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.selectPreference;
+import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.uncheckPreference;
 
 /**
  * Created by Daniel on 24.07.2016 :) at 12:11 :).
@@ -52,7 +58,7 @@ public class SettingsActivityIntentsTest {
     }
 
     @Test
-    public void isGPSWorksCorrectly() {
+    public void isGPSWorksCorrectly() throws UiObjectNotFoundException {
         isPreferenceWorkCorrectly(R.string.gps_key_preference);
 
         LocationManager locationManager = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -63,7 +69,7 @@ public class SettingsActivityIntentsTest {
     }
 
     @Test
-    public void isInternetWorksCorrectly() {
+    public void isInternetWorksCorrectly() throws UiObjectNotFoundException {
         isPreferenceWorkCorrectly(R.string.internet_key_preference);
 
         ConnectionInternetDetector detector = new ConnectionInternetDetector(context);
@@ -86,7 +92,7 @@ public class SettingsActivityIntentsTest {
         selectPreference(stringKey,prefs,context);
     }
 
-    private void isIntentInPreferenceDialogWorksCorrectly(int stringKey, boolean isServiceEnable, int stringTextNoService, String action) {
+    private void isIntentInPreferenceDialogWorksCorrectly(int stringKey, boolean isServiceEnable, int stringTextNoService, String action) throws UiObjectNotFoundException {
         if(isServiceEnable)
             isPreferenceChecked(stringKey,context);
         else{
@@ -94,14 +100,11 @@ public class SettingsActivityIntentsTest {
             Instrumentation.ActivityResult result =  new Instrumentation.ActivityResult(0,resultData);
 
             onView(withText(stringTextNoService)).check(matches(isCompletelyDisplayed()));
-            onView(withId(android.R.id.button1)).perform(click());
+            UiObject button = device.findObject(new UiSelector().text("Yes"));
+            button.click();
             intending(allOf(hasAction(action))).respondWith(result);
-            try {
-                //Trzeba trochę poczekać aż nowa aktywność się otworzy :(
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            button.waitUntilGone(UIAutomotorTestHelper.TIME_OUT);
+
             device.pressBack();
             isPreferenceNotChecked(stringKey,context);
         }

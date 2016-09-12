@@ -3,7 +3,9 @@ package pl.gda.pg.eti.kask.soundmeterpg.Internet;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.EndTaskException;
 import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.AccountManager;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 
@@ -20,6 +22,8 @@ public class MyAccountManager implements AccountManager {
     private Activity activity;
     private int progressOfLogging =0;
     private String errorMessage;
+    private volatile boolean endTask = false;
+    private Thread loggingThread;
 
     public MyAccountManager(Activity activity){
         this.activity = activity;
@@ -37,19 +41,19 @@ public class MyAccountManager implements AccountManager {
         //TODO usuń ta linijkę jak zrobisz panel wylogowania
         prefs.putBoolean(key,false,activity);
 
-        Thread loggingThread;
+        endTask = false;
         if(login.equals(MyAccountManager.login) && password.equals(MyAccountManager.password))
             loggingThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     prefs.putBoolean(key,true,activity);
-                    for (int i = 0; i < 10; i++) {
-                        addToProgress(3000);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    int progressStep = 3000;
+                    int forTimesLoop = 10;
+                    int timeToSleepInMilliseconds = 1000;
+                    try {
+                        emulateLoggingInServer(progressStep, forTimesLoop, timeToSleepInMilliseconds);
+                    } catch (EndTaskException e) {
+                        Log.i("MyAccountManager","EndTask");
                     }
                 }
             });
@@ -57,34 +61,36 @@ public class MyAccountManager implements AccountManager {
             loggingThread =  new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 0; i < 29; i++) {
-                        addToProgress(1000);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    int progressStep = 1000;
+                    int forTimesLoop = 29;
+                    int timeToSleepInMilliseconds = 1000;
+                    try {
+                        emulateLoggingInServer(progressStep, forTimesLoop, timeToSleepInMilliseconds);
+                        String msg = activity.getString(R.string.timeout_error_message_login_activity);
+                        setErrorMessage(msg);
+                        setProgressOfLogging(MAX_DURATION_OF_LOG_IN);
+                    } catch (EndTaskException e) {
+                        Log.i("MyAccountManager","EndTask");
                     }
-                    String msg = activity.getString(R.string.timeout_error_message_login_activity);
-                    setErrorMessage(msg);
-                    setProgressOfLogging(MAX_DURATION_OF_LOG_IN);
+
                 }
             });
         else
             loggingThread =  new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 0; i < 5; i++) {
-                        addToProgress(3000);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    int progressStep = 3000;
+                    int forTimesLoop = 5;
+                    int timeToSleepInMilliseconds = 1000;
+                    try {
+                        emulateLoggingInServer(progressStep, forTimesLoop, timeToSleepInMilliseconds);
+                        String msg = activity.getString(R.string.incorrect_credentials_login_activity);
+                        setErrorMessage(msg);
+                        setProgressOfLogging(MAX_DURATION_OF_LOG_IN);
+                    } catch (EndTaskException e) {
+                        Log.i("MyAccountManager","EndTask");
                     }
-                    String msg = activity.getString(R.string.incorrect_credentials_login_activity);
-                    setErrorMessage(msg);
-                    setProgressOfLogging(MAX_DURATION_OF_LOG_IN);
+
                 }
             });
         loggingThread.start();
@@ -103,6 +109,34 @@ public class MyAccountManager implements AccountManager {
     @Override
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    @Override
+    public synchronized void stopLogInProcess() {
+        if(loggingThread !=  null && loggingThread.isAlive())
+            endTask = true;
+    }
+
+    private void emulateLoggingInServer(int progressStep, int forTimesLoop, int timeToSleepInMilliseconds) throws EndTaskException {
+        for(int i=0;i<forTimesLoop;i++){
+            addToProgress(progressStep);
+            endTaskIfNecessary();
+            try {
+                Thread.sleep(timeToSleepInMilliseconds);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private void endTaskIfNecessary() throws EndTaskException{
+        if(endTask){
+            prefs.putBoolean(key,false,activity);
+            String msg = activity.getString(R.string.end_task_login_Activity);
+            setErrorMessage(msg);
+            addToProgress(MAX_DURATION_OF_LOG_IN);
+            throw new EndTaskException();
+        }
     }
 
     private synchronized void addToProgress(int value){

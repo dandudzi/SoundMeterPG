@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.allOf;
  * Created by Daniel on 11.08.2016 at 17:32 :).
  */
 @RunWith(AndroidJUnit4.class)
-public class MainActivityNavigationDrawerIntentTest {
+public class NavigationDrawerIntentTest {
 
     @Rule
     public final IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<>(
