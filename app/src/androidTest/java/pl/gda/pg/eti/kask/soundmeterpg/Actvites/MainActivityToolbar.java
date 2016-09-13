@@ -1,6 +1,7 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
 
 import android.content.Context;
+import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.uiautomator.UiDevice;
 
 import org.junit.Ignore;
@@ -14,8 +15,6 @@ import static android.support.test.espresso.Espresso.openContextualActionModeOve
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.DrawerActions.closeDrawer;
-import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -31,12 +30,11 @@ public class MainActivityToolbar {
     UiDevice device;
 
     @Test
-    public void isNavigationDrawerShowsCorrectly(){
-        String firstRow = context.getResources().getStringArray(R.array.rows_list_drawer)[1];
-        openDrawer(R.id.drawer_layout);
-        onView(withText(firstRow)).check(matches(isCompletelyDisplayed()));
-        closeDrawer(R.id.drawer_layout);
-        onView(withText(firstRow)).check(matches(not(isDisplayed())));
+    public void isNavigationDrawerOpenCorrectly(){
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.left_drawer)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.close());
+        onView(withId(R.id.left_drawer)).check(matches(not(isDisplayed())));
     }
 
     @Test

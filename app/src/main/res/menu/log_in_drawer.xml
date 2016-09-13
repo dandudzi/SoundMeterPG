@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"
+        android:id="@+id/main_content_drawer">
+        <item android:id="@+id/measure_drawer"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/measure_drawer"/>
+        <item android:id="@+id/measurements_drawer"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/measurements_drawer"/>
+        <item android:id="@+id/settings_drawer"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/settings_drawer"/>
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/log_out_content_drawer">
+        <item android:id="@+id/log_out_drawer"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/log_out_drawer"/>
+    </group>
+</menu>

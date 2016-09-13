@@ -67,10 +67,6 @@
     <string name="help_link_faq_dialog">If you need help click <a href="http://www.wp.pl">here</a></string>
     <string name="help_url_faq_dialog">http://www.wp.pl</string>
 
-    <!-- Drawer Activity -->
-    <string name="drawer_open">drawer_open</string>
-    <string name="drawer_close">drawer_close</string>
-
     <!-- Login Activity-->
     <string name="login_button_text">Login</string>
     <string name="skip_button_text_login_activity">Skip</string>
@@ -88,5 +84,14 @@
     <string name="cookies_link_login_dialog">http://www.wp.pl</string>
     <string name="cookies_information_login_dialog">This application uses cookies. Logując się zgadzasz się na naszą politykę związaną z ich wykorzystaniem. Find out more <a href="http://www.wp.pl">here</a>.</string>
     <string name="title_login_dialog">Achtung!</string>
+
+    <!-- Drawer Activity -->
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
+    <string name="measure_drawer">Measure</string>
+    <string name="measurements_drawer">Measurements</string>
+    <string name="settings_drawer">Settings</string>
+    <string name="log_in_drawer">Log in</string>
+    <string name="log_out_drawer">Log out</string>
 
 </resources>
