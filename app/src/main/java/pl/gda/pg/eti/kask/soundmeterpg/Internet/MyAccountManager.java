@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.EndTaskException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.EndTask;
 import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.AccountManager;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 
@@ -52,7 +52,7 @@ public class MyAccountManager implements AccountManager {
                     int timeToSleepInMilliseconds = 1000;
                     try {
                         emulateLoggingInServer(progressStep, forTimesLoop, timeToSleepInMilliseconds);
-                    } catch (EndTaskException e) {
+                    } catch (EndTask e) {
                         Log.i("MyAccountManager","EndTask");
                     }
                 }
@@ -69,7 +69,7 @@ public class MyAccountManager implements AccountManager {
                         String msg = activity.getString(R.string.timeout_error_message_login_activity);
                         setErrorMessage(msg);
                         setProgressOfLogging(MAX_DURATION_OF_LOG_IN);
-                    } catch (EndTaskException e) {
+                    } catch (EndTask e) {
                         Log.i("MyAccountManager","EndTask");
                     }
 
@@ -87,7 +87,7 @@ public class MyAccountManager implements AccountManager {
                         String msg = activity.getString(R.string.incorrect_credentials_login_activity);
                         setErrorMessage(msg);
                         setProgressOfLogging(MAX_DURATION_OF_LOG_IN);
-                    } catch (EndTaskException e) {
+                    } catch (EndTask e) {
                         Log.i("MyAccountManager","EndTask");
                     }
 
@@ -117,7 +117,7 @@ public class MyAccountManager implements AccountManager {
             endTask = true;
     }
 
-    private void emulateLoggingInServer(int progressStep, int forTimesLoop, int timeToSleepInMilliseconds) throws EndTaskException {
+    private void emulateLoggingInServer(int progressStep, int forTimesLoop, int timeToSleepInMilliseconds) throws EndTask {
         for(int i=0;i<forTimesLoop;i++){
             addToProgress(progressStep);
             endTaskIfNecessary();
@@ -129,13 +129,13 @@ public class MyAccountManager implements AccountManager {
         }
     }
     
-    private void endTaskIfNecessary() throws EndTaskException{
+    private void endTaskIfNecessary() throws EndTask {
         if(endTask){
             prefs.putBoolean(key,false,activity);
             String msg = activity.getString(R.string.end_task_login_Activity);
             setErrorMessage(msg);
             addToProgress(MAX_DURATION_OF_LOG_IN);
-            throw new EndTaskException();
+            throw new EndTask();
         }
     }
 
