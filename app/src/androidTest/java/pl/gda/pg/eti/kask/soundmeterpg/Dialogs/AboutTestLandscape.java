@@ -36,13 +36,5 @@ public class AboutTestLandscape extends  AboutDisplayCorrectly{
         openContextualActionModeOverflowMenu();
         onView(ViewMatchers.withText(R.string.title_about_dialog)).perform(click());
     }
-//TODO jeżeli nie będzie błędów z landscape usunąć
-  /*  @After
-    public void after(){
-        UiObject view = device.findObject(new UiSelector().resourceId(UIAutomotorTestHelper.MEASURE_ID));
-        if(!view.exists())
-            device.pressBack();
-        view.waitForExists(UIAutomotorTestHelper.TIME_OUT);
-        onView(isRoot()).perform(orientationPortrait());
-    }*/
+
 }

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/primary_dark"
     android:orientation="horizontal">
 
 
@@ -74,7 +74,7 @@
                     android:id="@+id/login_edit_text_login_activity"
                     android:layout_marginBottom="10dp"
                     android:padding="10dp"
-                    android:background="@color/colorButtonLogin"
+                    android:background="@color/button_login"
                     android:hint="@string/login_hint"
                     android:singleLine="true"/>
 
@@ -84,7 +84,7 @@
                     android:id="@+id/password_edit_text_login_activity"
                     android:layout_marginBottom="10dp"
                     android:padding="10dp"
-                    android:background="@color/colorButtonLogin"
+                    android:background="@color/button_login"
                     android:hint="@string/password_hint"
                     android:inputType="textPassword"
                     android:singleLine="true"/>

@@ -28,8 +28,5 @@ public class MainActivityToolbarTest extends MainActivityToolbar{
         super.context = mActivityRule.getActivity().getBaseContext();
     }
 
-
-
-
 }
 

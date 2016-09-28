@@ -129,7 +129,7 @@ public class MyAccountManager implements AccountManager {
         }
     }
     
-    private void endTaskIfNecessary() throws EndTaskException{
+    private void endTaskIfNecessary() throws EndTaskException {
         if(endTask){
             prefs.putBoolean(key,false,activity);
             String msg = activity.getString(R.string.end_task_login_Activity);
