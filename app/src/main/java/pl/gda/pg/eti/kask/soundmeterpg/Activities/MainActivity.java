@@ -3,9 +3,12 @@ package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,11 +34,10 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
-import pl.gda.pg.eti.kask.soundmeterpg.NoiseLevel;
-import pl.gda.pg.eti.kask.soundmeterpg.Probe;
+import pl.gda.pg.eti.kask.soundmeterpg.Services.SampleCreator;
+import pl.gda.pg.eti.kask.soundmeterpg.Sample;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.Drawer.RowsDrawer;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +45,21 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private ListView drawerList;
+    private static SampleCreator _sampleCreator;
+    protected static ServiceConnection _mConnection = new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            SampleCreator.LocalBinder binder = (SampleCreator.LocalBinder) service;
+            _sampleCreator = binder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            _sampleCreator = null;
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -54,8 +70,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = setUpToolbar();
 
         setUpDrawer(myToolbar);
+       // bindService(new Intent(getBaseContext(), SampleCreator.class), _mConnection, Context.BIND_AUTO_CREATE);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
+    @Override
+    protected void onDestroy() {
+        //unbindService(_mConnection);
+
+        super.onDestroy();
+      ///  System.exit(0);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 
     private void setUpDrawer(final Toolbar myToolbar) {
@@ -95,11 +128,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onDestroy() {
 
-        super.onDestroy();
-    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -223,14 +254,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void startMyService(View v) {
-        Intent serviceIntent = new Intent(this, NoiseLevel.class);
-        serviceIntent.addCategory("NoiseLevel");
+        Intent serviceIntent = new Intent(this, SampleCreator.class);
+        serviceIntent.addCategory("SampleCreator");
         startService(serviceIntent);
     }
 
     public void stopMyService(View v) {
-        Intent serviceIntent = new Intent(this, NoiseLevel.class);
-        serviceIntent.addCategory("NoiseLevel");
+        Intent serviceIntent = new Intent(this, SampleCreator.class);
+        serviceIntent.addCategory("SampleCreator");
         stopService(serviceIntent);
     }
 
@@ -243,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
     public void showGPS(View w) {
         DataBaseHandler dataBaseHandler = new DataBaseHandler(getBaseContext(), getResources().getString(R.string.database_name));
         try {
-            dataBaseHandler.insert(new Probe(32.3, 322.23, 12.11, 0));
+            dataBaseHandler.insert(new Sample(32.3, 322.23, 12.11, 0));
         } catch (NullRecordException e) {
             e.printStackTrace();
         } catch (OverrangeException e) {

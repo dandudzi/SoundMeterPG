@@ -67,6 +67,11 @@ public class PreferenceTestHelper {
         if(isChecked)
             checkBox.check(matches(isChecked())).perform(click());
     }
+    public static void setPrivilages(int keyId, SharedPreferences prefs, Context context, boolean enabled){
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(context.getResources().getString(keyId), enabled);
+        editor.commit();
+    }
 
     private static DataInteraction getDataInteraction(int keyId, Context context){
         int titleId;

@@ -5,6 +5,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission
         android:name="android.permission.ACCESS_MOCK_LOCATION"
         tools:ignore="MockLocation" />
@@ -12,7 +15,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -21,7 +23,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <service android:name="pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,7 +33,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         android:configChanges="orientation|screenSize"
-        >
+        android:name="android.support.multidex.MultiDexApplication">
+        <service android:name="pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization"/>
         <activity
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.Launcher"
@@ -42,6 +45,20 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <service android:name=".Services.SampleCreator" >
+                <uses-permission
+                    android:name="android.permission.ACCESS_MOCK_LOCATION"
+                    tools:ignore="MockLocation" />
+                />
+                <service android:name=".Services.Sender"/>
+                <service android:name="pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization"/>
+                <service android:name=".Services.Localization"/>
+            </service>
+            <uses-permission
+                android:name="android.permission.ACCESS_MOCK_LOCATION"
+                tools:ignore="MockLocation" />
+            />
         </activity>
 
         <activity
@@ -49,16 +66,28 @@
             android:label="Preferences"
             android:parentActivityName=".Activities.MainActivity"
             android:configChanges="orientation|screenSize"/>
+
+
         <service android:name=".Services.Sender">
             <uses-permission android:name="android.permission.INTERNET" />
         </service>
-        <service android:name=".Services.Localization" />
+        <service android:name=".Services.GoogleAPILocalization"/>
+        <service android:name=".Services.SampleCreator" >
+            <uses-permission
+                android:name="android.permission.ACCESS_MOCK_LOCATION"
+                tools:ignore="MockLocation" />
+            />
+            <service android:name=".Services.Sender"/>
+            <service android:name=".Services.Localization"/>
+        </service>
         <activity
             android:name=".Activities.LoginActivity"
             android:noHistory="true"
             android:excludeFromRecents="true"
             android:finishOnTaskLaunch="true"
             android:label="@string/title_activity_login"
+            android:parentActivityName=".Activities.MainActivity" >
+        </activity>
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".Activities.MainActivity" />
     </application>

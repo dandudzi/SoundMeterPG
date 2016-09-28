@@ -20,12 +20,22 @@ public class PreferenceParser implements PreferenceManager {
     }
 
     @Override
-    public boolean hasPrivilegesToUseInternet() {
+    public boolean hasPermissionToUseInternet() {
         return _preferences.getBoolean(_context.getResources().getString(R.string.internet_key_preference), false);
 
     }
-
-    public boolean hasPrivilegesToUseGPS() {
+    @Override
+    public boolean hasPermissionToUseGPS() {
         return _preferences.getBoolean(_context.getResources().getString(R.string.gps_key_preference), false);
+    }
+
+    @Override
+    public boolean hasPermissionToUseInternalStorage(){
+        return _preferences.getBoolean(_context.getResources().getString(R.string.internal_storage_key_preference), false);
+    }
+
+    @Override
+    public boolean hasPermissionToUseMicrophone(){
+        return _preferences.getBoolean(_context.getResources().getString(R.string.recording_audio_key_preference), false);
     }
 }

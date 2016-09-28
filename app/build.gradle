@@ -8,9 +8,9 @@ android {
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
+        multiDexEnabled true
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     buildTypes {
         release {
@@ -25,7 +25,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-
     androidTestCompile 'com.android.support:support-annotations:24.0.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
@@ -42,4 +41,5 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
+    compile 'com.google.android.gms:play-services:9.4.0'
 }

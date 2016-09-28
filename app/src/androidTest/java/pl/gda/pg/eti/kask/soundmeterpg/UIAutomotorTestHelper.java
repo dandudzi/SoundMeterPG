@@ -111,6 +111,7 @@ public class UIAutomotorTestHelper {
             myApp.clickAndWaitForNewWindow(TIME_OUT);
     }
 
+
     public static void openActivityByIconApp( UiDevice device) throws UiObjectNotFoundException {
         UiObject appsButton = device.findObject(new UiSelector().description("Apps"));
         UiObject panel  = getHomeScreen(device);

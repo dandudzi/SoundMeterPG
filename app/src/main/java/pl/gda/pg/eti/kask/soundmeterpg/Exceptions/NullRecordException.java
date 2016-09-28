@@ -1,4 +1,4 @@
-package pl.gda.pg.eti.kask.soundmeterpg.Exception;
+package pl.gda.pg.eti.kask.soundmeterpg.Exceptions;
 
 /**
  * Created by gierl on 09.08.2016.

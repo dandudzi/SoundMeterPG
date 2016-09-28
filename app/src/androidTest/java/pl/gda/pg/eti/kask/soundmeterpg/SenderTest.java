@@ -1,95 +1,80 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.ServiceTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.Until;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.Sender;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
-
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
 
 
 /**
- * Created by gierl on 16.08.2016.
+ * Created by filgierl
  */
+
 @RunWith(AndroidJUnit4.class)
 public class SenderTest {
-    private static Probe _probe;
-    private static Context _context;
-    private static Sender _sender;
-    private static Intent _intent;
-    private static UiDevice _device;
-    private static ConnectionInternetDetector _connectionInternetDetector;
-    private static PreferenceParser _preferenceParser;
-    protected static ServiceConnection _mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            Sender.LocalBinder binder = (Sender.LocalBinder) service;
-            _sender = binder.getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-        }
-    };
-
-    @ClassRule
-    public static ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+    private static Sample sample;
+    private static Context context = InstrumentationRegistry.getTargetContext();
+    private static Sender sender;
+    private static ConnectionInternetDetector connectionInternetDetector;
+    @Rule
+    public final ServiceTestRule mServiceRule = new ServiceTestRule().withTimeout(60L, TimeUnit.SECONDS);
+    private final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getTargetContext());
 
     @BeforeClass
     public static void setUp() {
-        _context = mActivityRule.getActivity().getApplication().getBaseContext();
-        _intent = new Intent(_context, Sender.class);
-        _context.bindService(_intent, _mConnection, Context.BIND_AUTO_CREATE);
-        _device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        _connectionInternetDetector = new ConnectionInternetDetector(_context);
-        _preferenceParser = new PreferenceParser(_context);
+        connectionInternetDetector = new ConnectionInternetDetector(context);
         Random rand = new Random();
         try {
-            _probe = new Probe(Probe.MIN_NOISE_LEVEL + (Probe.MAX_NOISE_LEVEL - Probe.MIN_NOISE_LEVEL) * rand.nextDouble(),
-                    Probe.MIN_LATITUDE + (Probe.MAX_LATITUDE - Probe.MIN_LATITUDE) * rand.nextDouble(),
-                    Probe.MIN_LONGITUDE + (Probe.MAX_LONGITUDE - Probe.MIN_LONGITUDE) * rand.nextDouble());
+            sample = new Sample(Sample.MIN_NOISE_LEVEL + (Sample.MAX_NOISE_LEVEL - Sample.MIN_NOISE_LEVEL) * rand.nextDouble(),
+                    Sample.MIN_LATITUDE + (Sample.MAX_LATITUDE - Sample.MIN_LATITUDE) * rand.nextDouble(),
+                    Sample.MIN_LONGITUDE + (Sample.MAX_LONGITUDE - Sample.MIN_LONGITUDE) * rand.nextDouble(), 0);
         } catch (OverrangeException e) {
             e.printStackTrace();
         }
     }
 
+    @Before
+    public void boundService() throws TimeoutException, InterruptedException {
+        context = InstrumentationRegistry.getTargetContext();
+        Intent senderIntent = new Intent(context, Sender.class);
+        IBinder binder = mServiceRule.bindService(senderIntent);
+        //Czas na zbindowanie, metoda asynchroniczna
+        Thread.sleep(2000);
+        if (binder == null)
+            binder = mServiceRule.bindService(senderIntent);
+        sender = ((Sender.LocalBinder) binder).getService();
+    }
+
+    /*
     @Test
     public void isServiceRunning() {
         //Serwis jest zbindowany i powinien być uruchomiony.
         Assert.assertTrue(ServiceDetector.isMyServiceRunning(Sender.class, _context));
-        _context.unbindService(_mConnection);
+        _context.unbindService(mConnection);
         Assert.assertFalse(ServiceDetector.isMyServiceRunning(Sender.class, _context));
         //Zasymulowanie wcisnięcia przycisk home.
-        _context.bindService(_intent, _mConnection, Context.BIND_AUTO_CREATE);
+        _context.bindService(_intent, mConnection, Context.BIND_AUTO_CREATE);
         _device.pressHome();
         Assert.assertTrue(ServiceDetector.isMyServiceRunning(Sender.class, _context));
         // Zasymulowanie zablokowanie telefonu i wyłączenie ekranu.
@@ -105,30 +90,40 @@ public class SenderTest {
         _device.pressBack();
         _device.pressBack();
         mActivityRule.getActivity().finish();
-        _context.unbindService(_mConnection);
+        _context.unbindService(mConnection);
         Assert.assertFalse("Should return false if app is closed", ServiceDetector.isMyServiceRunning(Sender.class, _context));
         returnService();
     }
-
+*/
     @Test
     public void isConnectionWithServer() {
-        putPrivilages(true);
-        if (_connectionInternetDetector.isConnectingToInternet())
-            Assert.assertTrue(_sender.isConnectionWithServer(_context.getResources().getString(R.string.ping_site)));
+        PreferenceTestHelper.setPrivilages(R.string.internet_key_preference, preferences, context, true);
+        if (connectionInternetDetector.isConnectingToInternet())
+            Assert.assertTrue(sender.isConnectionWithServer(context.getResources().getString(R.string.ping_site)));
         else
-            Assert.assertFalse(_sender.isConnectionWithServer(_context.getResources().getString(R.string.ping_site)));
+            Assert.assertFalse(sender.isConnectionWithServer(context.getResources().getString(R.string.ping_site)));
         //TODO ogarnąć to na emulatorze, na fizycznym urządzeniu działa
-        putPrivilages(false);
-        Assert.assertFalse(_sender.isConnectionWithServer(_context.getResources().getString(R.string.ping_site)));
+        PreferenceTestHelper.setPrivilages(R.string.internet_key_preference, preferences, context, false);
+        Assert.assertFalse(sender.isConnectionWithServer(context.getResources().getString(R.string.ping_site)));
     }
 
     @Test
     public void isSendingDataToServerCorrectly() {
-
-        putPrivilages(true);
+        PreferenceTestHelper.setPrivilages(R.string.internet_key_preference, preferences, context, true);
         try {
-            if (_connectionInternetDetector.isConnectingToInternet())
-                Assert.assertTrue(_sender.insert(_probe));
+            if (connectionInternetDetector.isConnectingToInternet())
+                Assert.assertTrue(sender.insert(sample));
+        } catch (NullRecordException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void tryingToSendWithoOutInternet() {
+        PreferenceTestHelper.setPrivilages(R.string.internet_key_preference, preferences, context, false);
+        try {
+            if (connectionInternetDetector.isConnectingToInternet())
+                Assert.assertFalse(sender.insert(sample));
         } catch (NullRecordException e) {
             e.printStackTrace();
         }
@@ -136,18 +131,18 @@ public class SenderTest {
 
     @Test
     public void NullParametrTest() {
-        putPrivilages(true);
-        Probe probe = null;
+        PreferenceTestHelper.setPrivilages(R.string.internet_key_preference, preferences, context, false);
+        Sample sample = null;
         Throwable e = null;
         try {
-            _sender.insert(probe);
+            sender.insert(sample);
         } catch (Throwable ex) {
             e = ex;
         }
         Assert.assertTrue(e instanceof NullRecordException);
     }
 
-    private void returnService() {
+   /* private void returnService() {
         //Uruchomienie aplikacji na nowo.
         final String launcherPackage = _device.getLauncherPackageName();
         assertThat(launcherPackage, notNullValue());
@@ -157,14 +152,8 @@ public class SenderTest {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         ctx.startActivity(intent);
         _device.wait(Until.hasObject(By.pkg("pl.gda.pg.eti.kask.soundmeterpg").depth(0)), 2000);
-        _context.bindService(_intent, _mConnection, Context.BIND_AUTO_CREATE);
+        _context.bindService(_intent, mConnection, Context.BIND_AUTO_CREATE);
     }
-
-    private void putPrivilages(boolean enabled) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(_context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(_context.getResources().getString(R.string.internet_key_preference), enabled);
-        editor.commit();
-    }
+    */
 
 }

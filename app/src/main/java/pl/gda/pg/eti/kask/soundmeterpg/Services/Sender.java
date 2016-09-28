@@ -14,33 +14,32 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Probe;
+import pl.gda.pg.eti.kask.soundmeterpg.Sample;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 public class Sender extends Service {
 
-    private final IBinder mBinder = new LocalBinder();
-    private ConnectionInternetDetector _connectionInternetDetector;
-    private PreferenceParser _preferenceParser;
+    private final IBinder localBinder = new LocalBinder();
+    private ConnectionInternetDetector connectionInternetDetector;
+    private PreferenceParser preferenceParser;
 
     public class LocalBinder extends Binder {
         public Sender getService() {
-            //zwracamy instancje serwisu, przez nią odwołamy się następnie do metod.
             return Sender.this;
         }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        _connectionInternetDetector = new ConnectionInternetDetector(getBaseContext());
-        _preferenceParser = new PreferenceParser(getBaseContext());
-        return mBinder;
+        connectionInternetDetector = new ConnectionInternetDetector(getBaseContext());
+        preferenceParser = new PreferenceParser(getBaseContext());
+        return localBinder;
     }
 
     public boolean isConnectionWithServer(String url) {
-        if (_preferenceParser.hasPrivilegesToUseInternet() && _connectionInternetDetector.isConnectingToInternet()) {
+        if (preferenceParser.hasPermissionToUseInternet() && connectionInternetDetector.isConnectingToInternet()) {
             Runtime runtime = Runtime.getRuntime();
             try {
                 Process mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 " + url);
@@ -60,19 +59,19 @@ public class Sender extends Service {
         } else return false;
     }
 
-    public boolean insert(Probe probe) throws NullRecordException {
-        if (probe == null) {
+    public boolean insert(Sample sample) throws NullRecordException {
+        if (sample == null) {
             throw new NullRecordException("The probe is null!");
         }
-        if (_preferenceParser.hasPrivilegesToUseInternet() && _connectionInternetDetector.isConnectingToInternet()
+        if (preferenceParser.hasPermissionToUseInternet() && connectionInternetDetector.isConnectingToInternet()
                 && isConnectionWithServer("soundmeterpg.cba.pl")) {
             HttpURLConnection connection;
             URL url = null;
             OutputStreamWriter request = null;
             String response;
-            String parameters = getResources().getString(R.string.noise) + "=" + probe.getAvgNoiseLevel() +
-                    "&" + getResources().getString(R.string.latitude) + "=" + probe.getLatitude() +
-                    "&" + getResources().getString(R.string.longitude) + "=" + probe.getLongitude();
+            String parameters = getResources().getString(R.string.noise) + "=" + sample.getAvgNoiseLevel() +
+                    "&" + getResources().getString(R.string.latitude) + "=" + sample.getLatitude() +
+                    "&" + getResources().getString(R.string.longitude) + "=" + sample.getLongitude();
             try {
                 url = new URL(getResources().getString(R.string.site));
                 connection = (HttpURLConnection) url.openConnection();

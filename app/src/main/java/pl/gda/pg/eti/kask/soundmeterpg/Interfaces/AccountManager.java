@@ -8,5 +8,6 @@ public interface AccountManager {
     void logIn(String user, String password, String mac);
     void logOut();
     int getProgress();
+    void stopLogInProcess();
     String getErrorMessage();
 }

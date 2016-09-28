@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.io.File;
@@ -21,21 +20,16 @@ import java.util.Random;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 
-import static junit.framework.Assert.fail;
-
 /**
  * Created by gierl on 04.08.2016.
  */
 @RunWith(AndroidJUnit4.class)
 public class DataBaseTest {
-    private static DataBaseHandler _db;
-    private static Map<Integer, Probe> _probeMap = new HashMap<Integer, Probe>();
+    private static DataBaseHandler db;
+    private static Map<Integer, Sample> probeMap = new HashMap<Integer, Sample>();
     private static final int LIMIT_PROBE = 10;
-    private static final double MIN = 1.0001;
-    private static final double MAX = 150.23;
     @ClassRule
-    public static IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<>(MainActivity.class);
-    public final ExpectedException exception = ExpectedException.none();
+    public static IntentsTestRule<MainActivity> mActivityRule = new IntentsTestRule<>(MainActivity.class);;
 
     @BeforeClass
     public static void setUp() {
@@ -43,22 +37,22 @@ public class DataBaseTest {
         Random rand = new Random();
         for (int i = 0; i < LIMIT_PROBE; i++) {
             try {
-                _probeMap.put(i, new Probe(Probe.MIN_NOISE_LEVEL + (Probe.MAX_NOISE_LEVEL - Probe.MIN_NOISE_LEVEL) * rand.nextDouble(),
-                        Probe.MIN_LATITUDE + (Probe.MAX_LATITUDE - Probe.MIN_LATITUDE) * rand.nextDouble(),
-                        Probe.MIN_LONGITUDE + (Probe.MAX_LONGITUDE - Probe.MIN_LONGITUDE) * rand.nextDouble(), 0));
+                probeMap.put(i, new Sample(Sample.MIN_NOISE_LEVEL + (Sample.MAX_NOISE_LEVEL - Sample.MIN_NOISE_LEVEL) * rand.nextDouble(),
+                        Sample.MIN_LATITUDE + (Sample.MAX_LATITUDE - Sample.MIN_LATITUDE) * rand.nextDouble(),
+                        Sample.MIN_LONGITUDE + (Sample.MAX_LONGITUDE - Sample.MIN_LONGITUDE) * rand.nextDouble(), 0));
             } catch (OverrangeException e) {
                 e.printStackTrace();
             }
-            Probe pr = _probeMap.get(i);
+            Sample pr = probeMap.get(i);
         }
     }
 
     @Before
     public void tearUp() throws NullRecordException {
-        _db = new DataBaseHandler(mActivityRule.getActivity().getBaseContext(), mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
-        _db.getWritableDatabase();
+        db = new DataBaseHandler(mActivityRule.getActivity().getBaseContext(), mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
+        db.getWritableDatabase();
         for (int i = 0; i < LIMIT_PROBE; i++) {
-            _db.insert(_probeMap.get((Integer) i));
+            db.insert(probeMap.get((Integer) i));
         }
     }
 
@@ -72,8 +66,8 @@ public class DataBaseTest {
         mActivityRule.getActivity().getBaseContext().deleteDatabase(mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
         File dbPath = mActivityRule.getActivity().getBaseContext().getDatabasePath(mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
         Assert.assertFalse(dbPath.exists());
-        _db = new DataBaseHandler(mActivityRule.getActivity().getBaseContext(), mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
-        _db.getReadableDatabase();
+        db = new DataBaseHandler(mActivityRule.getActivity().getBaseContext(), mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
+        db.getReadableDatabase();
         dbPath = mActivityRule.getActivity().getBaseContext().getDatabasePath(mActivityRule.getActivity().getApplicationContext().getResources().getString(R.string.database_test));
         Assert.assertTrue(dbPath.exists());
     }
@@ -82,7 +76,7 @@ public class DataBaseTest {
     public void insertTest() {
         for (int i = 0; i < LIMIT_PROBE; i++) {
             try {
-                Assert.assertTrue(_db.insert(_probeMap.get((Integer) i)));
+                Assert.assertTrue(db.insert(probeMap.get((Integer) i)));
             } catch (NullRecordException e) {
                 e.printStackTrace();
             }
@@ -93,7 +87,7 @@ public class DataBaseTest {
     public void ereaseTest() {
         try {
             for (int i = LIMIT_PROBE; i >= 1; i--) {
-                Assert.assertTrue(_db.erease(i));
+                Assert.assertTrue(db.erease(i));
             }
         } catch (NullRecordException e) {
             e.printStackTrace();
@@ -103,11 +97,11 @@ public class DataBaseTest {
     @Test
     public void getProbeByIDTest() throws NullRecordException {
         for (int i = 0; i < LIMIT_PROBE; i++) {
-            Probe pr = _db.getProbeByID(i + 1);//+1 ze względu że w bazie rekordy są od pierwszego rekordu a nie od zerowego
-            Assert.assertEquals(_probeMap.get(i).getLatitude(), pr.getLatitude(), 0.0);
-            Assert.assertEquals(_probeMap.get(i).getLongitude(), pr.getLongitude(), 0.0);
-            Assert.assertEquals(_probeMap.get(i).getAvgNoiseLevel(), pr.getAvgNoiseLevel(), 0.0);
-            Assert.assertFalse(_probeMap.get(i).getState());
+            Sample pr = db.getProbeByID(i + 1);//+1 ze względu że w bazie rekordy są od pierwszego rekordu a nie od zerowego
+            Assert.assertEquals(probeMap.get(i).getLatitude(), pr.getLatitude(), 0.0);
+            Assert.assertEquals(probeMap.get(i).getLongitude(), pr.getLongitude(), 0.0);
+            Assert.assertEquals(probeMap.get(i).getAvgNoiseLevel(), pr.getAvgNoiseLevel(), 0.0);
+            Assert.assertFalse(probeMap.get(i).getState());
         }
     }
 
@@ -116,7 +110,7 @@ public class DataBaseTest {
     public void throwingExceptionTest() {
         Throwable e = null;
         try {
-            Probe pr = _db.getProbeByID(LIMIT_PROBE + 1);
+            Sample pr = db.getProbeByID(LIMIT_PROBE + 1);
         } catch (Throwable ex) {
             e = ex;
         }
@@ -128,7 +122,7 @@ public class DataBaseTest {
     public void ereaseNullProbe() {
         Throwable e = null;
         try {
-            _db.erease(LIMIT_PROBE + 1);
+            db.erease(LIMIT_PROBE + 1);
         } catch (Throwable ex) {
             e = ex;
         }
@@ -138,9 +132,9 @@ public class DataBaseTest {
     @Test
     public void insertNullProbe() {
         Throwable e = null;
-        Probe probe = null;
+        Sample sample = null;
         try {
-            _db.insert(probe);
+            db.insert(sample);
         } catch (Throwable ex) {
             e = ex;
         }
@@ -149,10 +143,10 @@ public class DataBaseTest {
 
     @Test
     public void insertOverageProbe() {
-        Probe pr = null;
+        Sample pr = null;
         try {
-            pr = new Probe(Probe.MAX_NOISE_LEVEL + 1, Probe.MAX_LATITUDE + 2, Probe.MAX_LONGITUDE + 22, 0);
-            _db.insert(pr);
+            pr = new Sample(Sample.MAX_NOISE_LEVEL + 1, Sample.MAX_LATITUDE + 2, Sample.MAX_LONGITUDE + 22, 0);
+            db.insert(pr);
             Assert.fail("Test should fail, should be exception");
         } catch (OverrangeException e) {
             e.printStackTrace();
@@ -163,13 +157,13 @@ public class DataBaseTest {
 
     @Test
     public void isStoredValueOnServer() {
-        _db.changeState(LIMIT_PROBE - 2 + 1, true);
-        _db.changeState(LIMIT_PROBE - 4 + 1, true);
-        _db.changeState(LIMIT_PROBE + LIMIT_PROBE * 2 + 1, true);
+        db.changeState(LIMIT_PROBE - 2 + 1, true);
+        db.changeState(LIMIT_PROBE - 4 + 1, true);
+        db.changeState(LIMIT_PROBE + LIMIT_PROBE * 2 + 1, true);
         try {
-            Assert.assertTrue(_db.getProbeByID(LIMIT_PROBE - 2 + 1).getState());
-            Assert.assertTrue(_db.getProbeByID(LIMIT_PROBE - 4 + 1).getState());
-            Assert.assertFalse(_db.getProbeByID(LIMIT_PROBE + LIMIT_PROBE * 2 + 1).getState());
+            Assert.assertTrue(db.getProbeByID(LIMIT_PROBE - 2 + 1).getState());
+            Assert.assertTrue(db.getProbeByID(LIMIT_PROBE - 4 + 1).getState());
+            Assert.assertFalse(db.getProbeByID(LIMIT_PROBE + LIMIT_PROBE * 2 + 1).getState());
         } catch (NullRecordException e) {
             e.printStackTrace();
         }

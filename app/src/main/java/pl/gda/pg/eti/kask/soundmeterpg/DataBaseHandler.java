@@ -13,14 +13,14 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
  * Created by gierl on 19.07.2016.
  */
 public class DataBaseHandler extends SQLiteOpenHelper {
-    private Context _context;
+    private Context context;
     private static final int DATABASE_VERSION = 1;
     private static final String ID = "ID";
 
     public DataBaseHandler(Context ctx, String name) {
 
         super(ctx, name, null, DATABASE_VERSION);
-        _context = ctx;
+        context = ctx;
     }
 
     @Override
@@ -36,17 +36,17 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         //TODO naleĹĽy odpowiednio przenieĹ›Ä‡ elementy z starszej wersji bazy do nowej. Ta metoda moĹĽe siÄ™ przydaÄ‡
     }
 
-    public boolean insert(Probe probe) throws NullRecordException {
-        if (probe == null) throw new NullRecordException();
+    public boolean insert(Sample sample) throws NullRecordException {
+        if (sample == null) throw new NullRecordException();
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put(_context.getResources().getString(R.string.noise), probe.getAvgNoiseLevel());
-            contentValues.put(_context.getResources().getString(R.string.latitude), probe.getLatitude());
-            contentValues.put(_context.getResources().getString(R.string.longitude), probe.getLongitude());
-            contentValues.put(_context.getResources().getString(R.string.stored), probe.getState());
+            contentValues.put(context.getResources().getString(R.string.noise), sample.getAvgNoiseLevel());
+            contentValues.put(context.getResources().getString(R.string.latitude), sample.getLatitude());
+            contentValues.put(context.getResources().getString(R.string.longitude), sample.getLongitude());
+            contentValues.put(context.getResources().getString(R.string.stored), sample.getState());
             int return_value = -1;
-            return_value = (int) db.insert(_context.getResources().getString(R.string.table), null, contentValues);
+            return_value = (int) db.insert(context.getResources().getString(R.string.table), null, contentValues);
             db.close();
             if (return_value <= 0) {
                 return false;
@@ -57,9 +57,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return false;
     }
 
-    public Probe getProbeByID(int ID) throws NullRecordException {
-        Probe probe = null;
-        String query = "SELECT * from " + _context.getResources().getString(R.string.table) + " WHERE ID=" + ID;
+    public Sample getProbeByID(int ID) throws NullRecordException {
+        Sample sample = null;
+        String query = "SELECT * from " + context.getResources().getString(R.string.table) + " WHERE ID=" + ID;
         SQLiteDatabase db = null;
         try {
             db = this.getReadableDatabase();
@@ -69,35 +69,44 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst() && cursor.getCount() != 0) {
             try {
-                probe = new Probe(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getInt(4));
+                sample = new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getInt(4));
             } catch (OverrangeException e) {
                 e.printStackTrace();
             }
-            return probe;
+            cursor.close();
+            db.close();
+            return sample;
         } else throw new NullRecordException("Not found records that have ID = " + ID);
 
 
     }
 
-    /*  private Probe getProbeFromDB() {
-          Probe probe = null;
-          String query = "Select * from " + TABLE + " ORDER BY " + ID + " ASC LIMIT 1";
+      public Sample getProbeFromDB() throws NullRecordException {
+          Sample sample = null;
+          String query = "Select * from " + context.getResources().getString(R.string.table) + " ORDER BY " + ID + " ASC LIMIT 1";
 
           try {
               SQLiteDatabase db = this.getReadableDatabase();
+
               Cursor cursor = db.rawQuery(query, null);
               if (cursor.moveToFirst()) {
-                  probe = new Probe(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3));
-                  return probe;
+                  sample = new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3),cursor.getInt(4));
+                  cursor.close();
+                  db.close();
+                  return sample;
               }
+              db.close();
           } catch (Exception e) {
               android.util.Log.e("Exception", "Cannot get writableDataBase", e);
           }
-          return probe;
+          if(sample == null)
+              throw new NullRecordException("Cannot get object from database. Empty database?");
+
+          return sample;
       }
-  */
+
     public boolean erease(int ID) throws NullRecordException {
-        String query = "Select * from " + _context.getResources().getString(R.string.table) + " WHERE ID=" + ID;
+        String query = "Select * from " + context.getResources().getString(R.string.table) + " WHERE ID=" + ID;
         SQLiteDatabase db = null;
         try {
             db = this.getWritableDatabase();
@@ -106,7 +115,11 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
-                return db.delete(_context.getResources().getString(R.string.table), ID + "=" + cursor.getInt(0), null) > 0;
+                int returnValue = db.delete(context.getResources().getString(R.string.table), ID + "=" + cursor.getInt(0), null);
+                cursor.close();
+                db.close();
+                return  returnValue>0;
+
             } else throw new NullRecordException("Not found records that have ID = " + ID);
 
     }
@@ -114,10 +127,11 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public boolean changeState(int ID, boolean stored) {
         int state = (stored) ? 1 : 0;
         ContentValues args = new ContentValues();
-        args.put(_context.getResources().getString(R.string.stored), state);
+        args.put(context.getResources().getString(R.string.stored), state);
         SQLiteDatabase db = null;
         db = this.getWritableDatabase();
-        int rowAffected = db.update(_context.getResources().getString(R.string.table), args, "ID" + "=" + ID, null);
+        int rowAffected = db.update(context.getResources().getString(R.string.table), args, "ID" + "=" + ID, null);
+        db.close();
         if (rowAffected > 0) return true;
         else return false;
     }
