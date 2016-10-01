@@ -156,10 +156,10 @@ public class GoogleAPILocalization extends Service implements ConnectionCallback
         lastKnownLocation = location;
     }
 
-
     public class LocalBinder extends Binder {
         public GoogleAPILocalization getService() {
             return GoogleAPILocalization.this;
         }
     }
+
 }

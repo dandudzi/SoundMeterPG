@@ -2,7 +2,7 @@
 <resources>
     <!--SampleCreator -->
     <integer name="sample_rate">22050</integer>
-    <integer name="samples_per_minute">16</integer>
+    <integer name="samples_per_minute">2</integer>
     <integer name="time_of_sample">3750</integer>
     <integer name="milisecond_in_minute">1000</integer>
 

@@ -188,46 +188,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
-    public void startMyService(View v) {
-        Intent serviceIntent = new Intent(this, SampleCreator.class);
-        serviceIntent.addCategory("SampleCreator");
-        startService(serviceIntent);
-    }
-
-    public void stopMyService(View v) {
-        Intent serviceIntent = new Intent(this, SampleCreator.class);
-        serviceIntent.addCategory("SampleCreator");
-        stopService(serviceIntent);
-    }
-
-
-    public void insertData(View btn) throws IOException {
-        //TODO to tylko bylo do prototypu
-        //new Sender(getBaseContext()).execute(tmpRecorder.soundDb(1.0));
-    }
-
-    public void showGPS(View w) {
-        DataBaseHandler dataBaseHandler = new DataBaseHandler(getBaseContext(), getResources().getString(R.string.database_name));
-        try {
-            dataBaseHandler.insert(new Sample(32.3, 322.23, 12.11, 0));
-        } catch (NullRecordException e) {
-            e.printStackTrace();
-        } catch (OverrangeException e) {
-            e.printStackTrace();
-        }
-          /*  _gps = new Localization(MainActivity.this);
-
-            if(_gps.canGetLocation()) {
-                double latitude = _gps.getLatitude();
-                double longitude = _gps.getLongitude();
-
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Your Location is -\nLat: " + latitude + "\nLong: "
-                                + longitude, Toast.LENGTH_LONG).show();
-            } else {
-                _gps.showSettingsAlert();
-            }
-*/
-    }
 }

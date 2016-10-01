@@ -5,6 +5,7 @@
   <PreferenceCategory
       android:title="@string/application_settings"
       android:id="@+id/application_settings_preferences"
+
       >
 
     <CheckBoxPreference
@@ -25,6 +26,8 @@
         android:dependency="@string/recording_audio_key_preference"
         android:id="@+id/working_in_background_check_box_preference"
         android:layout="@layout/checkbox_preference"/>
+
+  <pl.gda.pg.eti.kask.soundmeterpg.SeekBarPreference />
 
   </PreferenceCategory>
 

@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.util.Log;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoGPS;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoInternet;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.SeekBarPreference;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 
 /**
