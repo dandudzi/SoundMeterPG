@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.ArrayAdapter;
+
+import java.util.ArrayList;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
@@ -27,8 +30,12 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE SAMPLES(ID integer primary key autoincrement," +
                 "Noise double(14,11)," +
+                "Variance double(14,11),"+
                 "Latitude double(14,11) not null," +
-                "Longitude double(14,11) not null, StoredOnServer integer default 0);");
+                "Longitude double(14,11) not null," +
+                "Date  character(19) not null," +
+                "UserID character(20) not null," +
+                "StoredOnServer integer default 0);");
     }
 
     @Override
@@ -42,8 +49,11 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(context.getResources().getString(R.string.noise), sample.getAvgNoiseLevel());
+            contentValues.put(context.getResources().getString(R.string.variance), sample.getVariance());
             contentValues.put(context.getResources().getString(R.string.latitude), sample.getLatitude());
             contentValues.put(context.getResources().getString(R.string.longitude), sample.getLongitude());
+            contentValues.put(context.getResources().getString(R.string.date), sample.getDate());
+            contentValues.put(context.getResources().getString(R.string.userID), sample.getUserID());
             contentValues.put(context.getResources().getString(R.string.stored), sample.getState());
             int return_value = -1;
             return_value = (int) db.insert(context.getResources().getString(R.string.table), null, contentValues);
@@ -80,6 +90,30 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
 
     }
+
+    public ArrayList<Sample> getSamples() throws OverrangeException {
+        ArrayList<Sample> arrayAdapter = new ArrayList<>();
+        Sample sample = null;
+        String query = "SELECT * from " + context.getResources().getString(R.string.table) + ";";
+        SQLiteDatabase db = null;
+        try {
+            db = this.getReadableDatabase();
+        } catch (Exception e) {
+            android.util.Log.e("Exception", "Cannot get writableDataBase", e);
+        }
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst() && cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                arrayAdapter.add(new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getDouble(4),
+                        cursor.getString(5), cursor.getString(6), cursor.getInt(7)));
+            }
+        }
+            cursor.close();
+            db.close();
+            return arrayAdapter;
+        }
+
+
 
       public Sample getProbeFromDB() throws NullRecordException {
           Sample sample = null;

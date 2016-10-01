@@ -26,6 +26,7 @@
         android:id="@+id/working_in_background_check_box_preference"
         android:layout="@layout/checkbox_preference"/>
 
+
   </PreferenceCategory>
 
   <PreferenceCategory

@@ -3,9 +3,13 @@ package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,14 +21,27 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
+import pl.gda.pg.eti.kask.soundmeterpg.MainAdapter;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.Sample;
+import pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization;
+import pl.gda.pg.eti.kask.soundmeterpg.Services.SampleCreator;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -32,7 +49,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private NavigationView drawerList;
-
+    private  ListView listView;
+    private  SampleCreator sampleCreator;
+    private Intent intent ;
+    private ServiceConnection sampleCreatorConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            SampleCreator.LocalBinder binder = (SampleCreator.LocalBinder) service;
+                binder = (SampleCreator.LocalBinder) service;
+            sampleCreator = binder.getService();
+            try {
+                sampleCreator.start();
+            } catch (InsufficientPermissionsException e) {
+                e.printStackTrace();
+            }
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            sampleCreator = null;
+            sampleCreator.stop();
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -42,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setUpToolbar();
         setUpDrawer();
+        intent = new Intent(getBaseContext(), SampleCreator.class);
+
 
     }
 
@@ -100,7 +139,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume()
     {
+        getBaseContext().bindService(intent, sampleCreatorConnection, Context.BIND_AUTO_CREATE);
         super.onResume();
+
     }
 
     @Override
@@ -131,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setFragmentContent(new Measure());
                 break;
             case R.id.measurements_drawer:
+
                 setFragmentContent(new Measurements());
                 break;
             case R.id.log_in_drawer:

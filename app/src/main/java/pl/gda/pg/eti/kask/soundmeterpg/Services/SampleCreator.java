@@ -13,6 +13,11 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
@@ -20,6 +25,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Sample;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 /**
@@ -33,8 +39,10 @@ public class SampleCreator extends Service {
     private static final int SENDER = 1;
     private static int BUFFER_SIZE;
     private volatile double avgDB;
+    private volatile double variance;
     private double amplitude;
     private short[] buffer;
+    private double [] samples;
     private int counter = 0;
     private AudioRecord audioRecord;
     private PreferenceParser preferenceParser;
@@ -82,7 +90,9 @@ public class SampleCreator extends Service {
         buffer = new short[BUFFER_SIZE];
         preferenceParser = new PreferenceParser(this);
         bindServices();
+        samples = new double[getResources().getInteger(R.integer.samples_per_minute)];
         return localBinder;
+
     }
     @Override
     public boolean onUnbind(Intent intent) {
@@ -105,6 +115,13 @@ public class SampleCreator extends Service {
          Runnable runnable = new Runnable() {
             public void run() {
                 while (runningThread) {
+                    while(googleAPILocalization == null){
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        continue;}
                     try {
                         Thread.sleep(getResources().getInteger(R.integer.time_of_sample));
                         counter++;
@@ -120,7 +137,10 @@ public class SampleCreator extends Service {
                                 Sample pr = null;
                                 try {
                                     Location l  = googleAPILocalization.getLocation();
-                                    pr = new Sample(result, l.getLatitude(),l.getLongitude(), 0);
+                                    Calendar c = Calendar.getInstance();
+                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String formattedDate = df.format(c.getTime());
+                                    pr = new Sample(result, variance(result), l.getLatitude(),l.getLongitude(),formattedDate,"LEL", 0);
                                 } catch (OverrangeException e) {
                                     e.printStackTrace();
                                 } catch (NullLocalizationException e) {
@@ -200,9 +220,18 @@ public class SampleCreator extends Service {
     }
     private void calculateSample(){
         amplitude = getNoiseLevel();
+        samples[counter] = amplitude;
         amplitude /= 10.0;
         amplitude = Math.pow(10, amplitude);
         avgDB += amplitude;
+    }
+    private double variance(double averageDB){
+        double variance = 0.0;
+        for(int i =0; i<getResources().getInteger(R.integer.samples_per_minute);i++)
+        {
+            variance =Math.sqrt(samples[i]-averageDB);
+        }
+        return variance/getResources().getInteger(R.integer.samples_per_minute);
     }
     public class LocalBinder extends Binder {
         public SampleCreator getService() {

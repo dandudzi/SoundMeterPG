@@ -19,6 +19,10 @@
         <string name="working_in_background_title_preference">Allow working in background</string>
         <string name="working_in_background_summary_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
+    <string name="number_of_samples_preference">processing_private_data</string>
+    <string name="number_of_samples_title_preference">Number of samples stored on device</string>
+    <string name="number_of_samples_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+
         <!--Settings Device-->
         <string name="device_settings">Device Settings</string>
 
@@ -108,8 +112,12 @@
 
     <!-- Sender and DataBaseHandler-->
     <string name="noise">Noise</string>
+    <string name="variance">Variance</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="date">Date</string>
+    <string name="userID">UserID</string>
     <string name="stored">StoredOnServer</string>
+
 
 </resources>
