@@ -1,4 +1,4 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Services;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -18,7 +18,7 @@ public class ServiceDetector {
     public static boolean isMyServiceRunning(Class<?> serviceClass, Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            Log.e("Service name = ", serviceClass.getName());
+            //Log.e("Service name = ", serviceClass.getName());
             if (serviceClass.getName().equals(service.service.getClassName())) {
                 return true;
             }

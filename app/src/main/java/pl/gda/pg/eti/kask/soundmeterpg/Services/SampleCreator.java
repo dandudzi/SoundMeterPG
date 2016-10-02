@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.location.Location;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -13,14 +12,12 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.MeasurementChangeListener;
-import pl.gda.pg.eti.kask.soundmeterpg.Sample;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 /**
@@ -137,32 +134,32 @@ public class SampleCreator extends Service {
                             counter = 0;
                             Log.i("Avg in db", Double.toString(result));
                             if (googleAPILocalization.canUseGPS()) {
-                                Sample oneMinuteSample = null;
-                                try {
+                                Measurement oneMinuteMeasurement = null;
+                              /*  try {
                                     Location l  = googleAPILocalization.getLocation();
-                                    oneMinuteSample = new Sample(result, l.getLatitude(),l.getLongitude(), 0);
+                                    //oneMinuteMeasurement = new Measurement(result, l.getLatitude(),l.getLongitude(), 0);
                                 } catch (OverrangeException e) {
                                     e.printStackTrace();
                                 } catch (NullLocalizationException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
 
                                 if(listener != null)
-                                    listener.onMeasurementChange(oneMinuteSample);
+                                    listener.onMeasurementChange(oneMinuteMeasurement);
 
-                                Log.i("Sample", Integer.toString((int)oneMinuteSample.getAvgNoiseLevel()));
+                                //Log.i("Sample", Integer.toString((int) oneMinuteMeasurement.getAvgNoiseLevel()));
                                 if (sender.isConnectionWithServer("soundmeterpg.cba.pl")) {
-                                    try {
-                                        if (sender.insert(oneMinuteSample))
-                                            oneMinuteSample.setState(true);
-                                        Log.i("Store samples on server",Double.toString(oneMinuteSample.getAvgNoiseLevel()));
+                                   /* try {
+                                        //if (sender.insert(oneMinuteMeasurement))
+                                        //    oneMinuteMeasurement.setState(true);
+                                      //  Log.i("Store samples on server",Double.toString(oneMinuteMeasurement.getAvgNoiseLevel()));
                                     } catch (NullRecordException e) {
                                         e.printStackTrace();
-                                    }
+                                    }*/
                                 }
                                 try {
-                                    dataBaseHandler.insert(oneMinuteSample);
-                                    Log.i("Store samples in Database",Double.toString(oneMinuteSample.getLatitude())+ Double.toString(oneMinuteSample.getLongitude()));
+                                    dataBaseHandler.insert(oneMinuteMeasurement);
+                                   // Log.i("Store samples in Database",Double.toString(oneMinuteMeasurement.getLatitude())+ Double.toString(oneMinuteMeasurement.getLongitude()));
                                 } catch (NullRecordException e) {
                                     e.printStackTrace();
                                 }

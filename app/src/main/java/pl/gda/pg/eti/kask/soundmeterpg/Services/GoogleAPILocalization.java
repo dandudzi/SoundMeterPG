@@ -21,7 +21,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
-import pl.gda.pg.eti.kask.soundmeterpg.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 /**

@@ -14,7 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Sample;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
@@ -59,8 +59,8 @@ public class Sender extends Service {
         } else return false;
     }
 
-    public boolean insert(Sample sample) throws NullRecordException {
-        if (sample == null) {
+    public boolean insert(Measurement measurement) throws NullRecordException {
+        if (measurement == null) {
             throw new NullRecordException("The probe is null!");
         }
         if (preferenceParser.hasPermissionToUseInternet() && connectionInternetDetector.isConnectingToInternet()
@@ -69,9 +69,9 @@ public class Sender extends Service {
             URL url = null;
             OutputStreamWriter request = null;
             String response;
-            String parameters = getResources().getString(R.string.noise) + "=" + sample.getAvgNoiseLevel() +
-                    "&" + getResources().getString(R.string.latitude) + "=" + sample.getLatitude() +
-                    "&" + getResources().getString(R.string.longitude) + "=" + sample.getLongitude();
+            //String parameters = getResources().getString(R.string.noise) + "=" + measurement.getAvgNoiseLevel() +
+                  //  "&" + getResources().getString(R.string.latitude) + "=" + measurement.getLatitude() +
+                 //   "&" + getResources().getString(R.string.longitude) + "=" + measurement.getLongitude();
             try {
                 url = new URL(getResources().getString(R.string.site));
                 connection = (HttpURLConnection) url.openConnection();
@@ -79,7 +79,7 @@ public class Sender extends Service {
                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 connection.setRequestMethod("POST");
                 request = new OutputStreamWriter(connection.getOutputStream());
-                request.write(parameters);
+              //  request.write(parameters);
                 request.flush();
                 request.close();
                 String line = "";

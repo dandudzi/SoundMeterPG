@@ -3,11 +3,11 @@ package pl.gda.pg.eti.kask.soundmeterpg.Exceptions;
 /**
  * Created by gierl on 10.08.2016.
  */
-public class OverrangeException extends Exception {
-    public OverrangeException() {
+public class OverRangeException extends RuntimeException {
+    public OverRangeException() {
     }
 
-    public OverrangeException(String message) {
+    public OverRangeException(String message) {
         super(message);
     }
 }

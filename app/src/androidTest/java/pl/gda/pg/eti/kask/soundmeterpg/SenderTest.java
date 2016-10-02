@@ -22,9 +22,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.Sender;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 
 
 /**
@@ -33,7 +34,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 
 @RunWith(AndroidJUnit4.class)
 public class SenderTest {
-    private static Sample sample;
+    private static Measurement measurement;
     private static Context context = InstrumentationRegistry.getTargetContext();
     private static Sender sender;
     private static ConnectionInternetDetector connectionInternetDetector;
@@ -45,13 +46,13 @@ public class SenderTest {
     public static void setUp() {
         connectionInternetDetector = new ConnectionInternetDetector(context);
         Random rand = new Random();
-        try {
-            sample = new Sample(Sample.MIN_NOISE_LEVEL + (Sample.MAX_NOISE_LEVEL - Sample.MIN_NOISE_LEVEL) * rand.nextDouble(),
-                    Sample.MIN_LATITUDE + (Sample.MAX_LATITUDE - Sample.MIN_LATITUDE) * rand.nextDouble(),
-                    Sample.MIN_LONGITUDE + (Sample.MAX_LONGITUDE - Sample.MIN_LONGITUDE) * rand.nextDouble(), 0);
-        } catch (OverrangeException e) {
+        /*try {
+            measurement = new Measurement(Measurement.MIN_NOISE_LEVEL + (Measurement.MAX_NOISE_LEVEL - Measurement.MIN_NOISE_LEVEL) * rand.nextDouble(),
+                    Measurement.MIN_LATITUDE + (Measurement.MAX_LATITUDE - Measurement.MIN_LATITUDE) * rand.nextDouble(),
+                    Measurement.MIN_LONGITUDE + (Measurement.MAX_LONGITUDE - Measurement.MIN_LONGITUDE) * rand.nextDouble(), 0);
+        } catch (OverRangeException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Before
@@ -112,7 +113,7 @@ public class SenderTest {
         PreferenceTestHelper.setPrivilages(R.string.internet_key_preference, preferences, context, true);
         try {
             if (connectionInternetDetector.isConnectingToInternet())
-                Assert.assertTrue(sender.insert(sample));
+                Assert.assertTrue(sender.insert(measurement));
         } catch (NullRecordException e) {
             e.printStackTrace();
         }
@@ -123,7 +124,7 @@ public class SenderTest {
         PreferenceTestHelper.setPrivilages(R.string.internet_key_preference, preferences, context, false);
         try {
             if (connectionInternetDetector.isConnectingToInternet())
-                Assert.assertFalse(sender.insert(sample));
+                Assert.assertFalse(sender.insert(measurement));
         } catch (NullRecordException e) {
             e.printStackTrace();
         }
@@ -132,10 +133,10 @@ public class SenderTest {
     @Test
     public void NullParametrTest() {
         PreferenceTestHelper.setPrivilages(R.string.internet_key_preference, preferences, context, false);
-        Sample sample = null;
+        Measurement measurement = null;
         Throwable e = null;
         try {
-            sender.insert(sample);
+            sender.insert(measurement);
         } catch (Throwable ex) {
             e = ex;
         }

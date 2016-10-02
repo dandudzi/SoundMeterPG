@@ -23,7 +23,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <service android:name="pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -35,6 +35,8 @@
         android:configChanges="orientation|screenSize"
         android:name="android.support.multidex.MultiDexApplication">
         <service android:name="pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization"/>
+        <service android:name=".Services.Measure" android:exported="false"/>
+        <service android:name=".Services.Sender"/>
         <activity
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.Launcher"
@@ -46,15 +48,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <service android:name=".Services.SampleCreator" >
-                <uses-permission
-                    android:name="android.permission.ACCESS_MOCK_LOCATION"
-                    tools:ignore="MockLocation" />
-                />
-                <service android:name=".Services.Sender"/>
-                <service android:name="pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization"/>
-                <service android:name=".Services.Localization"/>
-            </service>
             <uses-permission
                 android:name="android.permission.ACCESS_MOCK_LOCATION"
                 tools:ignore="MockLocation" />
@@ -68,28 +61,15 @@
             android:configChanges="orientation|screenSize"/>
 
 
-        <service android:name=".Services.Sender">
-            <uses-permission android:name="android.permission.INTERNET" />
-        </service>
-        <service android:name=".Services.GoogleAPILocalization"/>
-        <service android:name=".Services.SampleCreator" >
-            <uses-permission
-                android:name="android.permission.ACCESS_MOCK_LOCATION"
-                tools:ignore="MockLocation" />
-            />
-            <service android:name=".Services.Sender"/>
-            <service android:name=".Services.Localization"/>
-        </service>
         <activity
             android:name=".Activities.LoginActivity"
             android:noHistory="true"
             android:excludeFromRecents="true"
             android:finishOnTaskLaunch="true"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".Activities.MainActivity" >
-        </activity>
+            android:parentActivityName=".Activities.MainActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".Activities.MainActivity" />
+             />
     </application>
 
 </manifest>

@@ -4,14 +4,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.ServiceTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -27,8 +24,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsExcepti
 import pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.SampleCreator;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.Sender;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
+import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
 
 import static junit.framework.Assert.fail;
 
@@ -36,7 +32,7 @@ import static junit.framework.Assert.fail;
  * Created by Filip Gierłowski and dandudzi xd
  */
 @RunWith(AndroidJUnit4.class)
-public class SampleCreatorLifeCycleTest {
+public class MeasurementCreatorLifeCycleTest {
     private static Context context;
     private static Intent intent;
     private static SampleCreator sampleCreator;

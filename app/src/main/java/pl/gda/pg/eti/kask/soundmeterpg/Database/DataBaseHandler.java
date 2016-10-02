@@ -1,4 +1,4 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 
 /**
  * Created by gierl on 19.07.2016.
@@ -36,15 +37,15 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         //TODO naleĹĽy odpowiednio przenieĹ›Ä‡ elementy z starszej wersji bazy do nowej. Ta metoda moĹĽe siÄ™ przydaÄ‡
     }
 
-    public boolean insert(Sample sample) throws NullRecordException {
-        if (sample == null) throw new NullRecordException();
+    public boolean insert(Measurement measurement) throws NullRecordException {
+        if (measurement == null) throw new NullRecordException();
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put(context.getResources().getString(R.string.noise), sample.getAvgNoiseLevel());
-            contentValues.put(context.getResources().getString(R.string.latitude), sample.getLatitude());
-            contentValues.put(context.getResources().getString(R.string.longitude), sample.getLongitude());
-            contentValues.put(context.getResources().getString(R.string.stored), sample.getState());
+            //contentValues.put(context.getResources().getString(R.string.noise), measurement.getAvgNoiseLevel());
+            //contentValues.put(context.getResources().getString(R.string.latitude), measurement.getLatitude());
+            //contentValues.put(context.getResources().getString(R.string.longitude), measurement.getLongitude());
+            //contentValues.put(context.getResources().getString(R.string.stored), measurement.getState());
             int return_value = -1;
             return_value = (int) db.insert(context.getResources().getString(R.string.table), null, contentValues);
             db.close();
@@ -57,8 +58,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return false;
     }
 
-    public Sample getProbeByID(int ID) throws NullRecordException {
-        Sample sample = null;
+    public Measurement getProbeByID(int ID) throws NullRecordException {
+        Measurement measurement = null;
         String query = "SELECT * from " + context.getResources().getString(R.string.table) + " WHERE ID=" + ID;
         SQLiteDatabase db = null;
         try {
@@ -68,21 +69,21 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst() && cursor.getCount() != 0) {
-            try {
-                sample = new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getInt(4));
+            /*try {
+                //measurement = new Measurement(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getInt(4));
             } catch (OverrangeException e) {
                 e.printStackTrace();
-            }
+            }*/
             cursor.close();
             db.close();
-            return sample;
+            return measurement;
         } else throw new NullRecordException("Not found records that have ID = " + ID);
 
 
     }
 
-      public Sample getProbeFromDB() throws NullRecordException {
-          Sample sample = null;
+      public Measurement getProbeFromDB() throws NullRecordException {
+          Measurement measurement = null;
           String query = "Select * from " + context.getResources().getString(R.string.table) + " ORDER BY " + ID + " ASC LIMIT 1";
 
           try {
@@ -90,19 +91,19 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
               Cursor cursor = db.rawQuery(query, null);
               if (cursor.moveToFirst()) {
-                  sample = new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3),cursor.getInt(4));
+                  //measurement = new Measurement(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3),cursor.getInt(4));
                   cursor.close();
                   db.close();
-                  return sample;
+                  return measurement;
               }
               db.close();
           } catch (Exception e) {
               android.util.Log.e("Exception", "Cannot get writableDataBase", e);
           }
-          if(sample == null)
+          if(measurement == null)
               throw new NullRecordException("Cannot get object from database. Empty database?");
 
-          return sample;
+          return measurement;
       }
 
     public boolean erease(int ID) throws NullRecordException {
