@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.espresso.DataInteraction;
 import android.support.v7.widget.AppCompatImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -92,6 +93,30 @@ public class SettingsActivityDisplayCorrectly {
         String key = context.getString(R.string.internal_storage_key_preference);
 
         isPreferenceDisplayCorrectly(key,titleId,summaryId);
+    }
+
+    @Test
+    public void isSeekBarDisplayCorrectly() {
+        int title = R.string.title_seek_bar_preference;
+        String key = context.getString(R.string.measurements_in_storage_key_preference);
+
+        DataInteraction interaction = findPreferencesOnView(key, title);
+        interaction.check(matches(isCompletelyDisplayed()));
+
+        DataInteraction titleSeekBar = interaction.onChildView(allOf(withText(title)));
+        TextViewTestHelper.testSinglelineTextView(titleSeekBar,context.getString(title));
+
+        DataInteraction minValue = interaction.onChildView(allOf(withId(R.id.min_value_seek_bar)));
+        DataInteraction maxValue = interaction.onChildView(allOf(withId(R.id.max_value_seek_bar)));
+        DataInteraction currentValue = interaction.onChildView(allOf(withId(R.id.current_value_seek_bar)));
+
+        TextViewTestHelper.testSinglelineTextView(minValue);
+        TextViewTestHelper.testSinglelineTextView(maxValue);
+        TextViewTestHelper.testSinglelineTextView(currentValue);
+
+
+        DataInteraction seekBar = interaction.onChildView(allOf(withId(R.id.seek_bar_preference)));
+        seekBar.check(matches(isCompletelyDisplayed()));
     }
 
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +15,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import pl.gda.pg.eti.kask.soundmeterpg.IntentActionsAndKeys;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.SampleCreator;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 
 /**
  * Created by Daniel on 10.08.2016 at 17:53 :).
  */
 public class Measure extends Fragment{
-
     private Context context;
 
     private TextView currentNoiseLevel;
@@ -31,9 +33,26 @@ public class Measure extends Fragment{
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            currentNoiseLevel.setText("Juz");
+            IntentActionsAndKeys action =  IntentActionsAndKeys.valueOf(intent.getAction());
+            switch (action){
+                case SAMPLE_RECEIVE_ACTION:
+                    Sample sample = intent.getExtras().getParcelable(IntentActionsAndKeys.SAMPLE_KEY.toString());
+                    changeUIMeasurement(sample);
+                    break;
+                case ERROR_MEASURE_ACTION:
+                    String key =  intent.getExtras().getString(IntentActionsAndKeys.ERROR_KEY.toString());
+                    Measure.this.handleMeasureError(key);
+            }
         }
     };
+
+    private void handleMeasureError(String key) {
+        currentNoiseLevel.setText(key);
+    }
+
+    private  void changeUIMeasurement(Sample sample) {
+        currentNoiseLevel.setText(String.valueOf(sample.getNoiseLevel())+" db");
+    }
 
 
     @Override
@@ -56,7 +75,10 @@ public class Measure extends Fragment{
                 onMeasureButtonClick(v);
             }
         });
-        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, new IntentFilter("custom-event-name"));
+        IntentFilter filter =  new IntentFilter();
+        filter.addAction(IntentActionsAndKeys.END_ACTION.toString());
+        filter.addAction(IntentActionsAndKeys.ERROR_MEASURE_ACTION.toString());
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, filter);
     }
 
     @Override
@@ -77,8 +99,7 @@ public class Measure extends Fragment{
         boolean isMeasureServiceRunning = isMeasureServiceRunning();
         if(isMeasureServiceRunning){
             measureButton.setText("Start");
-            currentNoiseLevel.setText("0 db");
-            Intent stopServiceIntent = new Intent(pl.gda.pg.eti.kask.soundmeterpg.Services.Measure.END_ACTION);
+            Intent stopServiceIntent = new Intent(IntentActionsAndKeys.END_ACTION.toString());
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(stopServiceIntent);
         }else{
             measureButton.setText("Stop");

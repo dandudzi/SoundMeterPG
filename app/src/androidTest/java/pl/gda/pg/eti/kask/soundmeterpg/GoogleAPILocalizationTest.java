@@ -18,6 +18,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +46,7 @@ import static org.junit.Assert.fail;
 
 
 @RunWith(AndroidJUnit4.class)
+@Ignore
 public class GoogleAPILocalizationTest {
     private static final double MIN = 0.0001;
     private static final double MAX = 120.23;

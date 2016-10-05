@@ -11,4 +11,8 @@ public interface PreferenceManager {
     boolean hasPermissionToUseInternalStorage();
 
     boolean hasPermissionToUseMicrophone();
+
+    boolean hasPermissionToWorkInBackground();
+
+    int howManyMeasurementsInStorage();
 }

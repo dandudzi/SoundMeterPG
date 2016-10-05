@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -25,6 +26,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 /**
  * Created by gierl on 04.08.2016.
  */
+@Ignore
 @RunWith(AndroidJUnit4.class)
 public class DataBaseTest {
     private static DataBaseHandler db;

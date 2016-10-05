@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.preference.PreferenceManager;
+import android.support.test.espresso.DataInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -18,10 +19,15 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.IsNot.not;
 import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.*;
 
 /**
@@ -159,5 +165,26 @@ public class SettingsActivityWorkCorrectlyTest {
         isPreferenceChecked(R.string.internal_storage_key_preference,context);
     }
 
+
+    @Test
+    public void isSeekBarWorksCorrectly(){
+        selectPreference(R.string.recording_audio_key_preference,prefs,context);
+        selectPreference(R.string.private_data_key_preference,prefs,context);
+        selectPreference(R.string.working_in_background_key_preference,prefs,context);
+        uncheckPreference(R.string.internal_storage_key_preference,prefs,context);
+
+        int title = R.string.title_seek_bar_preference;
+        String key = context.getString(R.string.measurements_in_storage_key_preference);
+
+        DataInteraction interaction = findPreferencesOnView(key, title);
+        interaction.check(matches(not(isEnabled())));
+
+        selectPreference(R.string.internal_storage_key_preference,prefs,context);
+        interaction.check(matches(isEnabled()));
+
+        DataInteraction seekBar = interaction.onChildView(allOf(withId(R.id.seek_bar_preference)));
+        seekBar.perform(swipeLeft());
+        seekBar.perform(swipeRight());
+    }
 
 }

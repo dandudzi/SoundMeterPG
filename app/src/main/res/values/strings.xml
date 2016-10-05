@@ -13,11 +13,11 @@
         <!--Preference Application-->
         <string name="private_data_key_preference">processing_private_data</string>
         <string name="private_data_title_preference">Allow processing private data</string>
-        <string name="private_data_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="private_data_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
         <string name="working_in_background_key_preference">working_in_background</string>
         <string name="working_in_background_title_preference">Allow working in background</string>
-        <string name="working_in_background_summary_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="working_in_background_summary_preference"><!-- TODO --> 5Komentarz bardzo długi w długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
         <!--Settings Device-->
         <string name="device_settings">Device Settings</string>
@@ -25,22 +25,24 @@
         <!--Preference Device-->
         <string name="recording_audio_key_preference">recording_audio</string>
         <string name="recording_audio_title_preference">Allow recording audio</string>
-        <string name="recording_audio_summary_preference"><!-- TODO --> 4Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="recording_audio_summary_preference"><!-- TODO --> 4Komentarz bardzo długi w  długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
         <string name="gps_key_preference">access_to_gps</string>
         <string name="gps_title_preference">Allow access to GPS </string>
-        <string name="gps_summary_preference"><!-- TODO --> 3Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="gps_summary_preference"><!-- TODO --> 3Komentarz bardzo długi w  długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
         <string name="no_gps_text_dialog"><!-- TODO --> Nie ma GPS. Chcesz włączyć?</string>
 
         <string name="internet_key_preference">access_to_internet</string>
         <string name="internet_title_preference">Allow access to Internet </string>
-        <string name="internet_summary_preference"><!-- TODO --> 2Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="internet_summary_preference"><!-- TODO --> 2Komentarz bardzo długi w  długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
         <string name="no_internet_text_dialog"><!-- TODO --> Nie ma Internetu. Chcesz włączyć?</string>
 
         <string name="internal_storage_key_preference">access_to_internal_storage</string>
         <string name="internal_storage_title_preference">Allow access to internal storage </string>
-        <string name="internal_storage_summary_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="internal_storage_summary_preference"><!-- TODO --> 1Komentarz bardzo długi w  długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
+        <string name="measurements_in_storage_key_preference">measurements_in_storage</string>
+        <string name="title_seek_bar_preference">Measurements saved on internal storage device</string>
 
         <!-- About Dialog MainActivity-->
         <string name="title_about_dialog">About</string>
@@ -111,5 +113,7 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="stored">StoredOnServer</string>
+
+
 
 </resources>

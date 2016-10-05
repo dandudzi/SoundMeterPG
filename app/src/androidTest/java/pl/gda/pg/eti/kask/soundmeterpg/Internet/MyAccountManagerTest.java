@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Daniel on 17.08.2016 at 10:52 :).
  */
+@Ignore
 @RunWith(AndroidJUnit4.class)
 public class MyAccountManagerTest {
     private Activity activity;

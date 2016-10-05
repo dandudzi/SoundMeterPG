@@ -26,7 +26,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 /**
  * Created by Filip Gierłowski.
  */
-public class GoogleAPILocalization extends Service implements ConnectionCallbacks,
+public class  GoogleAPILocalization extends Service implements ConnectionCallbacks,
         LocationListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static GoogleApiClient googleApiClient;
