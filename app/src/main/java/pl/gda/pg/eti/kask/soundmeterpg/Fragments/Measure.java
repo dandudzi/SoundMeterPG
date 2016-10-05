@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import pl.gda.pg.eti.kask.soundmeterpg.IntentActionsAndKeys;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
@@ -28,6 +30,8 @@ public class Measure extends Fragment{
     private Context context;
 
     private TextView currentNoiseLevel;
+    private TextView currentLatitude;
+    private TextView currentLongitude;
     private Button measureButton;
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -52,6 +56,8 @@ public class Measure extends Fragment{
 
     private  void changeUIMeasurement(Sample sample) {
         currentNoiseLevel.setText(String.valueOf(sample.getNoiseLevel())+" db");
+        currentLatitude.setText("Latitude : " + String.valueOf(sample.getLocation().getLatitude()));
+        currentLongitude.setText("Longitude : " + String.valueOf(sample.getLocation().getLongitude()));
     }
 
 
@@ -67,6 +73,8 @@ public class Measure extends Fragment{
         Activity activity = getActivity();
         context = activity.getBaseContext();
         currentNoiseLevel = (TextView) activity.findViewById(R.id.current_db_measure_fragment);
+        currentLatitude = (TextView) activity.findViewById(R.id.latitude_measure_fragment);
+        currentLongitude = (TextView) activity.findViewById(R.id.longitude_measure_fragment);
         measureButton = (Button) activity.findViewById(R.id.measure_button_fragment);
 
         measureButton.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +86,7 @@ public class Measure extends Fragment{
         IntentFilter filter =  new IntentFilter();
         filter.addAction(IntentActionsAndKeys.END_ACTION.toString());
         filter.addAction(IntentActionsAndKeys.ERROR_MEASURE_ACTION.toString());
+        filter.addAction(IntentActionsAndKeys.SAMPLE_RECEIVE_ACTION.toString());
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, filter);
     }
 

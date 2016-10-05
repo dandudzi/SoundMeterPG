@@ -5,21 +5,15 @@ package pl.gda.pg.eti.kask.soundmeterpg;
  */
 
 public enum IntentActionsAndKeys {
-    SAMPLE_RECEIVE_ACTION("SAMPLE_RECEIVE_ACTION"),
-    SAMPLE_KEY ("SAMPLE_KEY"),
-    END_ACTION ("END_ACTION"),
-    ERROR_MEASURE_ACTION("ERROR_MEASURE_ACTION"),
-    ERROR_KEY("ERROR_KEY"),
-    GPS_ERROR_KEY("GPS_ERROR_KEY");
-
-    private final String text;
-    private IntentActionsAndKeys(String text){
-        this.text = text;
-    }
+    SAMPLE_RECEIVE_ACTION(),
+    SAMPLE_KEY (),
+    END_ACTION (),
+    ERROR_MEASURE_ACTION(),
+    ERROR_KEY(),
+    GPS_ERROR_KEY(),
+    MICROPHONE_ERROR_KEY(),
+    GPS_INACCESSIBLE_KEY(),
+    GPS_TURN_OFF_KEY();
 
 
-    @Override
-    public String toString() {
-        return text;
-    }
 }

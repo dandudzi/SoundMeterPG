@@ -26,10 +26,13 @@ public class AudioRecorder {
         recorder =  new AudioRecord(MediaRecorder.AudioSource.MIC,sampleRateInHz,CHANNEL,AUDIO_ENCODING,BUFFER_SIZE );
         buffer =  new short[BUFFER_SIZE];
         recorder.startRecording();
+       getAmplitude();
     }
 
     public int getNoiseLevel() {
         double amplitude = 1.0;
+        int amp2 = getAmplitude();
+        int wynik = (int)(20 * Math.log10(getAmplitude() / amplitude));
         return (int)(20 * Math.log10(getAmplitude() / amplitude));
     }
 
