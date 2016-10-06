@@ -101,13 +101,17 @@ public class Measure extends Fragment{
         super.onResume();
     }
 
+    @Override
+    public void onPause() {
+        sendEndActionToMeasureService();
+        super.onPause();
+    }
 
     public void onMeasureButtonClick(View view){
         boolean isMeasureServiceRunning = isMeasureServiceRunning();
         if(isMeasureServiceRunning){
             measureButton.setText("Start");
-            Intent stopServiceIntent = new Intent(IntentActionsAndKeys.END_ACTION.toString());
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(stopServiceIntent);
+            sendEndActionToMeasureService();
         }else{
             measureButton.setText("Stop");
             Intent intent = new Intent(getActivity(), pl.gda.pg.eti.kask.soundmeterpg.Services.Measure.class);
@@ -116,6 +120,11 @@ public class Measure extends Fragment{
         }
 
 
+    }
+
+    private void sendEndActionToMeasureService() {
+        Intent stopServiceIntent = new Intent(IntentActionsAndKeys.END_ACTION.toString());
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(stopServiceIntent);
     }
 
     private boolean isMeasureServiceRunning() {

@@ -12,22 +12,20 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
  */
 
 public class AudioRecorder {
-    private  final int CHANNEL = AudioFormat.CHANNEL_IN_MONO;
-    private  final int AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
-    private final int BUFFER_SIZE;
+
+    private int BUFFER_SIZE;
     private short[] buffer;
     private AudioRecord recorder;
     private Context context;
 
     public AudioRecorder(Context context){
         this.context = context;
-        int sampleRateInHz = context.getResources().getInteger(R.integer.sample_rate);
-        BUFFER_SIZE = AudioRecord.getMinBufferSize(context.getResources().getInteger(R.integer.sample_rate), CHANNEL, AUDIO_ENCODING);
-        recorder =  new AudioRecord(MediaRecorder.AudioSource.MIC,sampleRateInHz,CHANNEL,AUDIO_ENCODING,BUFFER_SIZE );
+        recorder =  findAudioRecorder();
         buffer =  new short[BUFFER_SIZE];
         recorder.startRecording();
-       getAmplitude();
+        getAmplitude();
     }
+
 
     public int getNoiseLevel() {
         double amplitude = 1.0;
@@ -56,4 +54,32 @@ public class AudioRecorder {
             recorder = null;
         }
     }
+
+    private static final int[] SAMPLES_RATE = new int[] {  22050, 44100, 8000, 11025 };
+    private static final int[] CHANNELS = new int[] { AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO };
+    private static final int[] AUDIOS_ENCODING = new int[] {  AudioFormat.ENCODING_PCM_16BIT, AudioFormat.ENCODING_PCM_8BIT };
+
+    private AudioRecord findAudioRecorder() {
+        AudioRecord recorder;
+        for (int CHANNEL:CHANNELS) {
+            for (int AUDIO_ENCODING: AUDIOS_ENCODING) {
+                for(int SAMPLE_RATE:SAMPLES_RATE){
+                    try {
+                        BUFFER_SIZE = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL, AUDIO_ENCODING);
+
+                        if (BUFFER_SIZE != AudioRecord.ERROR_BAD_VALUE) {
+                            recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,SAMPLE_RATE,CHANNEL,AUDIO_ENCODING,BUFFER_SIZE);
+
+                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
+                                return recorder;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }
