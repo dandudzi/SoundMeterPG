@@ -55,9 +55,9 @@ public class AudioRecorder {
         }
     }
 
-    private static final int[] SAMPLES_RATE = new int[] {  22050, 44100, 8000, 11025 };
+    private static final int[] SAMPLES_RATE = new int[] {  22050, 44100, 11025, 16000 };
     private static final int[] CHANNELS = new int[] { AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO };
-    private static final int[] AUDIOS_ENCODING = new int[] {  AudioFormat.ENCODING_PCM_16BIT, AudioFormat.ENCODING_PCM_8BIT };
+    private static final int[] AUDIOS_ENCODING = new int[] {  AudioFormat.ENCODING_PCM_16BIT, AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_FLOAT };
 
     private AudioRecord findAudioRecorder() {
         AudioRecord recorder;
@@ -72,6 +72,8 @@ public class AudioRecorder {
 
                             if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
                                 return recorder;
+                            else
+                                recorder.release();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

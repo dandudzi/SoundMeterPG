@@ -119,7 +119,6 @@ public class Measure extends Fragment{
 
         }
 
-
     }
 
     private void sendEndActionToMeasureService() {
