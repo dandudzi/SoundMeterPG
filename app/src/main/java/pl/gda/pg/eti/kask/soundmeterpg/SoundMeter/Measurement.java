@@ -1,5 +1,8 @@
 package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter;
 
+import java.util.Date;
+import java.util.List;
+
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
 
 /**
@@ -7,33 +10,46 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
  */
 public class Measurement {
 
-    private double avgNoiseLevel;
-    private double latitude;
-    private double longitude;
-    private boolean storedOnServer = false;
 
-    public Measurement(double avgNoiseLevel, double latitude, double longitude, int storedOnServer) throws OverRangeException {
-        this.avgNoiseLevel = avgNoiseLevel;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.storedOnServer = (storedOnServer == 1) ? true : false;
+    public Location location;
+    public Date date;
+    public boolean storedOnWebServer = false;
+    public MeasurementStatistics statistics;
+
+    public Measurement(MeasurementStatistics statistics, Location location, boolean storedOnWebServer, Date date) throws OverRangeException {
+        this.statistics = statistics;
+        this.location = location;
+        this.date = date;
+        this.storedOnWebServer = storedOnWebServer;
     }
 
-    public double getAvgNoiseLevel() {
-        return avgNoiseLevel;
+    public static MeasurementStatistics calculateMeasureStatistics(List<Sample> list){
+        double avg = 0;
+        int min = list.get(0).getNoiseLevel();
+        int max = 0 ;
+        double noiseLevel;
+        for (Sample sample: list) {
+            noiseLevel = sample.getNoiseLevel();
+            if(noiseLevel > max)
+                max = (int)noiseLevel;
+            if(noiseLevel < min)
+                min = (int) noiseLevel;
+            noiseLevel /= 10;
+            noiseLevel = Math.pow(10, noiseLevel);
+            avg += noiseLevel;
+        }
+        avg/=list.size();
+        avg = 10 * Math.log10(avg);
+        MeasurementStatistics statistics =  new MeasurementStatistics();
+        statistics.min =  min;
+        statistics.max = max;
+        statistics.avg = (int)avg;
+        return statistics;
     }
 
-    public double getLatitude() {
-        return latitude;
-    }
 
-    public double getLongitude() {
-        return longitude;
+    @Override
+    public String toString() {
+        return statistics + location.toString() + date.toString() + "\n storeOnWebServer: "+ storedOnWebServer;
     }
-
-    public boolean getState() {
-        return storedOnServer;
-    }
-
-    public void setState(boolean stored){ storedOnServer = stored;}
 }

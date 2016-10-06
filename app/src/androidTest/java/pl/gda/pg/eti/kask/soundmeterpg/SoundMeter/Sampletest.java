@@ -43,4 +43,23 @@ public class SampleTest {
         Sample newSample = bundle.getParcelable(tag);
         assertEquals(sample,newSample);
     }
+
+
+    @Test
+    public void parcelFakeLocationTest(){
+        Bundle bundle =  new Bundle();
+        Location location =  new FakeLocation();
+        Sample sample =  new Sample(CORRECT_NOISE_LEVEL,location);
+        Parcel parcel = Parcel.obtain();
+        String tag = "sampleTag";
+
+        bundle.putParcelable(tag,sample);
+        bundle.writeToParcel(parcel,0);
+
+        parcel.setDataPosition(0);
+        bundle = parcel.readBundle();
+        bundle.setClassLoader(Sample.class.getClassLoader());
+        Sample newSample = bundle.getParcelable(tag);
+        assertEquals(sample,newSample);
+    }
 }

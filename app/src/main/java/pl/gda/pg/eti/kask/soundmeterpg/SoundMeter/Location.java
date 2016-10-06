@@ -55,6 +55,11 @@ public class Location implements Parcelable{
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "Latitude: "+ latitude + " Longitude: "+ longitude + "\n";
+    }
+
     //Parcelable
 
     @Override

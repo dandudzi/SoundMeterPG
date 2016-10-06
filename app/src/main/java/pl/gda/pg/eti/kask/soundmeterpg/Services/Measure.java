@@ -6,17 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.icu.text.IDNA;
 import android.support.v4.content.LocalBroadcastManager;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InaccessibleGPSException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientGPSPermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientMicrophonePermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.TurnOffGPSException;
 import pl.gda.pg.eti.kask.soundmeterpg.IntentActionsAndKeys;
+import pl.gda.pg.eti.kask.soundmeterpg.MeasurementDataBaseManager;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.AudioRecorder;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
@@ -26,7 +24,9 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
  */
 
 public class Measure extends IntentService {
+    private static final int SAMPLE_PER_MILLISECONDS = 1000;
 
+    private volatile boolean endMeasure = false;
 
     private GoogleAPILocalization googleAPILocalization;
     private Sender sender;
@@ -34,9 +34,14 @@ public class Measure extends IntentService {
     private ServiceConnection localizationConnection = new GoogleApiServiceConnection(this);
     private ServiceConnection senderConnection= new SenderServiceConnection(this);
     private Thread binderThread;
+
+    private MeasurementDataBaseManager dataBaseManger;
     private PreferenceParser preferences;
     private AudioRecorder recorder;
-    private volatile boolean endMeasure = false;
+
+
+
+
 
     private BroadcastReceiver endTaskReceiver = new BroadcastReceiver() {
 
@@ -57,83 +62,6 @@ public class Measure extends IntentService {
         super("Measure");
     }
 
-    @Override
-    protected void onHandleIntent(Intent _intent) {
-        waitForBindAllService();
-
-        long startTime,endTime;
-        int oneMinute = 1000;
-        try {
-            initializeAudioRecorder();
-            while (!endMeasure) {
-                try {
-                    startTime = System.currentTimeMillis();
-                        sendSampleToMeasure(this.measure());
-                    endTime = System.currentTimeMillis();
-                    Thread.sleep(oneMinute - (endTime - startTime));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }catch (Exception e) {
-            handleMeasureError(e);
-        }
-    }
-
-    private void initializeAudioRecorder() throws InsufficientGPSPermissionsException {
-        synchronized (this) {
-            if(preferences.hasPermissionToUseMicrophone()){
-                recorder = new AudioRecorder(getBaseContext());
-            }else{
-                throw new InsufficientGPSPermissionsException("There is not permission to use microphone");
-            }
-
-        }
-    }
-
-    private void waitForBindAllService() {
-        try {
-            binderThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void handleMeasureError(Exception e) {
-        Intent intent = new Intent(IntentActionsAndKeys.ERROR_MEASURE_ACTION.toString());
-        if(e instanceof InsufficientGPSPermissionsException)
-            intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(),IntentActionsAndKeys.GPS_ERROR_KEY.toString());
-        if(e instanceof  InsufficientMicrophonePermissionsException)
-            intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.MICROPHONE_ERROR_KEY.toString());
-        if(e instanceof  TurnOffGPSException)
-            intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.GPS_TURN_OFF_KEY.toString());
-        if(e instanceof InaccessibleGPSException)
-            intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.GPS_INACCESSIBLE_KEY.toString());
-        LocalBroadcastManager.getInstance(Measure.this).sendBroadcast(intent);
-    }
-
-    private synchronized Sample measure() throws InsufficientPermissionsException, TurnOffGPSException, InaccessibleGPSException {
-        Location currentLocation = null;
-        int noiseLevel = 0;
-        if(preferences.hasPermissionToUseMicrophone())
-           noiseLevel = recorder.getNoiseLevel();
-        else
-            throw new InsufficientMicrophonePermissionsException("There is not permission to use microphone");
-        if(preferences.hasPermissionToUseGPS()) {
-            currentLocation = googleAPILocalization.getLocation();
-        }
-        else
-            throw new InsufficientGPSPermissionsException("There is not permission to use GPS");
-
-    return new Sample(noiseLevel,currentLocation);
-    }
-
-    private void sendSampleToMeasure(Sample sample) {
-        Intent intent = new Intent(IntentActionsAndKeys.SAMPLE_RECEIVE_ACTION.toString());
-        intent.putExtra(IntentActionsAndKeys.SAMPLE_KEY.toString(), sample);
-        LocalBroadcastManager.getInstance(Measure.this).sendBroadcast(intent);
-    }
 
     @Override
     public void onCreate() {
@@ -142,6 +70,7 @@ public class Measure extends IntentService {
         bindServices();
         setUpThreads();
         preferences = new PreferenceParser(getBaseContext());
+        dataBaseManger =  new MeasurementDataBaseManager(preferences);
         binderThread.start();
     }
 
@@ -170,11 +99,100 @@ public class Measure extends IntentService {
     }
 
     @Override
+    protected void onHandleIntent(Intent _intent) {
+        waitForBindAllService();
+
+        try {
+            initializeAudioRecorder();
+            while (!endMeasure) {
+                measureAction();
+            }
+        }catch (Exception e) {
+            handleMeasureError(e);
+        }
+    }
+
+    private void waitForBindAllService() {
+        try {
+            binderThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeAudioRecorder() throws InsufficientMicrophonePermissionsException {
+        synchronized (this) {
+            if(preferences.hasPermissionToUseMicrophone()){
+                recorder = new AudioRecorder(getBaseContext());
+            }else{
+                throw new InsufficientMicrophonePermissionsException("There is not permission to use microphone");
+            }
+
+        }
+    }
+
+    private void measureAction() throws InsufficientPermissionsException, TurnOffGPSException {
+        long startTime,endTime;
+        try {
+            startTime = System.currentTimeMillis();
+
+                measure();
+
+            endTime = System.currentTimeMillis();
+            Thread.sleep(SAMPLE_PER_MILLISECONDS - (endTime - startTime));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private synchronized void measure() throws InsufficientPermissionsException, TurnOffGPSException {
+        Sample sample = null;
+        sample = measureSample();
+        sendSampleToUI(sample);
+        dataBaseManger.sendToDataBase(sample);
+    }
+
+    private void handleMeasureError(Exception e) {
+        Intent intent = new Intent(IntentActionsAndKeys.ERROR_MEASURE_ACTION.toString());
+
+        if(e instanceof  InsufficientMicrophonePermissionsException)
+            intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.MICROPHONE_ERROR_KEY.toString());
+        if(e instanceof  TurnOffGPSException)
+            intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.GPS_TURN_OFF_KEY.toString());
+
+        LocalBroadcastManager.getInstance(Measure.this).sendBroadcast(intent);
+    }
+
+    private  Sample measureSample() throws InsufficientPermissionsException, TurnOffGPSException {
+        Location currentLocation = null;
+        int noiseLevel = 0;
+        if(preferences.hasPermissionToUseMicrophone())
+           noiseLevel = recorder.getNoiseLevel();
+        else
+            throw new InsufficientMicrophonePermissionsException("There is not permission to use microphone");
+        if(preferences.hasPermissionToUseGPS()) {
+            currentLocation = googleAPILocalization.getLocation();
+        }
+        if(currentLocation == null){
+            currentLocation = new FakeLocation();
+        }
+        return new Sample(noiseLevel,currentLocation);
+    }
+
+    private void sendSampleToUI(Sample sample) {
+        Intent intent = new Intent(IntentActionsAndKeys.SAMPLE_RECEIVE_ACTION.toString());
+        intent.putExtra(IntentActionsAndKeys.SAMPLE_KEY.toString(), sample);
+        LocalBroadcastManager.getInstance(Measure.this).sendBroadcast(intent);
+    }
+
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         synchronized (this) {
             if(recorder != null)
                 recorder.onDestroy();
+
             if (googleAPILocalization != null)
                 getBaseContext().unbindService(localizationConnection);
 

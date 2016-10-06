@@ -45,5 +45,4 @@ public class SampleTest {
         Sample sample = new Sample(CORRECT_NOISE_LEVEL, NULL_LOCATION);
     }
 
-
 }

@@ -19,8 +19,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InaccessibleGPSException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.TurnOffGPSException;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
@@ -87,7 +85,7 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
         return (ServiceDetector.isGPSEnabled(context));
     }
 
-    public Location getLocation() throws TurnOffGPSException, InaccessibleGPSException {
+    public Location getLocation() throws TurnOffGPSException {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 !canUseGPS()) {
@@ -96,7 +94,7 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
             //lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             android.location.Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if(location == null)
-                throw new InaccessibleGPSException("Cannot get localization.");
+                return null;
             else
             lastKnownLocation = new Location(location.getLatitude(), location.getLongitude());
         }
