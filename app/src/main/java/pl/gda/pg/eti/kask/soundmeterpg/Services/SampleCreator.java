@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.location.Location;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -13,19 +12,12 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
-import pl.gda.pg.eti.kask.soundmeterpg.Sample;
+import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.MeasurementChangeListener;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.ServiceDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 /**
@@ -39,10 +31,8 @@ public class SampleCreator extends Service {
     private static final int SENDER = 1;
     private static int BUFFER_SIZE;
     private volatile double avgDB;
-    private volatile double variance;
     private double amplitude;
     private short[] buffer;
-    private double [] samples;
     private int counter = 0;
     private AudioRecord audioRecord;
     private PreferenceParser preferenceParser;
@@ -53,6 +43,10 @@ public class SampleCreator extends Service {
     private GoogleAPILocalization googleAPILocalization;
     private Sender sender;
     private DataBaseHandler dataBaseHandler;
+    private MeasurementChangeListener listener;
+
+
+
     private ServiceConnection localizationConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
@@ -71,6 +65,7 @@ public class SampleCreator extends Service {
             googleAPILocalization = null;
         }
     };
+
     private ServiceConnection senderConnection= new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
@@ -83,6 +78,9 @@ public class SampleCreator extends Service {
             sender = null;
         }
     };
+
+
+
     @Override
     public IBinder onBind(final Intent intent) {
         avgDB = 0.0;
@@ -90,16 +88,16 @@ public class SampleCreator extends Service {
         buffer = new short[BUFFER_SIZE];
         preferenceParser = new PreferenceParser(this);
         bindServices();
-        samples = new double[getResources().getInteger(R.integer.samples_per_minute)];
         return localBinder;
-
     }
+
     @Override
     public boolean onUnbind(Intent intent) {
        stop();
         unbindServices();
         return super.onUnbind(intent);
     }
+
     public void start() throws InsufficientPermissionsException {
         avgDB = 0.0;
         counter = 0;
@@ -115,13 +113,15 @@ public class SampleCreator extends Service {
          Runnable runnable = new Runnable() {
             public void run() {
                 while (runningThread) {
-                    while(googleAPILocalization == null){
+                    if(googleAPILocalization == null){
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        continue;}
+                        continue;
+                    }
+
                     try {
                         Thread.sleep(getResources().getInteger(R.integer.time_of_sample));
                         counter++;
@@ -134,30 +134,32 @@ public class SampleCreator extends Service {
                             counter = 0;
                             Log.i("Avg in db", Double.toString(result));
                             if (googleAPILocalization.canUseGPS()) {
-                                Sample pr = null;
-                                try {
+                                Measurement oneMinuteMeasurement = null;
+                              /*  try {
                                     Location l  = googleAPILocalization.getLocation();
-                                    Calendar c = Calendar.getInstance();
-                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    String formattedDate = df.format(c.getTime());
-                                    pr = new Sample(result, variance(result), l.getLatitude(),l.getLongitude(),formattedDate,"LEL", 0);
+                                    //oneMinuteMeasurement = new Measurement(result, l.getLatitude(),l.getLongitude(), 0);
                                 } catch (OverrangeException e) {
                                     e.printStackTrace();
                                 } catch (NullLocalizationException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
+
+                                if(listener != null)
+                                    listener.onMeasurementChange(oneMinuteMeasurement);
+
+                                //Log.i("Sample", Integer.toString((int) oneMinuteMeasurement.getAvgNoiseLevel()));
                                 if (sender.isConnectionWithServer("soundmeterpg.cba.pl")) {
-                                    try {
-                                        if (sender.insert(pr))
-                                            pr.setState(true);
-                                        Log.i("Store samples on server",Double.toString(pr.getAvgNoiseLevel()));
+                                   /* try {
+                                        //if (sender.insert(oneMinuteMeasurement))
+                                        //    oneMinuteMeasurement.setState(true);
+                                      //  Log.i("Store samples on server",Double.toString(oneMinuteMeasurement.getAvgNoiseLevel()));
                                     } catch (NullRecordException e) {
                                         e.printStackTrace();
-                                    }
+                                    }*/
                                 }
                                 try {
-                                    dataBaseHandler.insert(pr);
-                                    Log.i("Store samples in Database",Double.toString(pr.getLatitude())+ Double.toString(pr.getLongitude()));
+                                    dataBaseHandler.insert(oneMinuteMeasurement);
+                                   // Log.i("Store samples in Database",Double.toString(oneMinuteMeasurement.getLatitude())+ Double.toString(oneMinuteMeasurement.getLongitude()));
                                 } catch (NullRecordException e) {
                                     e.printStackTrace();
                                 }
@@ -173,6 +175,7 @@ public class SampleCreator extends Service {
         recordThread = new Thread(runnable);
         recordThread.start();
     }
+
     public void stop(){
         runningThread = false;
         if(audioRecord != null) {
@@ -192,20 +195,24 @@ public class SampleCreator extends Service {
         dataBaseHandler.close();
 
     }
+
     private void bindServices(){
         intents[LOCALIZATION] = new Intent(getBaseContext(),GoogleAPILocalization.class);
         intents[SENDER] = new Intent(getBaseContext(),Sender.class);
         bindService(intents[LOCALIZATION], localizationConnection, Context.BIND_AUTO_CREATE);
         bindService(intents[SENDER], senderConnection, Context.BIND_AUTO_CREATE);
     }
+
     private  void unbindServices(){
         unbindService(localizationConnection);
         unbindService(senderConnection);
     }
+
     private double getNoiseLevel() {
         double amplitude = 1.0;
         return 20 * Math.log10(getAmplitude() / amplitude);
     }
+
     private int getAmplitude() {
         if (audioRecord != null) {
             audioRecord.read(buffer, 0, BUFFER_SIZE);
@@ -218,21 +225,18 @@ public class SampleCreator extends Service {
             return max;
         } else return 0;
     }
+
     private void calculateSample(){
         amplitude = getNoiseLevel();
-        samples[counter] = amplitude;
         amplitude /= 10.0;
         amplitude = Math.pow(10, amplitude);
         avgDB += amplitude;
     }
-    private double variance(double averageDB){
-        double variance = 0.0;
-        for(int i =0; i<getResources().getInteger(R.integer.samples_per_minute);i++)
-        {
-            variance =Math.sqrt(samples[i]-averageDB);
-        }
-        return variance/getResources().getInteger(R.integer.samples_per_minute);
+
+    public void setOnMeasurementChangeListener(MeasurementChangeListener onMeasurementChangeLisneter) {
+        this.listener = onMeasurementChangeLisneter;
     }
+
     public class LocalBinder extends Binder {
         public SampleCreator getService() {
             return SampleCreator.this;

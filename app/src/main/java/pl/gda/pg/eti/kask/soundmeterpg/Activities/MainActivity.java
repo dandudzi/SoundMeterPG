@@ -1,16 +1,17 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,27 +22,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
 
-import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 
-import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
-import pl.gda.pg.eti.kask.soundmeterpg.MainAdapter;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.Sample;
-import pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization;
-import pl.gda.pg.eti.kask.soundmeterpg.Services.SampleCreator;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -49,27 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private NavigationView drawerList;
-    private  ListView listView;
-    private  SampleCreator sampleCreator;
-    private Intent intent ;
-    private ServiceConnection sampleCreatorConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            SampleCreator.LocalBinder binder = (SampleCreator.LocalBinder) service;
-                binder = (SampleCreator.LocalBinder) service;
-            sampleCreator = binder.getService();
-            try {
-                sampleCreator.start();
-            } catch (InsufficientPermissionsException e) {
-                e.printStackTrace();
-            }
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            sampleCreator = null;
-            sampleCreator.stop();
-        }
-    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -79,9 +50,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setUpToolbar();
         setUpDrawer();
-        intent = new Intent(getBaseContext(), SampleCreator.class);
+        setUpPermission();
+    }
 
 
+    private void setUpPermission(){
+        if (Build.VERSION.SDK_INT >= 23) {
+            String[] permissions = new String[] {Manifest.permission.RECORD_AUDIO,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.INTERNET,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.ACCESS_FINE_LOCATION};
+
+            ArrayList<String> tmp = new ArrayList<>();
+            for (String permission: permissions) {
+                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                    } else
+                        tmp.add(permission);
+                }
+            }
+            if(tmp.size() > 0)
+                ActivityCompat.requestPermissions(this, tmp.toArray(new String[tmp.size()]), 1);
+        }
     }
 
     @Override
@@ -139,9 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume()
     {
-        getBaseContext().bindService(intent, sampleCreatorConnection, Context.BIND_AUTO_CREATE);
         super.onResume();
-
     }
 
     @Override
@@ -172,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setFragmentContent(new Measure());
                 break;
             case R.id.measurements_drawer:
-
                 setFragmentContent(new Measurements());
                 break;
             case R.id.log_in_drawer:
@@ -230,46 +215,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
-    public void startMyService(View v) {
-        Intent serviceIntent = new Intent(this, SampleCreator.class);
-        serviceIntent.addCategory("SampleCreator");
-        startService(serviceIntent);
-    }
-
-    public void stopMyService(View v) {
-        Intent serviceIntent = new Intent(this, SampleCreator.class);
-        serviceIntent.addCategory("SampleCreator");
-        stopService(serviceIntent);
-    }
-
-
-    public void insertData(View btn) throws IOException {
-        //TODO to tylko bylo do prototypu
-        //new Sender(getBaseContext()).execute(tmpRecorder.soundDb(1.0));
-    }
-
-    public void showGPS(View w) {
-        DataBaseHandler dataBaseHandler = new DataBaseHandler(getBaseContext(), getResources().getString(R.string.database_name));
-        try {
-            dataBaseHandler.insert(new Sample(32.3, 322.23, 12.11, 0));
-        } catch (NullRecordException e) {
-            e.printStackTrace();
-        } catch (OverrangeException e) {
-            e.printStackTrace();
-        }
-          /*  _gps = new Localization(MainActivity.this);
-
-            if(_gps.canGetLocation()) {
-                double latitude = _gps.getLatitude();
-                double longitude = _gps.getLongitude();
-
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Your Location is -\nLat: " + latitude + "\nLong: "
-                                + longitude, Toast.LENGTH_LONG).show();
-            } else {
-                _gps.showSettingsAlert();
-            }
-*/
-    }
 }

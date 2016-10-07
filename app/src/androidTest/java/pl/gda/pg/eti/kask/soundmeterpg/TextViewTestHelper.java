@@ -43,9 +43,19 @@ public class TextViewTestHelper {
         interaction.check(matches(not(hasMultilineText())));
     }
 
+    public static void testSinglelineTextView(DataInteraction interaction){
+        testTextView(interaction);
+        interaction.check(matches(not(hasMultilineText())));
+    }
+
     private static void testTextView(DataInteraction interaction, String text){
         interaction.check(matches(isCompletelyDisplayed()));
         interaction.check(matches(withText(text)));
+        interaction.check(matches(not(hasEllipsizedText())));
+    }
+
+    private static void testTextView(DataInteraction interaction){
+        interaction.check(matches(isCompletelyDisplayed()));
         interaction.check(matches(not(hasEllipsizedText())));
     }
 }

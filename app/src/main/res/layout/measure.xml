@@ -4,17 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/measure"
     android:background="@android:color/holo_red_dark">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="measure"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="48dp"
-        android:layout_marginTop="40dp"
-        tools:ignore="HardcodedText" />
+        android:layout_above="@+id/measure_button_fragment"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="93dp"
+        android:id="@+id/current_db_measure_fragment"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:id="@+id/measure_button_fragment"
+        android:layout_height="100dp"
+        android:background="@color/primary"
+        android:textColor="@color/cast_expanded_controller_text_color"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="110dp"
+        android:id="@+id/latitude_measure_fragment"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_above="@+id/current_db_measure_fragment"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/longitude_measure_fragment"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

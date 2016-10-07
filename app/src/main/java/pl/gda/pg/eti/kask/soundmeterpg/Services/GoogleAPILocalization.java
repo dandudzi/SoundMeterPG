@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,21 +19,21 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullLocalizationException;
-import pl.gda.pg.eti.kask.soundmeterpg.ServiceDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.TurnOffGPSException;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 /**
  * Created by Filip Gierłowski.
  */
-public class GoogleAPILocalization extends Service implements ConnectionCallbacks,
+public class  GoogleAPILocalization extends Service implements ConnectionCallbacks,
         LocationListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static GoogleApiClient googleApiClient;
     private static LocationRequest locationRequest;
     // Location updates intervals in sec
-    private static int UPDATE_INTERVAL = 10000; // 3,75 sec
-    private static int FATEST_INTERVAL = 5000; // 1 sec
+    private static int UPDATE_INTERVAL = 3000; // 3,75 sec
+    private static int FATEST_INTERVAL = 1000; // 1 sec
     private static int DISPLACEMENT = 10; // 10 meters
     private final IBinder localBinder = new LocalBinder();
     private Location lastKnownLocation;
@@ -83,22 +82,23 @@ public class GoogleAPILocalization extends Service implements ConnectionCallback
     }
 
     public boolean canUseGPS() {
-        return (ServiceDetector.isGPSEnabled(context) &&
-                (preferenceParser.hasPermissionToUseGPS() || preferenceParser.hasPermissionToUseInternet()));
+        return (ServiceDetector.isGPSEnabled(context));
     }
 
-    public Location getLocation() throws NullLocalizationException {
+    public Location getLocation() throws TurnOffGPSException {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 !canUseGPS()) {
-            throw new NullLocalizationException("Can not get Localization! Check if you have privilages to use GPS or GPS is disabled!");
+            throw new TurnOffGPSException("GPS is turn off.");
         } else {
-            lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            if (lastKnownLocation != null)
-                return lastKnownLocation;
+            //lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            android.location.Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if(location == null)
+                return null;
             else
-                throw new NullLocalizationException("Can not get Localization! Check if GoogleApiClient is started.");
+            lastKnownLocation = new Location(location.getLatitude(), location.getLongitude());
         }
+        return lastKnownLocation;
     }
 
     private boolean checkPlayServices() {
@@ -152,14 +152,14 @@ public class GoogleAPILocalization extends Service implements ConnectionCallback
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        lastKnownLocation = location;
+    public void onLocationChanged(android.location.Location location) {
+        lastKnownLocation = new Location(location.getLatitude(), location.getLongitude());
     }
-
 
     public class LocalBinder extends Binder {
         public GoogleAPILocalization getService() {
             return GoogleAPILocalization.this;
         }
     }
+
 }

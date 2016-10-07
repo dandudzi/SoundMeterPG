@@ -6,6 +6,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
@@ -18,6 +19,6 @@ public class SettingsTestHelper {
     }
 
     public static void isSettingDisplay() {
-        onView(withText(R.string.recording_audio_title_preference)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.settings)).check(matches(isCompletelyDisplayed()));
     }
 }

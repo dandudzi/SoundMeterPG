@@ -115,12 +115,24 @@ public class PreferenceTestHelper {
         return onData(getDataMatcher(key, titleId, summaryId));
     }
 
+    public static DataInteraction findPreferencesOnView(String key, int titleId) {
+        return onData(getDataMatcher(key, titleId));
+    }
+
     private static Matcher getDataMatcher(String key, int titleId, int summaryId) {
         return allOf(
                 is(instanceOf(Preference.class)),
                 withKey(key),
                 withTitle(titleId),
                 withSummary(summaryId));
+    }
+
+    private static Matcher getDataMatcher(String key, int titleId) {
+        return allOf(
+                is(instanceOf(Preference.class)),
+                withKey(key),
+                withTitle(titleId)
+                );
     }
 
     public static DataInteraction getCheckbox(DataInteraction interaction){

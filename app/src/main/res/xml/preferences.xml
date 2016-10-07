@@ -4,8 +4,7 @@
 
   <PreferenceCategory
       android:title="@string/application_settings"
-      android:id="@+id/application_settings_preferences"
-      >
+      android:id="@+id/application_settings_preferences">
 
     <CheckBoxPreference
         android:key="@string/private_data_key_preference"
@@ -39,8 +38,7 @@
         android:summary="@string/recording_audio_summary_preference"
         android:defaultValue="true"
         android:id="@+id/recording_audio_check_box_preference"
-        android:layout="@layout/checkbox_preference"
-        />
+        android:layout="@layout/checkbox_preference" />
 
     <CheckBoxPreference
         android:key="@string/gps_key_preference"
@@ -51,24 +49,32 @@
         android:id="@+id/access_to_gps_check_box_preference"
         android:layout="@layout/checkbox_preference"/>
 
-    <CheckBoxPreference
-        android:key="@string/internet_key_preference"
-        android:title="@string/internet_title_preference"
-        android:summary="@string/internet_summary_preference"
-        android:defaultValue="false"
-        android:dependency="@string/private_data_key_preference"
-        android:id="@+id/access_to_internet_check_box_preference"
-        android:layout="@layout/checkbox_preference"/>
+      <CheckBoxPreference
+          android:key="@string/internet_key_preference"
+          android:title="@string/internet_title_preference"
+          android:summary="@string/internet_summary_preference"
+          android:defaultValue="false"
+          android:dependency="@string/private_data_key_preference"
+          android:id="@+id/access_to_internet_check_box_preference"
+          android:layout="@layout/checkbox_preference"/>
 
-    <CheckBoxPreference
+    <pl.gda.pg.eti.kask.soundmeterpg.SeekBarPreference
+        android:key="@string/measurements_in_storage_key_preference"
+        android:defaultValue="50"
+        android:dependency="@string/internal_storage_key_preference"
+        android:title="@string/title_seek_bar_preference"/>
+
+      <CheckBoxPreference
         android:key="@string/internal_storage_key_preference"
         android:title="@string/internal_storage_title_preference"
         android:summary="@string/internal_storage_summary_preference"
         android:defaultValue="true"
         android:dependency="@string/recording_audio_key_preference"
         android:id="@+id/access_to_internal_storage_check_box_preference"
-        android:layout="@layout/checkbox_preference"
-       />
+        android:layout="@layout/checkbox_preference" />
+
+
+
 
   </PreferenceCategory>
 
