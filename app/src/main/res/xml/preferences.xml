@@ -58,6 +58,12 @@
           android:id="@+id/access_to_internet_check_box_preference"
           android:layout="@layout/checkbox_preference"/>
 
+    <pl.gda.pg.eti.kask.soundmeterpg.SeekBarPreference
+        android:key="@string/measurements_in_storage_key_preference"
+        android:defaultValue="50"
+        android:dependency="@string/internal_storage_key_preference"
+        android:title="@string/title_seek_bar_preference"/>
+
       <CheckBoxPreference
         android:key="@string/internal_storage_key_preference"
         android:title="@string/internal_storage_title_preference"
@@ -67,11 +73,7 @@
         android:id="@+id/access_to_internal_storage_check_box_preference"
         android:layout="@layout/checkbox_preference" />
 
-    <pl.gda.pg.eti.kask.soundmeterpg.SeekBarPreference
-        android:key="@string/measurements_in_storage_key_preference"
-        android:defaultValue="50"
-        android:dependency="@string/internal_storage_key_preference"
-        android:title="@string/title_seek_bar_preference"/>
+
 
 
   </PreferenceCategory>

@@ -17,6 +17,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoGPS;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoInternet;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SeekBarPreference;
+import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 
 /**
@@ -31,7 +32,6 @@ public class Settings extends PreferenceFragment {
     private String privateDataKey;
     private String workingInBackgroundKey;
     private Activity activity;
-    private LocationManager locationManager;
     private ConnectionInternetDetector internetDetector;
 
     @Override
@@ -52,7 +52,6 @@ public class Settings extends PreferenceFragment {
         internetPreference.setOnPreferenceChangeListener(listener);
 
         activity = getActivity();
-        locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         internetDetector = new ConnectionInternetDetector(activity.getBaseContext());
 
         setCheckboxInternetAndGpsStartingValueDependentOnAccessToService();
@@ -83,7 +82,7 @@ public class Settings extends PreferenceFragment {
     }
 
     private void setGPSCheckboxSelectBasedOnResultUserAction() {
-        if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
+        if(ServiceDetector.isGPSEnabled(activity.getBaseContext()))
             GPSPreference.setChecked(true);
         else
             GPSPreference.setChecked(false);
@@ -146,7 +145,7 @@ public class Settings extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
-                    if (locationManager != null && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    if (!ServiceDetector.isGPSEnabled(activity.getBaseContext())) {
                         AlertDialog alert = NoGPS.create(activity, Settings.this);
                         Log.i("NoGPS","Opening Dialog");
                         alert.show();
@@ -182,7 +181,7 @@ public class Settings extends PreferenceFragment {
         else
             internetPreference.setChecked(false);
 
-        if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )&& GPSPreference.isChecked())
+        if(ServiceDetector.isGPSEnabled(activity.getBaseContext()) && GPSPreference.isChecked())
             GPSPreference.setChecked(true);
         else
             GPSPreference.setChecked(false);

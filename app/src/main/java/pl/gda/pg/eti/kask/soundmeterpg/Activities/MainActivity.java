@@ -1,12 +1,17 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,6 +22,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import java.sql.Array;
+import java.util.ArrayList;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
@@ -42,7 +50,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setUpToolbar();
         setUpDrawer();
+        setUpPermission();
+    }
 
+
+    private void setUpPermission(){
+        if (Build.VERSION.SDK_INT >= 23) {
+            String[] permissions = new String[] {Manifest.permission.RECORD_AUDIO,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.INTERNET,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.ACCESS_FINE_LOCATION};
+
+            ArrayList<String> tmp = new ArrayList<>();
+            for (String permission: permissions) {
+                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                    } else
+                        tmp.add(permission);
+                }
+            }
+            if(tmp.size() > 0)
+                ActivityCompat.requestPermissions(this, tmp.toArray(new String[tmp.size()]), 1);
+        }
     }
 
     @Override

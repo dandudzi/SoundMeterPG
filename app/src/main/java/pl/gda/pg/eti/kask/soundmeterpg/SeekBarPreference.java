@@ -1,4 +1,6 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
+/* This class is merge of two project
+* Below are both licences*/
 /*
  * The MIT License (MIT)
  *
@@ -24,6 +26,23 @@ package pl.gda.pg.eti.kask.soundmeterpg;
  * link - http://stackoverflow.com/questions/5050272/android-seekbarpreference
  */
 
+/*
+ * Copyright (C) 2011 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * link - https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/preference/SeekBarPreference.java
+ */
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -40,8 +59,10 @@ public class SeekBarPreference extends Preference implements
 
     public static int maximum = 100;
     public static int interval = 5;
-    private float oldValue = 25;
+    private int oldValue = 25;
+    private int defValue = 50;
     private TextView Indicator;
+    private boolean trackingTouch;
 
     public SeekBarPreference(Context context) {
         super(context);
@@ -66,63 +87,81 @@ public class SeekBarPreference extends Preference implements
         SeekBar bar= (SeekBar)layout.findViewById(R.id.seek_bar_preference);
         bar.setOnSeekBarChangeListener(this);
         bar.setMax(maximum);
-        bar.setProgress((int)oldValue);
+        bar.setProgress(oldValue);
+        this.Indicator.setText(""+oldValue);
         return layout;
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress,
-                                  boolean fromUser) {
-        progress = Math.round(((float) progress) / interval) * interval;
-
-        if (!callChangeListener(progress)) {
-            seekBar.setProgress((int) this.oldValue);
-            return;
+    public void onProgressChanged(
+            SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser && !trackingTouch) {
+            syncProgress(seekBar);
+            this.Indicator.setText(""+oldValue);
+            updatePreference(oldValue);
+            notifyChanged();
         }
 
-        seekBar.setProgress(progress);
-        this.oldValue = progress;
-        this.Indicator.setText(""+progress);
-        updatePreference(progress);
+    }
 
-        if(fromUser)
-        notifyChanged();
+    void syncProgress(SeekBar seekBar) {
+        int progress = seekBar.getProgress();
+        if (progress != oldValue) {
+            if (callChangeListener(progress)) {
+                setProgress(progress, false);
+            } else {
+                seekBar.setProgress(oldValue);
+            }
+        }
+    }
+
+    private void setProgress(int progress, boolean notifyChanged) {
+        if (progress > maximum)
+            progress = maximum;
+
+        if (progress < 0)
+            progress = 0;
+
+        if (progress != oldValue) {
+            oldValue = progress;
+            persistInt(progress);
+            if (notifyChanged) {
+                notifyChanged();
+            }
+        }
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        trackingTouch = true;
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        trackingTouch = false;
+        if (seekBar.getProgress() != oldValue) {
+            syncProgress(seekBar);
+            this.Indicator.setText(""+oldValue);
+            updatePreference(oldValue);
+            notifyChanged();
+        }
+
     }
 
     @Override
     protected Object onGetDefaultValue(TypedArray ta, int index) {
-        int dValue = ta.getInt(index, 25);
-
-        return validateValue(dValue);
+        int dValue = ta.getInt(index, defValue);
+        return dValue;
     }
 
     @Override
     protected void onSetInitialValue(boolean restoreValue,
                                      Object defaultValue) {
-        int temp = restoreValue ? getPersistedInt(25) : (Integer) defaultValue;
+        int temp = restoreValue ? getPersistedInt(defValue) : (Integer) defaultValue;
         if (!restoreValue)
             persistInt(temp);
 
         this.oldValue = temp;
-    }
-
-    private int validateValue(int value) {
-        if (value > maximum)
-            value = maximum;
-        else if (value < 0)
-            value = 0;
-        else if (value % interval != 0)
-            value = Math.round(((float) value) / interval) * interval;
-
-        return value;
     }
 
     private void updatePreference(int newValue) {
