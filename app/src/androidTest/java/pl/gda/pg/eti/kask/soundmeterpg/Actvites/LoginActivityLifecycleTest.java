@@ -1,5 +1,6 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
 
+import android.os.Build;
 import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
@@ -47,6 +48,8 @@ public class LoginActivityLifecycleTest {
     public void openLoginPressBackTest() throws UiObjectNotFoundException {
         openLoginActivityAndCheckIsDisplay();
         device.pressBack();
+        if (Build.VERSION.SDK_INT == 23)
+            device.pressBack();
         checkViewIsDisplay(MEASURE_ID,device);
     }
 
@@ -56,6 +59,8 @@ public class LoginActivityLifecycleTest {
         startLogIn();
         checkViewIsDisplay(LOGIN_PROGRESS_ACTIVITY_ID,device);
         device.pressBack();
+        if (Build.VERSION.SDK_INT == 23)
+            device.pressBack();
         checkViewIsDisplay(MEASURE_ID,device);
         openLoginActivityAndCheckIsDisplay();
     }

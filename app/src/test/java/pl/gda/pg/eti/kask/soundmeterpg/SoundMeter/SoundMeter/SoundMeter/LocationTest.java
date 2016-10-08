@@ -14,6 +14,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * Created by gierl on 01.10.2016.
  */
+
 public class LocationTest {
 
     private final double CORECCT_LONGITUDE = 20.0;

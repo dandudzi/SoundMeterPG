@@ -38,6 +38,7 @@ import org.hamcrest.Matcher;
 import java.util.Collection;
 
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
+import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.TIME_OUT;
 
 /**
  * An Espresso ViewAction that changes the orientation of the screen
@@ -68,7 +69,11 @@ public class OrientationChangeAction implements ViewAction {
         if (resumedActivities.isEmpty()) {
             throw new RuntimeException("Could not change orientation");
         }
-
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ViewAction orientationLandscape() {

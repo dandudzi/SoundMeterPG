@@ -69,7 +69,7 @@ public class Measure extends IntentService {
         LocalBroadcastManager.getInstance(this).registerReceiver(endTaskReceiver, new IntentFilter(IntentActionsAndKeys.END_ACTION.toString()));
         bindServices();
         setUpThreads();
-        preferences = new PreferenceParser(getBaseContext());
+        preferences = new PreferenceParser(this);
         dataBaseManger =  new MeasurementDataBaseManager(preferences);
         binderThread.start();
     }
@@ -166,10 +166,10 @@ public class Measure extends IntentService {
     private  Sample measureSample() throws InsufficientPermissionsException, TurnOffGPSException {
         Location currentLocation = null;
         int noiseLevel = 0;
-        if(preferences.hasPermissionToUseMicrophone())
-           noiseLevel = recorder.getNoiseLevel();
-        else
-            throw new InsufficientMicrophonePermissionsException("There is not permission to use microphone");
+
+        isMicrophoneAvailable();
+        noiseLevel = recorder.getNoiseLevel();
+
         if(preferences.hasPermissionToUseGPS()) {
             currentLocation = googleAPILocalization.getLocation();
         }
@@ -177,6 +177,11 @@ public class Measure extends IntentService {
             currentLocation = new FakeLocation();
         }
         return new Sample(noiseLevel,currentLocation);
+    }
+
+    private void isMicrophoneAvailable() throws InsufficientMicrophonePermissionsException {
+        if(!preferences.hasPermissionToUseMicrophone())
+            throw new InsufficientMicrophonePermissionsException("There is not permission to use microphone");
     }
 
     private void sendSampleToUI(Sample sample) {
@@ -198,6 +203,9 @@ public class Measure extends IntentService {
 
             if(sender !=  null)
                 getBaseContext().unbindService(senderConnection);
+
+            if(dataBaseManger != null)
+                dataBaseManger.flush();
         }
     }
 

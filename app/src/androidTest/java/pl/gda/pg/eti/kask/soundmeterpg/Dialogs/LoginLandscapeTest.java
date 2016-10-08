@@ -31,7 +31,6 @@ public class LoginLandscapeTest extends LoginDisplayCorrectly {
     public  void setUp() throws InterruptedException {
         super.context = mActivityRule.getActivity().getBaseContext();
         onView(isRoot()).perform(orientationLandscape());
-        Thread.sleep(TIME_OUT/2);
         onView(withId(R.id.login_button_login_activity)).perform(click());
     }
 
