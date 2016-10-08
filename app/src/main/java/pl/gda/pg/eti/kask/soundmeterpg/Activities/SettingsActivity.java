@@ -2,6 +2,7 @@ package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -9,11 +10,14 @@ import android.view.MenuItem;
 
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Settings;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 /**
  * Created by Daniel on 10.07.2016 at 12:12 :).
  */
 public class SettingsActivity extends AppCompatActivity {
+
+    PreferenceParser preference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,8 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
+        preference = new PreferenceParser(getBaseContext());
+        preference.setAllPreferenceLikePermission();
     }
 
     @Override
@@ -46,6 +51,12 @@ public class SettingsActivity extends AppCompatActivity {
         Log.i("Settings","Click menu item with id:"+item.getItemId());
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        preference.setAllPreferenceLikePermission();
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 

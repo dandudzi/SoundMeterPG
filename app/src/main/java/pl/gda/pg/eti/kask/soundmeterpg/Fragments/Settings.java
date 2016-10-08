@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -19,6 +20,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SeekBarPreference;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 /**
  * Created by Daniel on 14.07.2016 at 12:11 :).
@@ -29,10 +31,12 @@ public class Settings extends PreferenceFragment {
     private CheckBoxPreference privateDataPreference;
     private CheckBoxPreference GPSPreference;
     private CheckBoxPreference internetPreference;
+    private CheckBoxPreference recordingPreference;
     private String privateDataKey;
     private String workingInBackgroundKey;
     private Activity activity;
     private ConnectionInternetDetector internetDetector;
+    private PreferenceParser preference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,9 +55,12 @@ public class Settings extends PreferenceFragment {
         listener =  createListenerAccessToInternet();
         internetPreference.setOnPreferenceChangeListener(listener);
 
+        listener = createListenerAccessToMicrophone();
+        recordingPreference.setOnPreferenceChangeListener(listener);
+
         activity = getActivity();
         internetDetector = new ConnectionInternetDetector(activity.getBaseContext());
-
+        preference = new PreferenceParser(activity);
         setCheckboxInternetAndGpsStartingValueDependentOnAccessToService();
     }
 
@@ -95,12 +102,14 @@ public class Settings extends PreferenceFragment {
         workingInBackgroundKey = resources.getString(R.string.working_in_background_key_preference);
         String keyAccessToGPS = resources.getString(R.string.gps_key_preference);
         String keyAccessToInternet = resources.getString(R.string.internet_key_preference);
+        String keyRecording = resources.getString(R.string.recording_audio_key_preference);
 
         internalStoragePreference = (CheckBoxPreference) findPreference(keyAccessToInternalStorage);
         workingInBackground = (CheckBoxPreference)findPreference(workingInBackgroundKey);
         privateDataPreference = (CheckBoxPreference)findPreference(privateDataKey);
         GPSPreference = (CheckBoxPreference) findPreference(keyAccessToGPS);
         internetPreference = (CheckBoxPreference) findPreference(keyAccessToInternet);
+        recordingPreference = (CheckBoxPreference) findPreference(keyRecording);
     }
 
     private Preference.OnPreferenceChangeListener createListenerAccessToInternalStorage() {
@@ -140,14 +149,43 @@ public class Settings extends PreferenceFragment {
     }
 
     private Preference.OnPreferenceChangeListener createListenerAccessToGPS(){
+            return new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if(newValue.toString().equals("true")) {
+                        if(Build.VERSION.SDK_INT >= 23)
+                            if(Settings.this.preference.isNotGPSAvailable()){
+                                Settings.this.preference.requestGPSPermission(activity);
+                                return  false;
+                            }
+                        if (!ServiceDetector.isGPSEnabled(activity.getBaseContext())) {
+                            AlertDialog alert = NoGPS.create(activity, Settings.this);
+                            Log.i("NoGPS","Opening Dialog");
+                            alert.show();
+                            return false;
+                        }
+                    }
+                    return true;
+            }
+        };
+    }
+
+    private Preference.OnPreferenceChangeListener createListenerAccessToInternet() {
+
         return new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
-                    if (!ServiceDetector.isGPSEnabled(activity.getBaseContext())) {
-                        AlertDialog alert = NoGPS.create(activity, Settings.this);
-                        Log.i("NoGPS","Opening Dialog");
+                    if(Build.VERSION.SDK_INT >= 23)
+                        if(Settings.this.preference.isNotInternetAvailable()){
+                            Settings.this.preference.requestInternetPermission(activity);
+                            return  false;
+                        }
+                    if (!internetDetector.isConnectingToInternet()) {
+                        AlertDialog alert = NoInternet.create(activity, Settings.this);
+                        Log.i("NoInternet","Opening Dialog");
                         alert.show();
                         return false;
                     }
@@ -157,19 +195,22 @@ public class Settings extends PreferenceFragment {
         };
     }
 
-    private Preference.OnPreferenceChangeListener createListenerAccessToInternet() {
+    private Preference.OnPreferenceChangeListener createListenerAccessToMicrophone() {
+
         return new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if(newValue.toString().equals("true")) {
-                    if (!internetDetector.isConnectingToInternet()) {
-                        AlertDialog alert = NoInternet.create(activity, Settings.this);
-                        Log.i("NoInternet","Opening Dialog");
-                        alert.show();
-                        return false;
-                    }
-                }
+                    if(Build.VERSION.SDK_INT >= 23)
+                        if(Settings.this.preference.isNotMicrophoneAvailable()) {
+                            Settings.this.preference.requestMicrophonePermission(activity);
+                            return  false;
+                        }
+                    recordingPreference.setChecked(true);
+                }else
+                    recordingPreference.setChecked(false);
+
                 return true;
             }
         };

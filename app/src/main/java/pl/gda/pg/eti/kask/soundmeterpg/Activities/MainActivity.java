@@ -1,17 +1,13 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 
-import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,9 +19,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import java.sql.Array;
-import java.util.ArrayList;
-
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
@@ -33,6 +26,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -40,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private NavigationView drawerList;
+    private PreferenceParser preference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,26 +45,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setUpToolbar();
         setUpDrawer();
-        setUpPermission();
+        preference = new PreferenceParser(getBaseContext());
+        preference.askUserForPermission(this);
     }
 
+    private void setFragmentContent(Fragment newFragment){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-    private void setUpPermission(){
-        if (Build.VERSION.SDK_INT >= 23) {
-            String[] permissions = new String[] {Manifest.permission.RECORD_AUDIO,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.INTERNET,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.ACCESS_FINE_LOCATION};
+        transaction.replace(R.id.content_frame, newFragment);
 
-            ArrayList<String> tmp = new ArrayList<>();
-            for (String permission: permissions) {
-                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                    } else
-                        tmp.add(permission);
-                }
-            }
-            if(tmp.size() > 0)
-                ActivityCompat.requestPermissions(this, tmp.toArray(new String[tmp.size()]), 1);
-        }
+        transaction.commit();
+    }
+
+    private void setUpToolbar() {
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
+        setSupportActionBar(myToolbar);
+
+        //noinspection ConstantConditions
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        String description = getString(R.string.main_icon_description);
+        getSupportActionBar().setHomeActionContentDescription(description);
+
+        drawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                myToolbar,
+                R.string.drawer_open,
+                R.string.drawer_close
+        );
+    }
+
+    private void setUpDrawer() {
+        drawerList = (NavigationView) findViewById(R.id.left_drawer);
+        drawerList.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -112,40 +121,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Log.i("Navigation Drawer","User chose position number "+item.getTitle());
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -167,28 +142,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    private void setUpDrawer() {
-        drawerList = (NavigationView) findViewById(R.id.left_drawer);
-        drawerList.setNavigationItemSelectedListener(this);
+    @Override
+    public void onBackPressed() {
+        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
-    private void setUpToolbar() {
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
-        setSupportActionBar(myToolbar);
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
 
-        //noinspection ConstantConditions
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        String description = getString(R.string.main_icon_description);
-        getSupportActionBar().setHomeActionContentDescription(description);
-
-        drawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                myToolbar,
-                R.string.drawer_open,
-                R.string.drawer_close
-        );
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void startActivity(Class _class) {
@@ -207,12 +179,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             aboutAlert.show();
     }
 
-    private void setFragmentContent(Fragment newFragment){
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.content_frame, newFragment);
-
-        transaction.commit();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        preference.setAllPreferenceLikePermission();
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
 }
