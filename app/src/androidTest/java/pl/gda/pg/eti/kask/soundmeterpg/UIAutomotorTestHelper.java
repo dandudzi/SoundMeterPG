@@ -1,11 +1,16 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * Created by Daniel on 30.08.2016 at 10:51 :).
@@ -147,6 +152,90 @@ public class UIAutomotorTestHelper {
             throw  new UiObjectNotFoundException("Not found button");
 
         button.clickAndWaitForNewWindow(TIME_OUT);
+    }
+    public static void turnOnGps(UiDevice device, Context context) throws UiObjectNotFoundException {
+        UiObject object = null;
+       switch(Build.VERSION.SDK_INT ){
+           case 19 :
+               Intent settingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+               settingIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+               context.startActivity(settingIntent);
+               object = new UiObject(new UiSelector().className("android.widget.Switch"));
+               break;
+           case 20 :
+               //Lel nie ma api 20 w ogole xD
+               break;
+           case 21 :
+               device.openNotification();
+               object = new UiObject(new UiSelector().resourceId("com.android.systemui:id/multi_user_avatar"));
+               object.click();
+               object = new UiObject(new UiSelector().resourceId("android:id/title").text("Location"));
+               break;
+           case 22:
+               device.openQuickSettings();
+               object = new UiObject(new UiSelector().resourceId("android:id/title").text("Location"));
+               break;
+           case 23 :
+               device.openQuickSettings();
+               object = new UiObject(new UiSelector().index(6));
+               break;
+           case 24 :
+               device.openQuickSettings();
+               object = new UiObject(new UiSelector().resourceId("com.android.systemui:id/tile_label").text("Location"));
+               break;
+       }
+        object.click();
+        device.pressBack();
+        device.pressBack();
+    }
+
+    public static void turnOnInternetData(UiDevice device, Context context) throws UiObjectNotFoundException {
+        UiObject object = null;
+        UiObject switchObject = new UiObject(new UiSelector().className("android.widget.Switch"));
+        UiObject buttonObject = new UiObject(new UiSelector().resourceId("android:id/button1"));
+        switch (Build.VERSION.SDK_INT) {
+            case 19:
+                Intent settingIntent = new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS);
+                settingIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(settingIntent);
+                UiObject mobileNetwork = new UiObject(new UiSelector().resourceId("android:id/title").text("Mobile networks"));
+                mobileNetwork.click();
+                mobileNetwork = new UiObject(new UiSelector().resourceId("android:id/checkbox"));
+                mobileNetwork.click();
+                break;
+            case 21:
+                device.openNotification();
+                object = new UiObject(new UiSelector().resourceId("com.android.systemui:id/multi_user_avatar"));
+                object.click();
+                UiObject androidObject = new UiObject(new UiSelector().resourceId("android:id/title").index(4));
+                androidObject.click();
+                switchObject.click();
+                buttonObject.click();
+                break;
+            case 22:
+                device.openQuickSettings();
+                androidObject = new UiObject(new UiSelector().resourceId("android:id/title").index(4));
+                androidObject.click();
+                switchObject.click();
+                buttonObject.click();
+                break;
+            case 23:
+                device.openQuickSettings();
+                androidObject = new UiObject(new UiSelector().className("android.view.ViewGroup").index(3));
+                androidObject.click();
+                switchObject.click();
+                buttonObject.click();
+                break;
+            case 24:
+                device.openQuickSettings();
+                androidObject = new UiObject(new UiSelector().resourceId("com.android.systemui:id/tile_label").index(0));
+                androidObject.click();
+                switchObject.click();
+                buttonObject.click();
+                break;
+        }
+        device.pressBack();
+        device.pressBack();
     }
 
 }
