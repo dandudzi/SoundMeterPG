@@ -67,9 +67,9 @@ public class PreferenceTestHelper {
         if(isChecked)
             checkBox.check(matches(isChecked())).perform(click());
     }
-    public static void setPrivilages(int keyId, SharedPreferences prefs, Context context, boolean enabled){
+    public static void setPrivilages(String keyId, SharedPreferences prefs, boolean enabled){
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(context.getResources().getString(keyId), enabled);
+        editor.putBoolean(keyId, enabled);
         editor.commit();
     }
 

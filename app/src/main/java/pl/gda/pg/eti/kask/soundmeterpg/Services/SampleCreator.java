@@ -133,7 +133,7 @@ public class SampleCreator extends Service {
                             result = 10 * Math.log10(result);
                             counter = 0;
                             Log.i("Avg in db", Double.toString(result));
-                            if (googleAPILocalization.canUseGPS()) {
+                          //  if (googleAPILocalization.canUseGPS()) {
                                 Measurement oneMinuteMeasurement = null;
                               /*  try {
                                     Location l  = googleAPILocalization.getLocation();
@@ -157,15 +157,15 @@ public class SampleCreator extends Service {
                                         e.printStackTrace();
                                     }*/
                                 }
-                                try {
-                                    dataBaseHandler.insert(oneMinuteMeasurement);
+                              //  try {
+                                    //dataBaseHandler.insert(oneMinuteMeasurement);
                                    // Log.i("Store samples in Database",Double.toString(oneMinuteMeasurement.getLatitude())+ Double.toString(oneMinuteMeasurement.getLongitude()));
-                                } catch (NullRecordException e) {
-                                    e.printStackTrace();
+                              //  } //catch (NullRecordException e) {
+                                  //  e.printStackTrace();
                                 }
-                            }
+                            //}
                             //TODO kumulowanie danych,estymacja,zapisywanie na dysk,wysylanie na sewer
-                        }
+                        //}
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

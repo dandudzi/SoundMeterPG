@@ -2,31 +2,20 @@ package pl.gda.pg.eti.kask.soundmeterpg.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ListActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.MainAdapter;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.Sample;
-
-import static pl.gda.pg.eti.kask.soundmeterpg.R.layout.measurements;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 
 /**
  * Created by Daniel on 10.08.2016 at 18:3;i0 :).
@@ -50,13 +39,13 @@ ListView listView;
         arrayOfUsers = new ArrayList<>();
         DataBaseHandler dataBaseHandler = new DataBaseHandler(getActivity().getBaseContext(), getResources().getString(R.string.database_name));
         try {
-            arrayOfUsers = dataBaseHandler.getSamples();
-        } catch (OverrangeException e) {
+           // arrayOfUsers = dataBaseHandler.getSamples();
+        } catch (OverRangeException e) {
             e.printStackTrace();
         }
         super.onAttach(activity);
-        adapter = new MainAdapter(activity, arrayOfUsers);
-        adapter.addAll(arrayOfUsers);
+        //adapter = new MainAdapter(activity, arrayOfUsers);
+      //  adapter.addAll(arrayOfUsers);
 
     }
 }

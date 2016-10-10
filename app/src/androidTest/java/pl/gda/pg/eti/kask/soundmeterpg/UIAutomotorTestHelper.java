@@ -10,6 +10,8 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Internet.ConnectionInternetDetector;
+
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
@@ -189,7 +191,24 @@ public class UIAutomotorTestHelper {
         device.pressBack();
     }
 
+
     public static void turnOnInternetData(UiDevice device, Context context) throws UiObjectNotFoundException {
+        ConnectionInternetDetector detector =  new ConnectionInternetDetector(context);
+        if(detector.isConnectingToInternet())
+            return;
+        turnInternetData(device,context);
+    }
+
+    public static void turnOffInternetData(UiDevice device, Context context) throws UiObjectNotFoundException {
+        ConnectionInternetDetector detector =  new ConnectionInternetDetector(context);
+        if(detector.isConnectingToInternet())
+            turnInternetData(device,context);
+    }
+
+
+
+
+  private static void turnInternetData(UiDevice device, Context context) throws UiObjectNotFoundException {
         UiObject object = null;
         UiObject switchObject = new UiObject(new UiSelector().className("android.widget.Switch"));
         UiObject buttonObject = new UiObject(new UiSelector().resourceId("android:id/button1"));
@@ -237,5 +256,8 @@ public class UIAutomotorTestHelper {
         device.pressBack();
         device.pressBack();
     }
+
+
+
 
 }

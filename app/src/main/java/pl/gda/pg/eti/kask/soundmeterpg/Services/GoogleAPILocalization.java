@@ -64,7 +64,6 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
     public IBinder onBind(Intent intent) {
         if (googleApiClient != null)
             googleApiClient.connect();
-        checkPlayServices();
         if (googleApiClient.isConnected()) {
             startLocationUpdates();
         }
@@ -81,7 +80,7 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
         return super.onUnbind(intent);
     }
 
-    public boolean canUseGPS() {
+    private boolean canUseGPS() {
         return (ServiceDetector.isGPSEnabled(context));
     }
 
@@ -137,6 +136,7 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
 
     @Override
     public void onConnected(Bundle bundle) {
+        if(googleApiClient.isConnected())
         startLocationUpdates();
     }
 

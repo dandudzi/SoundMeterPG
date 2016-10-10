@@ -1,16 +1,31 @@
-package pl.gda.pg.eti.kask.soundmeterpg;
+package pl.gda.pg.eti.kask.soundmeterpg.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.ArrayAdapter;
+import android.icu.util.MeasureUnit;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientInternalStoragePermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasurementStatistics;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 /**
  * Created by gierl on 19.07.2016.
@@ -18,24 +33,38 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
 public class DataBaseHandler extends SQLiteOpenHelper {
     private Context context;
     private static final int DATABASE_VERSION = 1;
-    private static final String ID = "ID";
+    public static final String MEASUREMENT = "MEASUREMENT";
+    public static final String ID = "ID";
+    public static final String MIN = "Min";
+    public static final String MAX = "Max";
+    public static final String AVG = "AvgNoise";
+    public static final String LATITUDE = "Latitude";
+    public static final String LONGITUDE = "Longitude";
+    public static final String DATE = "Date";
+    public static final String USER_ID = "UserID";
+    private static final String STORED_ON_SERVER = "StoredOnServer";
+    private Cursor cursor;
+    private PreferenceParser preferenceParser;
 
     public DataBaseHandler(Context ctx, String name) {
-
         super(ctx, name, null, DATABASE_VERSION);
-        context = ctx;
+        this.context = ctx;
+        preferenceParser = new PreferenceParser(context);
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE SAMPLES(ID integer primary key autoincrement," +
-                "Noise double(14,11)," +
-                "Variance double(14,11),"+
-                "Latitude double(14,11) not null," +
-                "Longitude double(14,11) not null," +
-                "Date  character(19) not null," +
-                "UserID character(20) not null," +
-                "StoredOnServer integer default 0);");
+        sqLiteDatabase.execSQL("CREATE TABLE MEASUREMENT(" +
+                ID + " integer primary key autoincrement," +
+                MIN + " integer not null," +
+                MAX + " integer not null," +
+                AVG + " integer not null," +
+                LATITUDE + " double(14,11) not null," +
+                LONGITUDE + " double(14,11) not null," +
+                DATE + "  character(19) not null," +
+                USER_ID + " character(20) not null," +
+                STORED_ON_SERVER + " integer default 0);");
     }
 
     @Override
@@ -43,130 +72,171 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         //TODO naleĹĽy odpowiednio przenieĹ›Ä‡ elementy z starszej wersji bazy do nowej. Ta metoda moĹĽe siÄ™ przydaÄ‡
     }
 
-    public boolean insert(Sample sample) throws NullRecordException {
-        if (sample == null) throw new NullRecordException();
+    public boolean insert(Measurement measurement) throws InsufficientInternalStoragePermissionsException {
+        if(!preferenceParser.hasPermissionToUseInternalStorage())
+            return throwException();
+        if (measurement == null) return  false;
         try {
             SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(context.getResources().getString(R.string.noise), sample.getAvgNoiseLevel());
-            contentValues.put(context.getResources().getString(R.string.variance), sample.getVariance());
-            contentValues.put(context.getResources().getString(R.string.latitude), sample.getLatitude());
-            contentValues.put(context.getResources().getString(R.string.longitude), sample.getLongitude());
-            contentValues.put(context.getResources().getString(R.string.date), sample.getDate());
-            contentValues.put(context.getResources().getString(R.string.userID), sample.getUserID());
-            contentValues.put(context.getResources().getString(R.string.stored), sample.getState());
+            ContentValues contentValues = createContentValue(measurement);
             int return_value = -1;
-            return_value = (int) db.insert(context.getResources().getString(R.string.table), null, contentValues);
+            return_value = (int) db.insert(MEASUREMENT, null, contentValues);
             db.close();
             if (return_value <= 0) {
                 return false;
-            } else return true;
+            } else
+            {
+                Log.i("DataBaseHandler","Added row to db");
+                return true;
+            }
         } catch (Exception e) {
             android.util.Log.e("Exception", "Cannot get writableDataBase", e);
         }
         return false;
     }
 
-    public Sample getProbeByID(int ID) throws NullRecordException {
-        Sample sample = null;
-        String query = "SELECT * from " + context.getResources().getString(R.string.table) + " WHERE ID=" + ID;
-        SQLiteDatabase db = null;
-        try {
-            db = this.getReadableDatabase();
-        } catch (Exception e) {
-            android.util.Log.e("Exception", "Cannot get writableDataBase", e);
-        }
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst() && cursor.getCount() != 0) {
-            try {
-                sample = new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getInt(4));
-            } catch (OverrangeException e) {
-                e.printStackTrace();
-            }
-            cursor.close();
-            db.close();
-            return sample;
-        } else throw new NullRecordException("Not found records that have ID = " + ID);
-
-
+    private boolean throwException() throws InsufficientInternalStoragePermissionsException {
+        throw new InsufficientInternalStoragePermissionsException("Cannot store object in database.\n" +
+                "You don't have inssuficient permission to use internal storage");
     }
 
-    public ArrayList<Sample> getSamples() throws OverrangeException {
-        ArrayList<Sample> arrayAdapter = new ArrayList<>();
-        Sample sample = null;
-        String query = "SELECT * from " + context.getResources().getString(R.string.table) + ";";
-        SQLiteDatabase db = null;
-        try {
-            db = this.getReadableDatabase();
-        } catch (Exception e) {
-            android.util.Log.e("Exception", "Cannot get writableDataBase", e);
-        }
-        Cursor cursor = db.rawQuery(query, null);
+    public Measurement getMeasurement(int ID) throws NullRecordException {
+        String query = "SELECT * from " + MEASUREMENT + " WHERE ID=" + ID;
+        Measurement measurement = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst() && cursor.getCount() != 0) {
-            while (cursor.moveToNext()) {
-                arrayAdapter.add(new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getDouble(4),
-                        cursor.getString(5), cursor.getString(6), cursor.getInt(7)));
-            }
-        }
+            measurement = createMeasurement();
             cursor.close();
             db.close();
-            return arrayAdapter;
+            return measurement;
+        } else{
+            cursor.close();
+            db.close();
+            throw new NullRecordException("Not found records with ID = " + ID);
         }
+    }
 
+    public Measurement  getLastAddedRow() throws NullRecordException {
+        Measurement measurement = null;
+        String query = "Select * from " + MEASUREMENT + " ORDER BY " + ID + " DESC LIMIT 1";
+        SQLiteDatabase db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            measurement = createMeasurement();
+            cursor.close();
+            db.close();
+            return measurement;
+        }
+        if(measurement == null){   cursor.close();
+            db.close();
+            throw new NullRecordException("Cannot get object from database. Empty database?");
+        }
+        return  measurement;
+    }
 
-
-      public Sample getProbeFromDB() throws NullRecordException {
-          Sample sample = null;
-          String query = "Select * from " + context.getResources().getString(R.string.table) + " ORDER BY " + ID + " ASC LIMIT 1";
-
-          try {
-              SQLiteDatabase db = this.getReadableDatabase();
-
-              Cursor cursor = db.rawQuery(query, null);
-              if (cursor.moveToFirst()) {
-                  sample = new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3),cursor.getInt(4));
-                  cursor.close();
-                  db.close();
-                  return sample;
-              }
-              db.close();
-          } catch (Exception e) {
-              android.util.Log.e("Exception", "Cannot get writableDataBase", e);
-          }
-          if(sample == null)
-              throw new NullRecordException("Cannot get object from database. Empty database?");
-
-          return sample;
-      }
+    public ArrayList<Measurement> getMeasurementArray(){
+        ArrayList<Measurement> measurementArrayList = new ArrayList<>();
+        Measurement measurement = null;
+        String query = "SELECT * from " + MEASUREMENT + ";";
+        SQLiteDatabase db = this.getReadableDatabase();
+        int counter = 0;
+        cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst() && cursor.getCount() != 0) {
+            measurement = createMeasurement();
+            measurementArrayList.add(measurement);
+            while (cursor.moveToNext()) {
+                measurement = createMeasurement();
+                measurementArrayList.add(measurement);
+            }
+        }
+        cursor.close();
+        db.close();
+        return measurementArrayList;
+    }
 
     public boolean erease(int ID) throws NullRecordException {
-        String query = "Select * from " + context.getResources().getString(R.string.table) + " WHERE ID=" + ID;
-        SQLiteDatabase db = null;
-        try {
-            db = this.getWritableDatabase();
-        } catch (Exception e) {
-            e.printStackTrace();
+        String query = "Select * from " + MEASUREMENT + " WHERE ID=" + ID;
+        SQLiteDatabase db = this.getWritableDatabase();
+        cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            int returnValue = db.delete(MEASUREMENT, this.ID + "=" + cursor.getInt(0), null);
+            cursor.close();
+            db.close();
+            return  returnValue>0;
+        } else
+        {
+            cursor.close();
+            db.close();
+            throw new NullRecordException("Not found records that have ID = " + ID);
         }
-            Cursor cursor = db.rawQuery(query, null);
-            if (cursor.moveToFirst()) {
-                int returnValue = db.delete(context.getResources().getString(R.string.table), ID + "=" + cursor.getInt(0), null);
-                cursor.close();
-                db.close();
-                return  returnValue>0;
-
-            } else throw new NullRecordException("Not found records that have ID = " + ID);
 
     }
 
-    public boolean changeState(int ID, boolean stored) {
-        int state = (stored) ? 1 : 0;
-        ContentValues args = new ContentValues();
-        args.put(context.getResources().getString(R.string.stored), state);
-        SQLiteDatabase db = null;
-        db = this.getWritableDatabase();
-        int rowAffected = db.update(context.getResources().getString(R.string.table), args, "ID" + "=" + ID, null);
-        db.close();
-        if (rowAffected > 0) return true;
-        else return false;
+    @NonNull
+    private Measurement createMeasurement() {
+        Measurement measurement;
+        MeasurementStatistics statistics = new MeasurementStatistics();
+        statistics.min = getMin();
+        statistics.max = getMax();
+        statistics.avg = getAvg();
+        Location location = new Location(getLatitude(), getLongitude());
+        Date date = getDate();
+        measurement = new Measurement(statistics, location ,getStoredOnServer(), date);
+        return measurement;
+    }
+
+    private ContentValues createContentValue(Measurement measurement) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MIN, measurement.getMin());
+        contentValues.put(MAX, measurement.getMax());
+        contentValues.put(AVG, measurement.getAvg());
+        contentValues.put(LATITUDE, measurement.getLocation().getLatitude());
+        contentValues.put(LONGITUDE, measurement.getLocation().getLongitude());
+        contentValues.put(DATE, measurement.getDate());
+        contentValues.put(USER_ID, 12);
+        contentValues.put(STORED_ON_SERVER, measurement.getStoredState());
+        return contentValues;
+    }
+
+    private int getMin(){
+        return cursor.getInt(1);
+    }
+
+    private int getMax(){
+        return cursor.getInt(2);
+    }
+
+    private int getAvg(){
+        return cursor.getInt(3);
+    }
+
+    private  double getLatitude(){
+        return cursor.getDouble(4);
+    }
+
+    private  double getLongitude(){
+        return cursor.getDouble(5);
+    }
+
+    private Date getDate() {
+        String dateString = cursor.getString(6);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date =  format.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    private int getUserID(){
+        return cursor.getInt(7);
+    }
+
+    private boolean getStoredOnServer(){
+        int storedOnWebServer = cursor.getInt(8);
+        return (storedOnWebServer ==0 ? false : true);
     }
 }

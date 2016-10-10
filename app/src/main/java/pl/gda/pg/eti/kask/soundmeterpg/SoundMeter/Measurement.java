@@ -1,5 +1,10 @@
 package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -17,12 +22,46 @@ public class Measurement {
     public MeasurementStatistics statistics;
 
     public Measurement(MeasurementStatistics statistics, Location location, boolean storedOnWebServer, Date date) throws OverRangeException {
-        this.statistics = statistics;
+        if(isCorrectStatistics(statistics))
+            this.statistics = statistics;
+        else
+            throw new OverRangeException(createOverRangeExceptionMessage(statistics));
         this.location = location;
         this.date = date;
         this.storedOnWebServer = storedOnWebServer;
     }
 
+    @NonNull
+    private String createOverRangeExceptionMessage(MeasurementStatistics statistics) {
+        return "Incorrect value. Correct value are : MinNoiseLevel : "+ Sample.MIN_NOISE_LEVEL + "\n" +
+                "MaxNoiseLevel : " + Sample.MAX_NOISE_LEVEL + "\n AvgNoise : bigger than : " + Sample.MIN_NOISE_LEVEL + " and less than : " + Sample.MAX_NOISE_LEVEL + " \n" +
+                "Current value : MinNoiseLevel : " + statistics.min + " MaxNoiseLevel : " + statistics.max + " AvgNoiseLevel : " + statistics.avg;
+    }
+
+    private boolean isCorrectStatistics(MeasurementStatistics statistics) {
+        return  ( statistics.min >= Sample.MIN_NOISE_LEVEL && statistics.min <= Sample.MAX_NOISE_LEVEL &&
+                ( statistics.max >= Sample.MIN_NOISE_LEVEL && statistics.max <= Sample.MAX_NOISE_LEVEL)&&
+                ( statistics.avg >= Sample.MIN_NOISE_LEVEL && statistics.avg <= Sample.MAX_NOISE_LEVEL));}
+
+    public Location getLocation(){
+        return location;
+    }
+    public String getDate(){
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+       return formatter.format(date);
+    }
+    public int getMin(){
+        return statistics.min;
+    }
+    public  int getMax(){
+        return statistics.max;
+    }
+    public int getAvg(){
+        return statistics.avg;
+    }
+    public boolean getStoredState(){
+        return storedOnWebServer;
+    }
     public static MeasurementStatistics calculateMeasureStatistics(List<Sample> list){
         double avg = 0;
         int min = list.get(0).getNoiseLevel();
@@ -44,6 +83,7 @@ public class Measurement {
         statistics.min =  min;
         statistics.max = max;
         statistics.avg = (int)avg;
+        Log.i("MEASUREMENT", "SIZE of ARRAY SAMPLE : " + list.size());
         return statistics;
     }
 

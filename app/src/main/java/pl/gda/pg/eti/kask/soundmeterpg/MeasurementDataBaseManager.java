@@ -1,10 +1,13 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientInternalStoragePermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
@@ -17,12 +20,14 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
  */
 
 public class MeasurementDataBaseManager {
-    private static final int MINUTES_PER_MEASUREMENT = 5;
+    private static final int MINUTES_PER_MEASUREMENT = 1;
     private ArrayList<Sample> list  = new ArrayList<>();
     private long startTime = -1;
+    private Context context;
     private PreferenceParser preference;
 
-    public MeasurementDataBaseManager(PreferenceParser preference){
+    public MeasurementDataBaseManager(Context context, PreferenceParser preference){
+        this.context = context;
         this.preference = preference;
     }
 
@@ -33,9 +38,10 @@ public class MeasurementDataBaseManager {
         list.add(sample);
 
         long currentTime = System.currentTimeMillis();
-        if((startTime - currentTime) >= (MINUTES_PER_MEASUREMENT * 1000)){
-            startTime = currentTime;
+        if((currentTime - startTime) >= (MINUTES_PER_MEASUREMENT * 60000)){
             flush();
+            startTime = currentTime;
+
         }
     }
 
@@ -58,6 +64,13 @@ public class MeasurementDataBaseManager {
         list.clear();
 
         //TODO sendTOSERVER
+        DataBaseHandler dataBaseHandler =new DataBaseHandler(context, context.getResources().getString(R.string.table));
+        try {
+            dataBaseHandler.insert(measurement);
+        } catch (InsufficientInternalStoragePermissionsException e) {
+            e.printStackTrace();
+        }
+        dataBaseHandler.close();
         Log.i("Measurement", measurement.toString());
     }
 

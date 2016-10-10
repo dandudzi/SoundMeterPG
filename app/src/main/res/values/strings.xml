@@ -45,6 +45,8 @@
         <string name="internal_storage_title_preference">Allow access to internal storage </string>
         <string name="internal_storage_summary_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
+    <string name="measurements_in_storage_key_preference">measurements_in_storage</string>
+    <string name="title_seek_bar_preference">Measurements saved on internal storage device</string>
 
         <!-- About Dialog MainActivity-->
         <string name="title_about_dialog">About</string>
