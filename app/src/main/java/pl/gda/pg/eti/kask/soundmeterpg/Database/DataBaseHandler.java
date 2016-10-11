@@ -5,12 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 
 /**
  * Created by gierl on 19.07.2016.
@@ -44,7 +43,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
 
     public boolean insert(Sample sample) throws NullRecordException {
-        if (sample == null) throw new NullRecordException();
+     /*   if (sample == null) throw new NullRecordException();
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -63,7 +62,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             } else return true;
         } catch (Exception e) {
             android.util.Log.e("Exception", "Cannot get writableDataBase", e);
-        }
+        }*/
         return false;
     }
 
@@ -78,24 +77,23 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst() && cursor.getCount() != 0) {
-            try {
+            /*try {
                 sample = new Sample(cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getInt(4));
             } catch (OverrangeException e) {
                 e.printStackTrace();
-            }
+            }*/
             cursor.close();
             db.close();
             return sample;
         } else throw new NullRecordException("Not found records that have ID = " + ID);
 
-
     }
 
-    public ArrayList<Sample> getSamples() throws OverrangeException {
+    public ArrayList<Sample> getSamples()  {
         ArrayList<Sample> arrayAdapter = new ArrayList<>();
         Sample sample = null;
         String query = "SELECT * from " + context.getResources().getString(R.string.table) + ";";
-        SQLiteDatabase db = null;
+       /* SQLiteDatabase db = null;
         try {
             db = this.getReadableDatabase();
         } catch (Exception e) {
@@ -108,8 +106,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                         cursor.getString(5), cursor.getString(6), cursor.getInt(7)));
             }
         }
-            cursor.close();
-            db.close();
+            cursor.close();*/
+           //db.close();
             return arrayAdapter;
         }
 
@@ -117,7 +115,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
       public Sample getProbeFromDB() throws NullRecordException {
           Sample sample = null;
-          String query = "Select * from " + context.getResources().getString(R.string.table) + " ORDER BY " + ID + " ASC LIMIT 1";
+         /* String query = "Select * from " + context.getResources().getString(R.string.table) + " ORDER BY " + ID + " ASC LIMIT 1";
 
           try {
               SQLiteDatabase db = this.getReadableDatabase();
@@ -134,7 +132,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
               android.util.Log.e("Exception", "Cannot get writableDataBase", e);
           }
           if(sample == null)
-              throw new NullRecordException("Cannot get object from database. Empty database?");
+              throw new NullRecordException("Cannot get object from database. Empty database?");*/
 
           return sample;
       }

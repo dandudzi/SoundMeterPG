@@ -12,7 +12,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
+
+import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.MeasurementChangeListener;
@@ -157,12 +158,12 @@ public class SampleCreator extends Service {
                                         e.printStackTrace();
                                     }*/
                                 }
-                                try {
-                                    dataBaseHandler.insert(oneMinuteMeasurement);
+                               /* try {
+                                   // dataBaseHandler.insert(oneMinuteMeasurement);
                                    // Log.i("Store samples in Database",Double.toString(oneMinuteMeasurement.getLatitude())+ Double.toString(oneMinuteMeasurement.getLongitude()));
                                 } catch (NullRecordException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
                             }
                             //TODO kumulowanie danych,estymacja,zapisywanie na dysk,wysylanie na sewer
                         }

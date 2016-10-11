@@ -16,6 +16,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import java.util.ArrayList;
 
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
+
 /**
  * Created by gierl on 28.09.2016.
  */
@@ -111,11 +113,11 @@ public class MainAdapter  extends ArrayAdapter<Sample> {
         TextView tvLongitude = (TextView) convertView.findViewById(R.id.longitude);
         CheckBox cbStoredSample = (CheckBox) convertView.findViewById(R.id.stored_sample);
 
-        tvAVG.setText( String.valueOf(sample.getAvgNoiseLevel()));
+        /*tvAVG.setText( String.valueOf(sample.getAvgNoiseLevel()));
         tvLatitude.setText(String.valueOf(sample.getLatitude()));
         tvLongitude.setText(String.valueOf(sample.getLongitude()));
         if(sample.getState())
-        cbStoredSample.setChecked(true);
+        cbStoredSample.setChecked(true);*/
         // Return the completed view to render on screen
         return convertView;
     }

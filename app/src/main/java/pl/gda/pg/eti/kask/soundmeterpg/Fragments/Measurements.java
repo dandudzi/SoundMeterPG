@@ -21,10 +21,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pl.gda.pg.eti.kask.soundmeterpg.DataBaseHandler;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverrangeException;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.MainAdapter;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.Sample;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 
 import static pl.gda.pg.eti.kask.soundmeterpg.R.layout.measurements;
 
@@ -51,7 +51,7 @@ ListView listView;
         DataBaseHandler dataBaseHandler = new DataBaseHandler(getActivity().getBaseContext(), getResources().getString(R.string.database_name));
         try {
             arrayOfUsers = dataBaseHandler.getSamples();
-        } catch (OverrangeException e) {
+        } catch (OverRangeException e) {
             e.printStackTrace();
         }
         super.onAttach(activity);

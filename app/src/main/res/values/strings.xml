@@ -45,6 +45,14 @@
         <string name="internal_storage_title_preference">Allow access to internal storage </string>
         <string name="internal_storage_summary_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
 
+        <string name="measurements_in_storage_key_preference">measurement_key_preference</string>
+        <string name="title_seek_bar_preference">Number of measurements save on local storage</string>
+
+        <string name="calibrate_key_preference">calibrate_key_preference</string>
+        <string name="calibrate_title_preference">Calibrate your device</string>
+        <string name="calibrate_msg_preference">db</string>
+        <string name="negative_value_calibration_dialog">Negative Value</string>
+        <string name="switch_text_calibration_dialog">value*(-1)</string>
 
         <!-- About Dialog MainActivity-->
         <string name="title_about_dialog">About</string>
@@ -118,6 +126,7 @@
     <string name="date">Date</string>
     <string name="userID">UserID</string>
     <string name="stored">StoredOnServer</string>
+
 
 
 </resources>

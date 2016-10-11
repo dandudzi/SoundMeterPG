@@ -21,6 +21,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static org.hamcrest.Matchers.allOf;
+import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.turnOffGPS;
 
 /**
  * Created by Daniel on 21.08.2016 at 16:16 :).
@@ -35,9 +36,10 @@ public class LoginActivityIntentTest {
             LoginActivity.class);
 
     @Before
-    public void initValues(){
+    public void setUp(){
         context = mActivityRule.getActivity().getBaseContext();
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
     }
 
     @Test

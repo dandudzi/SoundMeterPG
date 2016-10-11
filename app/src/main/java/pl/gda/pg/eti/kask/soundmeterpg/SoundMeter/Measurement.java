@@ -25,21 +25,24 @@ public class Measurement {
 
     public static MeasurementStatistics calculateMeasureStatistics(List<Sample> list){
         double avg = 0;
-        int min = list.get(0).getNoiseLevel();
-        int max = 0 ;
-        double noiseLevel;
-        for (Sample sample: list) {
-            noiseLevel = sample.getNoiseLevel();
-            if(noiseLevel > max)
-                max = (int)noiseLevel;
-            if(noiseLevel < min)
-                min = (int) noiseLevel;
-            noiseLevel /= 10;
-            noiseLevel = Math.pow(10, noiseLevel);
-            avg += noiseLevel;
+        int min = 0;
+        int max = 0;
+            if(list.size() > 0 ){
+            min = list.get(0).getNoiseLevel();
+            double noiseLevel;
+            for (Sample sample: list) {
+                noiseLevel = sample.getNoiseLevel();
+                if(noiseLevel > max)
+                    max = (int)noiseLevel;
+                if(noiseLevel < min)
+                    min = (int) noiseLevel;
+                noiseLevel /= 10;
+                noiseLevel = Math.pow(10, noiseLevel);
+                avg += noiseLevel;
+            }
+            avg/=list.size();
+            avg = 20 * Math.log10(avg);
         }
-        avg/=list.size();
-        avg = 10 * Math.log10(avg);
         MeasurementStatistics statistics =  new MeasurementStatistics();
         statistics.min =  min;
         statistics.max = max;
