@@ -43,6 +43,7 @@ import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.uncheckPrefer
 import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.TIME_OUT;
 import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.turnOffGPS;
 import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.turnOffInternetData;
+import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.turnOnAllPermission;
 import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.turnOnGPS;
 
 /**
@@ -59,12 +60,13 @@ public class SettingsActivityIntentsTest {
             SettingsActivity.class);
 
     @Before
-    public void setUp() throws UiObjectNotFoundException {
+    public void setUp() throws UiObjectNotFoundException, InterruptedException {
         context = mActivityRule.getActivity().getBaseContext();
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivityRule.getActivity());
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         turnOffGPS(device,context);
         turnOffInternetData(device,context);
+        turnOnAllPermission(device,context);
     }
 
     @Test

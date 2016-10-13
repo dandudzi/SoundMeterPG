@@ -67,7 +67,7 @@ public class SettingsActivityWorkCorrectlyTest {
             SettingsActivity.class);
 
     @Before
-    public void initValues() throws Exception {
+    public void setUp() throws Exception {
         context = mActivityRule.getActivity().getBaseContext();
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivityRule.getActivity());
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.util.Log;
 
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 
@@ -28,22 +29,23 @@ public class AudioRecorder {
 
 
     public int getNoiseLevel() {
-        double amplitude = 1.0;
-        int amp2 = getAmplitude();
-        int wynik = (int)(20 * Math.log10(getAmplitude() / amplitude));
-        return (int)(20 * Math.log10(getAmplitude() / amplitude));
+        return Math.abs((int)(20 * Math.log10(getAmplitude() / 1.0)));
     }
 
     private int getAmplitude() {
         if (recorder != null) {
             recorder.read(buffer, 0, BUFFER_SIZE);
-            int max = 0;
+            double RMS = 0;
+            int counter = 0;
             for (short s : buffer) {
-                if (Math.abs(s) > max) {
-                    max = Math.abs(s);
-                }
+                if(s!=0)
+                    counter++;
+                RMS += (s*s);
             }
-            return max;
+            RMS /= BUFFER_SIZE;
+            if(RMS != 0)
+                RMS = Math.sqrt(RMS);
+            return (int)RMS;
         } else return 0;
     }
 
@@ -55,7 +57,7 @@ public class AudioRecorder {
         }
     }
 
-    private static final int[] SAMPLES_RATE = new int[] {  22050, 44100, 11025, 16000, 8000 };
+    private static final int[] SAMPLES_RATE = new int[] {  44100, 22050, 48000, 11025, 16000, 8000 };
     private static final int[] CHANNELS = new int[] { AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO };
     private static final int[] AUDIOS_ENCODING = new int[] {  AudioFormat.ENCODING_PCM_16BIT, AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_FLOAT };
 
@@ -70,13 +72,15 @@ public class AudioRecorder {
                         if (BUFFER_SIZE != AudioRecord.ERROR_BAD_VALUE) {
                             recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,SAMPLE_RATE,CHANNEL,AUDIO_ENCODING,BUFFER_SIZE);
 
-                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
+                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED) {
+                                Log.i("Choosen mic","Samples: "+SAMPLE_RATE+" Encoding: "+AUDIO_ENCODING+" CHANNEL: "+CHANNEL);
                                 return recorder;
+                            }
                             else
                                 recorder.release();
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
             }

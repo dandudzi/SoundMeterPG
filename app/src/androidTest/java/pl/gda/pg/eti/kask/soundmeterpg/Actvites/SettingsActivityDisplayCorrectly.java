@@ -118,7 +118,6 @@ public class SettingsActivityDisplayCorrectly {
         TextViewTestHelper.testSinglelineTextView(maxValue);
         TextViewTestHelper.testSinglelineTextView(currentValue);
 
-
         DataInteraction seekBar = interaction.onChildView(allOf(withId(R.id.seek_bar_preference)));
         seekBar.check(matches(isCompletelyDisplayed()));
     }

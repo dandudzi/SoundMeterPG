@@ -24,7 +24,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
  */
 
 public class Measure extends IntentService {
-    private static final int SAMPLE_PER_MILLISECONDS = 1000;
+    private static final int MILLISECONDS_PER_SAMPLE = 250;
 
     private volatile boolean endMeasure = false;
 
@@ -38,9 +38,6 @@ public class Measure extends IntentService {
     private MeasurementDataBaseManager dataBaseManger;
     private PreferenceParser preferences;
     private AudioRecorder recorder;
-
-
-
 
 
     private BroadcastReceiver endTaskReceiver = new BroadcastReceiver() {
@@ -133,13 +130,18 @@ public class Measure extends IntentService {
 
     private void measureAction() throws InsufficientPermissionsException, TurnOffGPSException {
         long startTime,endTime;
+        int timeOfExecute;
         try {
             startTime = System.currentTimeMillis();
 
                 measure();
 
             endTime = System.currentTimeMillis();
-            Thread.sleep(SAMPLE_PER_MILLISECONDS - (endTime - startTime));
+            timeOfExecute = (int)(endTime - startTime);
+            if(timeOfExecute > MILLISECONDS_PER_SAMPLE)
+                Thread.sleep(MILLISECONDS_PER_SAMPLE );
+            else
+                Thread.sleep(MILLISECONDS_PER_SAMPLE -timeOfExecute);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

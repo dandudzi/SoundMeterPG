@@ -161,15 +161,18 @@ public class UIAutomotorTestHelper {
 
         button.clickAndWaitForNewWindow(TIME_OUT);
     }
+
     public static void turnOnGPS(UiDevice device, Context context) throws UiObjectNotFoundException {
         if(ServiceDetector.isGPSEnabled(context))
             return;
         turnGPS(device,context);
     }
+
     public static void turnOffGPS(UiDevice device, Context context) throws UiObjectNotFoundException {
         if(ServiceDetector.isGPSEnabled(context))
             turnGPS(device,context);
     }
+
     public static void turnGPS(UiDevice device, Context context) throws UiObjectNotFoundException {
         UiObject object = null;
        switch(Build.VERSION.SDK_INT ){

@@ -3,9 +3,11 @@ package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView drawerList;
     private PreferenceParser preference;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /*once onFirst start app*/
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
         preference.askUserForPermission(this);
+
     }
 
     private void setFragmentContent(Fragment newFragment){

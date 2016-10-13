@@ -17,7 +17,8 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
  */
 
 public class MeasurementDataBaseManager {
-    private static final int MINUTES_PER_MEASUREMENT = 5;
+    private static final int MINUTES_PER_MEASUREMENT = 1;
+    private static final int MINUTE_IN_MILLISECONDS = 60000;
     private ArrayList<Sample> list  = new ArrayList<>();
     private long startTime = -1;
     private PreferenceParser preference;
@@ -31,9 +32,10 @@ public class MeasurementDataBaseManager {
             startTime = System.currentTimeMillis();
 
         list.add(sample);
+        //Log.i("Sample", sample.toString() + " counter: " + list.size());
 
         long currentTime = System.currentTimeMillis();
-        if((startTime - currentTime) >= (MINUTES_PER_MEASUREMENT * 1000)){
+        if((currentTime - startTime) >= (MINUTES_PER_MEASUREMENT * MINUTE_IN_MILLISECONDS)){
             startTime = currentTime;
             flush();
         }
@@ -55,10 +57,13 @@ public class MeasurementDataBaseManager {
 
         Date date =  new Date();
         Measurement measurement =  new Measurement(avg, location, isStoreOnWebServer, date);
-        list.clear();
+
 
         //TODO sendTOSERVER
-        Log.i("Measurement", measurement.toString());
+        Log.i("Measurement", measurement.toString() +" counter: " + list.size());
+
+
+        list.clear();
     }
 
 }

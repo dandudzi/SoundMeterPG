@@ -90,4 +90,9 @@ public class Sample implements Parcelable{
             return new Sample[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Noise level: "+ noiseLevel;
+    }
 }

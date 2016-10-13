@@ -41,7 +41,7 @@ public class Measurement {
                 avg += noiseLevel;
             }
             avg/=list.size();
-            avg = 20 * Math.log10(avg);
+            avg = 10 * Math.log10(avg);
         }
         MeasurementStatistics statistics =  new MeasurementStatistics();
         statistics.min =  min;
