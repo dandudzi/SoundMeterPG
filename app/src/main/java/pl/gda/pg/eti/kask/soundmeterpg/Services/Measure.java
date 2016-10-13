@@ -159,9 +159,11 @@ public class Measure extends IntentService {
 
         if(e instanceof  InsufficientMicrophonePermissionsException)
             intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.MICROPHONE_ERROR_KEY.toString());
-        if(e instanceof  TurnOffGPSException)
+        else if(e instanceof  TurnOffGPSException)
             intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.GPS_TURN_OFF_KEY.toString());
-
+        else{
+            e .printStackTrace();
+        }
         LocalBroadcastManager.getInstance(Measure.this).sendBroadcast(intent);
     }
 

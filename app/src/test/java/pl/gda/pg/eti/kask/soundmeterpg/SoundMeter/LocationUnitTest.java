@@ -1,21 +1,17 @@
-package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.SoundMeter.SoundMeter;
+package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter;
 
-import android.os.Bundle;
-import android.os.Parcel;
-
-import org.junit.Assert;
 import org.junit.Test;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
 
 import static junit.framework.Assert.assertEquals;
 
 /**
+ *
  * Created by gierl on 01.10.2016.
  */
 
-public class LocationTest {
+public class LocationUnitTest {
 
     private final double CORECCT_LONGITUDE = 20.0;
     private final double LESS_THAN_MIN_LONGITUDE = Location.MIN_LONGITUDE -1;

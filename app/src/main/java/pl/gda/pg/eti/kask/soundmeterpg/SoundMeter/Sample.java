@@ -3,9 +3,6 @@ package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-
-import java.util.Date;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
 
@@ -19,6 +16,25 @@ public class Sample implements Parcelable{
 
     private int noiseLevel;
     private Location location;
+
+
+    public static int calculateRMSForPeriodOfTime(short[] amplitudesTable, final int BUFFER_SIZE){
+        double RMS = 0;
+        int counter = 0;
+        for (short s : amplitudesTable) {
+            if(s!=0)
+                counter++;
+            RMS += (s*s);
+        }
+        RMS /= BUFFER_SIZE;
+        if(RMS != 0)
+            RMS = Math.sqrt(RMS);
+        return (int)RMS;
+    }
+
+    public static int getNoiseLevelFromAmplitude(int amplitude){
+        return Math.abs((int)Math.round(20 * Math.log10(amplitude / 1.0)));
+    }
 
     public Sample(int noiseLevel, Location location) {
         if(location == null)

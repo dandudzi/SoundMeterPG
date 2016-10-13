@@ -24,29 +24,28 @@ public class Measurement {
     }
 
     public static MeasurementStatistics calculateMeasureStatistics(List<Sample> list){
-        double avg = 0;
-        int min = 0;
+        double leq = 0;
+        int min = 140;
         int max = 0;
             if(list.size() > 0 ){
-            min = list.get(0).getNoiseLevel();
             double noiseLevel;
             for (Sample sample: list) {
                 noiseLevel = sample.getNoiseLevel();
                 if(noiseLevel > max)
                     max = (int)noiseLevel;
-                if(noiseLevel < min)
+                if(noiseLevel > 0 && noiseLevel < min)
                     min = (int) noiseLevel;
                 noiseLevel /= 10;
                 noiseLevel = Math.pow(10, noiseLevel);
-                avg += noiseLevel;
+                leq += noiseLevel;
             }
-            avg/=list.size();
-            avg = 10 * Math.log10(avg);
+            leq/=list.size();
+            leq = 10 * Math.log10(leq);
         }
         MeasurementStatistics statistics =  new MeasurementStatistics();
         statistics.min =  min;
         statistics.max = max;
-        statistics.avg = (int)avg;
+        statistics.avg = (int)Math.round(leq);
         return statistics;
     }
 

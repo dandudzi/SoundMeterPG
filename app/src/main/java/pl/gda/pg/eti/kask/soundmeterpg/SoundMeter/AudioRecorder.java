@@ -6,8 +6,6 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
-import pl.gda.pg.eti.kask.soundmeterpg.R;
-
 /**
  * Created by Daniel on 05.10.2016.
  */
@@ -29,23 +27,16 @@ public class AudioRecorder {
 
 
     public int getNoiseLevel() {
-        return Math.abs((int)(20 * Math.log10(getAmplitude() / 1.0)));
+        int noiseLevel = Sample.getNoiseLevelFromAmplitude(getAmplitude());
+        if(noiseLevel < 0)
+            noiseLevel = 0;
+        return  noiseLevel;
     }
 
     private int getAmplitude() {
         if (recorder != null) {
             recorder.read(buffer, 0, BUFFER_SIZE);
-            double RMS = 0;
-            int counter = 0;
-            for (short s : buffer) {
-                if(s!=0)
-                    counter++;
-                RMS += (s*s);
-            }
-            RMS /= BUFFER_SIZE;
-            if(RMS != 0)
-                RMS = Math.sqrt(RMS);
-            return (int)RMS;
+           return Sample.calculateRMSForPeriodOfTime(buffer,BUFFER_SIZE);
         } else return 0;
     }
 
