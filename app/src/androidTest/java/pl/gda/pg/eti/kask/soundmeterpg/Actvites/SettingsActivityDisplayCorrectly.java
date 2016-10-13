@@ -3,9 +3,11 @@ package pl.gda.pg.eti.kask.soundmeterpg.Actvites;
 import android.content.Context;
 import android.support.test.espresso.DataInteraction;
 import android.support.v7.widget.AppCompatImageView;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -13,6 +15,9 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.TextViewTestHelper;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.PositionAssertions.isAbove;
+import static android.support.test.espresso.assertion.PositionAssertions.isRightOf;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -28,7 +33,6 @@ import static pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper.getCheckbox;
  */
 @Ignore
 public class SettingsActivityDisplayCorrectly {
-
     Context context;
 
     @Test
@@ -114,9 +118,42 @@ public class SettingsActivityDisplayCorrectly {
         TextViewTestHelper.testSinglelineTextView(maxValue);
         TextViewTestHelper.testSinglelineTextView(currentValue);
 
-
         DataInteraction seekBar = interaction.onChildView(allOf(withId(R.id.seek_bar_preference)));
         seekBar.check(matches(isCompletelyDisplayed()));
+    }
+
+    @Test
+    public void isCalibrateDisplayCorrectly(){
+        int title = R.string.calibrate_title_preference;
+        String key = context.getString(R.string.calibrate_key_preference);
+
+        DataInteraction calibration =  findPreferencesOnView(key,title);
+        calibration.check(matches(isCompletelyDisplayed()));
+        DataInteraction titleSeekBar = calibration.onChildView(allOf(withText(title)));
+        TextViewTestHelper.testSinglelineTextView(titleSeekBar,context.getString(title));
+        titleSeekBar.perform(click());
+
+        Matcher titleDialog = withText(R.string.calibrate_title_preference);
+        Matcher negativeValueText = withText(R.string.negative_value_calibration_dialog);
+        Matcher switchDialog = withText(R.string.switch_text_calibration_dialog);
+        Matcher db =  withText(R.string.calibrate_msg_preference);
+        Matcher numberPicker = withClassName(Matchers.equalTo(NumberPicker.class.getName()));
+
+        onView(titleDialog).check(matches(isCompletelyDisplayed()));
+        onView(negativeValueText).check(matches(isCompletelyDisplayed()));
+        onView(switchDialog).check(matches(isCompletelyDisplayed()));
+        onView(db).check(matches(isCompletelyDisplayed()));
+        onView(numberPicker).check(matches(isCompletelyDisplayed()));
+
+        onView(titleDialog).check(isAbove(switchDialog));
+        onView(titleDialog).check(isAbove(db));
+        onView(titleDialog).check(isAbove(numberPicker));
+
+        onView(db).check(isRightOf(numberPicker));
+
+        onView(numberPicker).check(isRightOf(negativeValueText));
+        onView(numberPicker).check(isRightOf(switchDialog));
+
     }
 
 
@@ -148,4 +185,6 @@ public class SettingsActivityDisplayCorrectly {
         DataInteraction checkBox  = getCheckbox(interaction);
         checkBox.check(matches(isCompletelyDisplayed()));
     }
+
+
 }

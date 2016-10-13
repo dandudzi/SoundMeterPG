@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/number_picker_calibrate_dialog"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:text="@string/calibrate_msg_preference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="38dp"
+                    android:id="@+id/textView2"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/number_picker_calibrate_dialog"
+                    android:singleLine="true"/>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/relativeLayout">
+                    <Switch
+                        android:text="@string/switch_text_calibration_dialog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch_calibration_dialog"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:text="@string/negative_value_calibration_dialog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/textView4"
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                         />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+    </ScrollView>
+</LinearLayout>

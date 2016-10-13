@@ -63,27 +63,28 @@ public class Measurement {
         return storedOnWebServer;
     }
     public static MeasurementStatistics calculateMeasureStatistics(List<Sample> list){
-        double avg = 0;
-        int min = list.get(0).getNoiseLevel();
-        int max = 0 ;
-        double noiseLevel;
-        for (Sample sample: list) {
-            noiseLevel = sample.getNoiseLevel();
-            if(noiseLevel > max)
-                max = (int)noiseLevel;
-            if(noiseLevel < min)
-                min = (int) noiseLevel;
-            noiseLevel /= 10;
-            noiseLevel = Math.pow(10, noiseLevel);
-            avg += noiseLevel;
+        double leq = 0;
+        int min = 140;
+        int max = 0;
+            if(list.size() > 0 ){
+            double noiseLevel;
+            for (Sample sample: list) {
+                noiseLevel = sample.getNoiseLevel();
+                if(noiseLevel > max)
+                    max = (int)noiseLevel;
+                if(noiseLevel > 0 && noiseLevel < min)
+                    min = (int) noiseLevel;
+                noiseLevel /= 10;
+                noiseLevel = Math.pow(10, noiseLevel);
+                leq += noiseLevel;
+            }
+            leq/=list.size();
+            leq = 10 * Math.log10(leq);
         }
-        avg/=list.size();
-        avg = 10 * Math.log10(avg);
         MeasurementStatistics statistics =  new MeasurementStatistics();
         statistics.min =  min;
         statistics.max = max;
-        statistics.avg = (int)avg;
-        Log.i("MEASUREMENT", "SIZE of ARRAY SAMPLE : " + list.size());
+        statistics.avg = (int)Math.round(leq);
         return statistics;
     }
 

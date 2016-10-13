@@ -1,15 +1,12 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -17,7 +14,6 @@ import android.util.Log;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoGPS;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoInternet;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.SeekBarPreference;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
@@ -43,8 +39,34 @@ public class Settings extends PreferenceFragment {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
-        initialCheckBoxesAndKeysPreference();
+        setUpCheckBoxesAndKeysPreference();
 
+        setUpListener();
+
+        activity = getActivity();
+        internetDetector = new ConnectionInternetDetector(activity.getBaseContext());
+        preference = new PreferenceParser(activity);
+        setCheckboxInternetAndGpsStartingValueDependentOnAccessToService();
+    }
+
+    private void setUpCheckBoxesAndKeysPreference() {
+        Resources resources = getResources();
+        String keyAccessToInternalStorage = resources.getString(R.string.internal_storage_key_preference);
+        privateDataKey = resources.getString(R.string.private_data_key_preference);
+        workingInBackgroundKey = resources.getString(R.string.working_in_background_key_preference);
+        String keyAccessToGPS = resources.getString(R.string.gps_key_preference);
+        String keyAccessToInternet = resources.getString(R.string.internet_key_preference);
+        String keyRecording = resources.getString(R.string.recording_audio_key_preference);
+
+        internalStoragePreference = (CheckBoxPreference) findPreference(keyAccessToInternalStorage);
+        workingInBackground = (CheckBoxPreference)findPreference(workingInBackgroundKey);
+        privateDataPreference = (CheckBoxPreference)findPreference(privateDataKey);
+        GPSPreference = (CheckBoxPreference) findPreference(keyAccessToGPS);
+        internetPreference = (CheckBoxPreference) findPreference(keyAccessToInternet);
+        recordingPreference = (CheckBoxPreference) findPreference(keyRecording);
+    }
+
+    private void setUpListener() {
         Preference.OnPreferenceChangeListener listener = createListenerAccessToInternalStorage();
         setDependencyForAccessToInternalStoragePreference(listener);
         setAvailabilityForAccessToInternalStoragePreference();
@@ -57,11 +79,6 @@ public class Settings extends PreferenceFragment {
 
         listener = createListenerAccessToMicrophone();
         recordingPreference.setOnPreferenceChangeListener(listener);
-
-        activity = getActivity();
-        internetDetector = new ConnectionInternetDetector(activity.getBaseContext());
-        preference = new PreferenceParser(activity);
-        setCheckboxInternetAndGpsStartingValueDependentOnAccessToService();
     }
 
     @Override
@@ -95,22 +112,7 @@ public class Settings extends PreferenceFragment {
             GPSPreference.setChecked(false);
     }
 
-    private void initialCheckBoxesAndKeysPreference() {
-        Resources resources = getResources();
-        String keyAccessToInternalStorage = resources.getString(R.string.internal_storage_key_preference);
-        privateDataKey = resources.getString(R.string.private_data_key_preference);
-        workingInBackgroundKey = resources.getString(R.string.working_in_background_key_preference);
-        String keyAccessToGPS = resources.getString(R.string.gps_key_preference);
-        String keyAccessToInternet = resources.getString(R.string.internet_key_preference);
-        String keyRecording = resources.getString(R.string.recording_audio_key_preference);
 
-        internalStoragePreference = (CheckBoxPreference) findPreference(keyAccessToInternalStorage);
-        workingInBackground = (CheckBoxPreference)findPreference(workingInBackgroundKey);
-        privateDataPreference = (CheckBoxPreference)findPreference(privateDataKey);
-        GPSPreference = (CheckBoxPreference) findPreference(keyAccessToGPS);
-        internetPreference = (CheckBoxPreference) findPreference(keyAccessToInternet);
-        recordingPreference = (CheckBoxPreference) findPreference(keyRecording);
-    }
 
     private Preference.OnPreferenceChangeListener createListenerAccessToInternalStorage() {
         return new Preference.OnPreferenceChangeListener() {

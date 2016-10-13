@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ public class Measure extends Fragment{
     private TextView currentLatitude;
     private TextView currentLongitude;
     private Button measureButton;
+    private PowerManager.WakeLock lock;
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -48,6 +50,8 @@ public class Measure extends Fragment{
     };
 
     private void handleMeasureError(String key) {
+        if(lock.isHeld())
+            lock.release();
         currentNoiseLevel.setText(key);
     }
 
@@ -86,6 +90,9 @@ public class Measure extends Fragment{
         filter.addAction(IntentActionsAndKeys.ERROR_MEASURE_ACTION.toString());
         filter.addAction(IntentActionsAndKeys.SAMPLE_RECEIVE_ACTION.toString());
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, filter);
+
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        lock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
     }
 
     @Override
@@ -104,6 +111,8 @@ public class Measure extends Fragment{
     @Override
     public void onPause() {
         sendEndActionToMeasureService();
+        if(lock.isHeld())
+            lock.release();
         super.onPause();
     }
 
@@ -112,11 +121,13 @@ public class Measure extends Fragment{
         if(isMeasureServiceRunning){
             measureButton.setText("Start");
             sendEndActionToMeasureService();
+            if(lock.isHeld())
+                lock.release();
         }else{
             measureButton.setText("Stop");
             Intent intent = new Intent(getActivity(), pl.gda.pg.eti.kask.soundmeterpg.Services.Measure.class);
             getActivity().startService(intent);
-
+            lock.acquire();
         }
 
     }

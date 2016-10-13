@@ -65,6 +65,8 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
         if (googleApiClient != null)
             googleApiClient.connect();
         if (googleApiClient.isConnected()) {
+        checkPlayServices();
+        if (googleApiClient!=null && googleApiClient.isConnected()) {
             startLocationUpdates();
         }
 
@@ -91,6 +93,8 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
             throw new TurnOffGPSException("GPS is turn off.");
         } else {
             //lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if(googleApiClient == null)
+                 return  null;
             android.location.Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if(location == null)
                 return null;

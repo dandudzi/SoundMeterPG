@@ -25,6 +25,10 @@
         android:id="@+id/working_in_background_check_box_preference"
         android:layout="@layout/checkbox_preference"/>
 
+    <pl.gda.pg.eti.kask.soundmeterpg.Dialogs.CalibrateDialog
+        android:key="@string/calibrate_key_preference"
+        android:title="@string/calibrate_title_preference"
+        android:defaultValue="0" />
 
   </PreferenceCategory>
 

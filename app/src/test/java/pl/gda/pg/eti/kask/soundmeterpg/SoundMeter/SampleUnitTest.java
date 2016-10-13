@@ -1,18 +1,17 @@
-package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.SoundMeter.SoundMeter;
+package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter;
 
 
 import org.junit.Test;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 
-import static org.junit.Assert.*;
+import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by gierl on 01.10.2016.
  */
 
-public class SampleTest {
+public class SampleUnitTest {
     private final  int CORRECT_NOISE_LEVEL = 24;
     private final int LESS_THAN_MIN_NOISE_LEVEL = Sample.MIN_NOISE_LEVEL - 1;
     private final int MORE_THAN_MAX_NOISE_LEVEL = Sample.MAX_NOISE_LEVEL + 1;
@@ -43,6 +42,20 @@ public class SampleTest {
     @Test(expected = NullPointerException.class)
     public void nullLocationTest(){
         Sample sample = new Sample(CORRECT_NOISE_LEVEL, NULL_LOCATION);
+    }
+
+    @Test
+    public void getNoiseLevelFromAmplitudeTest(){
+        int zeroTest = 0;
+        int zeroExpected = 0;
+        int negativeTest = -1;
+        int negativeExpected = 0;
+        int correctTest = 50;
+        int correctExpected = 34;
+
+        assertEquals( zeroExpected, Sample.getNoiseLevelFromAmplitude(zeroTest));
+        assertEquals(negativeExpected, Sample.getNoiseLevelFromAmplitude(negativeTest));
+        assertEquals(correctExpected,Sample.getNoiseLevelFromAmplitude(correctTest));
     }
 
 }

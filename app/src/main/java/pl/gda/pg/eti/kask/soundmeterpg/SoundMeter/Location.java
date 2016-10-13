@@ -43,6 +43,18 @@ public class Location implements Parcelable{
         return longitude;
     }
 
+    public SexigesimalLocation convertLocation(){
+        boolean isNegative = false;
+        double tmp = latitude;
+        SexigesimalLocation location = new SexigesimalLocation();
+        if(tmp <0) {
+            isNegative = true;
+            tmp *= -1;
+        }
+
+
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj == null)
