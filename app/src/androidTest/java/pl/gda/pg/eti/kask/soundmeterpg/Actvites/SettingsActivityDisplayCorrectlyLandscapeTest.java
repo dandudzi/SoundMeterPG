@@ -24,7 +24,7 @@ public class SettingsActivityDisplayCorrectlyLandscapeTest extends SettingsActiv
             SettingsActivity.class);
 
     @Before
-    public void initSettings() {
+    public void setUp() {
         super.context = mActivityRule.getActivity().getBaseContext();
         onView(isRoot()).perform(orientationLandscape());
     }

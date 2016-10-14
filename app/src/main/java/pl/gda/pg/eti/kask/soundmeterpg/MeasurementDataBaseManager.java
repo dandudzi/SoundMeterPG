@@ -45,8 +45,10 @@ public class MeasurementDataBaseManager {
         MeasurementStatistics avg = Measurement.calculateMeasureStatistics(list);
         Location location;
         boolean isStoreOnWebServer = false;
+        if(list.isEmpty())
+            return;
 
-        if(preference.hasPermissionToUseGPS())
+        if(preference.hasPermissionToUseGPS() )
             location =  list.get(0).getLocation();
         else
             location = new FakeLocation();

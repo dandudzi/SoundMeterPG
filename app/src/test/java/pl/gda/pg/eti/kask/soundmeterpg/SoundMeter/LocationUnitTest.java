@@ -53,4 +53,68 @@ public class LocationUnitTest {
     }
 
 
+    @Test
+    public void convertLocationSimpleTest(){
+        Location location = new Location(45.17823401,45.17823401);
+        SexigesimalLocation output = location.convertLocation();
+
+        assertEquals(45,output.degreesLatitude);
+        assertEquals(10,output.minutesLatitude);
+        assertEquals(41,output.secondsLatitude);
+
+        assertEquals(45,output.degreesLongitude);
+        assertEquals(10,output.minutesLongitude);
+        assertEquals(41,output.secondsLongitude);
+    }
+
+    @Test
+    public void convertLocationNegativeValueTest(){
+        Location location = new Location(-65.3062656,-95.3062656);
+        SexigesimalLocation output = location.convertLocation();
+
+        assertEquals(-65,output.degreesLatitude);
+        assertEquals(18,output.minutesLatitude);
+        assertEquals(22,output.secondsLatitude);
+
+        assertEquals(-95,output.degreesLongitude);
+        assertEquals(18,output.minutesLongitude);
+        assertEquals(22,output.secondsLongitude);
+    }
+
+    @Test
+    public void convertLocationZeroTest(){
+        Location location = new Location(0.0,0.45676);
+        SexigesimalLocation output = location.convertLocation();
+
+        assertEquals(0,output.degreesLatitude);
+        assertEquals(0,output.minutesLatitude);
+        assertEquals(0,output.secondsLatitude);
+
+        assertEquals(0,output.degreesLongitude);
+        assertEquals(27,output.minutesLongitude);
+        assertEquals(24,output.secondsLongitude);
+
+        location = new Location(0.0012,12.00345);
+        output = location.convertLocation();
+
+        assertEquals(0,output.degreesLatitude);
+        assertEquals(0,output.minutesLatitude);
+        assertEquals(4,output.secondsLatitude);
+
+        assertEquals(12,output.degreesLongitude);
+        assertEquals(0,output.minutesLongitude);
+        assertEquals(12,output.secondsLongitude);
+
+        location = new Location(85.0,74.45);
+        output = location.convertLocation();
+
+        assertEquals(85,output.degreesLatitude);
+        assertEquals(0,output.minutesLatitude);
+        assertEquals(0,output.secondsLatitude);
+
+        assertEquals(74,output.degreesLongitude);
+        assertEquals(27,output.minutesLongitude);
+        assertEquals(0,output.secondsLongitude);
+    }
+
 }

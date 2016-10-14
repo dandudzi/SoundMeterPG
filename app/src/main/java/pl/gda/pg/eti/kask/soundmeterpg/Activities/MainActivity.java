@@ -2,12 +2,11 @@ package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -38,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle drawerToggle;
     private NavigationView drawerList;
     private PreferenceParser preference;
+    private boolean isMeasure = false;
 
 
     @Override
@@ -58,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setFragmentContent(Fragment newFragment){
+        if(newFragment instanceof Measure)
+            isMeasure =true;
+        else
+            isMeasure=false;
+
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         transaction.replace(R.id.content_frame, newFragment);
@@ -155,8 +160,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             this.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(isMeasure) {
+                FragmentManager fragmentManager = this.getFragmentManager();
+                Measure frag = (Measure) fragmentManager.findFragmentById(R.id.content_frame);
+                if (preference.hasPermissionToWorkInBackground()){
+                    frag.startBackgroundService();
+                    super.onBackPressed();
+                }else {
+                    super.onBackPressed();
+                }
+            }
+
         }
+
     }
 
     @Override

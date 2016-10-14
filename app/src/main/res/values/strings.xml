@@ -128,5 +128,18 @@
     <string name="stored">StoredOnServer</string>
 
 
+    <!--Measure Main activity -->
+    <string name="min_measure">Min:</string>
+    <string name="max_measure">Max:</string>
+    <string name="avg_measure">Avg:</string>
+    <string name="longitude_measure">Longitude</string>
+    <string name="latitude_measure">Latitude</string>
+    <string name="unknown_error_title_measure">Unknown Error</string>
+    <string name="unknown_error_msg_measure">Unknown error. Look at logcat or contact with authors.</string>
+    <string name="turn_off_microphone_title_measure">Microphone Permission</string>
+    <string name="turn_off_microphone_msg_measure">Microphone permission is turn off. Pleas turn on it in Settings and try again.</string>
+    <string name="turn_off_location_title_measure">Localization </string>
+    <string name="turn_off_location_msg_measure">Application has got permission to use localization but it is turn off. Pleas turn on Localization and try again.</string>
+
 
 </resources>

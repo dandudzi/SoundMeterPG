@@ -16,6 +16,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.NumberPicker;
 
@@ -29,6 +30,7 @@ import org.junit.runner.RunWith;
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.SettingsActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 import pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -62,9 +64,18 @@ public class SettingsActivityWorkCorrectlyTest {
     private Context context;
     private SharedPreferences prefs;
     private UiDevice device;
+
     @Rule
     public final ActivityTestRule<SettingsActivity> mActivityRule = new ActivityTestRule<>(
             SettingsActivity.class);
+
+    String[] permissions = new String[] {
+            android.Manifest.permission.RECORD_AUDIO,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.READ_PHONE_STATE,
+            android.Manifest.permission.INTERNET,
+            android.Manifest.permission.ACCESS_NETWORK_STATE,
+            android.Manifest.permission.ACCESS_FINE_LOCATION};
 
     @Before
     public void setUp() throws Exception {
@@ -73,6 +84,7 @@ public class SettingsActivityWorkCorrectlyTest {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         turnOnGPS(device,context);
         turnOnAllPermission(device,context);
+
     }
 
     @Test

@@ -1,5 +1,7 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Dialogs;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -9,9 +11,9 @@ import android.view.View;
 /**
  * Created by Daniel on 04.08.2016 at 12:10 :).
  */
-class SimpleDialogWithTextView {
+public class SimpleDialogWithTextView {
 
-    public static AlertDialog createDialog(final InformationToCreateDialog info){
+    public static AlertDialog createDialogForResultOnYes(final InformationToCreateDialog info){
         AlertDialog.Builder dialog = new AlertDialog.Builder(info.ownerDialog);
         LayoutInflater inflater = info.ownerDialog.getLayoutInflater();
 
@@ -33,6 +35,22 @@ class SimpleDialogWithTextView {
             }
         });
         dialog.setView(dialogView);
+        return dialog.create();
+    }
+
+    public static AlertDialog createDialog(String msg, Context context, String title){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(title);
+        dialog.setMessage(msg);
+        dialog.setCancelable(false);
+        dialog.setNeutralButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+
         return dialog.create();
     }
 }

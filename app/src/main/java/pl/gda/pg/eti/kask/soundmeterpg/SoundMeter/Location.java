@@ -44,15 +44,31 @@ public class Location implements Parcelable{
     }
 
     public SexigesimalLocation convertLocation(){
-        boolean isNegative = false;
         double tmp = latitude;
         SexigesimalLocation location = new SexigesimalLocation();
-        if(tmp <0) {
-            isNegative = true;
+
+        location.degreesLatitude = (int) latitude;
+        location.degreesLongitude = (int) longitude;
+
+        if(tmp<0) {
             tmp *= -1;
+            location.minutesLatitude = (int) ((tmp + location.degreesLatitude) * 60);
+            location.secondsLatitude = (int) ((tmp + location.degreesLatitude - (location.minutesLatitude / 60.0)) * 3600);
+        }else{
+            location.minutesLatitude = (int) ((tmp - location.degreesLatitude) * 60);
+            location.secondsLatitude = (int) ((tmp - location.degreesLatitude - (location.minutesLatitude / 60.0)) * 3600);
+        }
+        tmp = longitude;
+        if(tmp<0) {
+            tmp *= -1;
+            location.minutesLongitude = (int) ((tmp + location.degreesLongitude) * 60);
+            location.secondsLongitude = (int) ((tmp + location.degreesLongitude - (location.minutesLongitude / 60.0)) * 3600);
+        }else {
+            location.minutesLongitude = (int) ((tmp - location.degreesLongitude) * 60);
+            location.secondsLongitude = (int) ((tmp - location.degreesLongitude - (location.minutesLongitude / 60.0)) * 3600);
         }
 
-
+        return location;
     }
 
     @Override

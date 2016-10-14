@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientMicrophonePermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientPermissionsException;
@@ -162,7 +163,9 @@ public class Measure extends IntentService {
         else if(e instanceof  TurnOffGPSException)
             intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.GPS_TURN_OFF_KEY.toString());
         else{
+            intent.putExtra(IntentActionsAndKeys.ERROR_KEY.toString(), IntentActionsAndKeys.INTERNAL_UNKNOWN_ERROR.toString());
             e .printStackTrace();
+            Log.e(IntentActionsAndKeys.INTERNAL_UNKNOWN_ERROR.toString(),e.toString());
         }
         LocalBroadcastManager.getInstance(Measure.this).sendBroadcast(intent);
     }
