@@ -25,6 +25,7 @@
         <service android:name="pl.gda.pg.eti.kask.soundmeterpg.Services.GoogleAPILocalization"/>
         <service android:name=".Services.Measure" android:exported="false"/>
         <service android:name=".Services.Sender"/>
+        <service android:name=".Services.BackgroundWork"/>
         <activity
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.Launcher"

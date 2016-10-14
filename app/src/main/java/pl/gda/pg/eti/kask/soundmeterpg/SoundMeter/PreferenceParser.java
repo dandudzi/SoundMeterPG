@@ -74,7 +74,7 @@ public class PreferenceParser implements PreferenceManager {
         editor.commit();
     }
 
-    public  void askUserForPermission(Activity activity){
+    public void askUserForPermission(Activity activity){
         if (Build.VERSION.SDK_INT >= 23) {
             String[] permissions = new String[] {
                     android.Manifest.permission.RECORD_AUDIO,
@@ -83,12 +83,11 @@ public class PreferenceParser implements PreferenceManager {
                     android.Manifest.permission.INTERNET,
                     android.Manifest.permission.ACCESS_NETWORK_STATE,
                     android.Manifest.permission.ACCESS_FINE_LOCATION};
-
             ArrayList<String> tmp = new ArrayList<>();
             for (String permission: permissions) {
                 if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-                    } else
+                    if ( ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+                   } else
                         tmp.add(permission);
                 }
             }

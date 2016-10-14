@@ -1,5 +1,6 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.support.v4.widget.CompoundButtonCompat;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 

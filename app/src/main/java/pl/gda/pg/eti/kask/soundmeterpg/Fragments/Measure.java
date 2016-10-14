@@ -9,17 +9,24 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.SimpleDialogWithTextView;
 import pl.gda.pg.eti.kask.soundmeterpg.IntentActionsAndKeys;
+import pl.gda.pg.eti.kask.soundmeterpg.MutableInteger;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasureStatistic;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasurementStatistics;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.SexigesimalLocation;
 
 /**
  * Created by Daniel on 10.08.2016 at 17:53 :).
@@ -27,9 +34,17 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 public class Measure extends Fragment{
     private Context context;
 
+
+    private TextView latitude;
+    private TextView longitude;
+    private TextView min;
+    private TextView max;
+    private TextView avg;
     private TextView currentNoiseLevel;
-    private TextView currentLatitude;
-    private TextView currentLongitude;
+    private MutableInteger counterSampleAvg = new MutableInteger();
+    private MeasurementStatistics statistic;
+
+    private PreferenceParser preferences;
     private Button measureButton;
     private PowerManager.WakeLock lock;
 
@@ -49,20 +64,51 @@ public class Measure extends Fragment{
         }
     };
 
-    private void handleMeasureError(String key) {
+    private void handleMeasureError(String _key) {
         if(lock.isHeld())
             lock.release();
-        currentNoiseLevel.setText(key);
-    }
 
-    private  void changeUIMeasurement(Sample sample) {
-        currentNoiseLevel.setText(String.valueOf(sample.getNoiseLevel())+" db");
-        if(!(sample.getLocation() instanceof FakeLocation)) {
-            currentLatitude.setText("Latitude : " + String.valueOf(sample.getLocation().getLatitude()));
-            currentLongitude.setText("Longitude : " + String.valueOf(sample.getLocation().getLongitude()));
+        measureButton.setText("Start");
+        currentNoiseLevel.setText("0 db");
+
+        IntentActionsAndKeys key = IntentActionsAndKeys.valueOf(_key);
+        if(isAdded())
+        switch (key){
+            case MICROPHONE_ERROR_KEY:
+                AlertDialog dialog = SimpleDialogWithTextView.createDialog(getString(R.string.turn_off_microphone_msg_measure),this.getActivity(),getString(R.string.turn_off_microphone_title_measure));
+                dialog.show();
+                break;
+            case GPS_TURN_OFF_KEY:
+                dialog = SimpleDialogWithTextView.createDialog(getString(R.string.turn_off_location_msg_measure),this.getActivity(),getString(R.string.turn_off_location_title_measure));
+                dialog.show();
+                break;
+            case INTERNAL_UNKNOWN_ERROR:
+                dialog = SimpleDialogWithTextView.createDialog(getString(R.string.unknown_error_msg_measure),this.getActivity(),getString(R.string.unknown_error_title_measure));
+                dialog.show();
+                break;
         }
     }
 
+    private  void changeUIMeasurement(Sample sample) {
+        int noiseLevel =sample.getNoiseLevel();
+        int avg;
+        avg = MeasureStatistic.setUpStatistic(noiseLevel,statistic,counterSampleAvg);
+
+        currentNoiseLevel.setText(String.valueOf(noiseLevel)+" db");
+        min.setText(String.valueOf(statistic.min) +" db");
+        max.setText(String.valueOf(statistic.max) +" db");
+        this.avg.setText(String.valueOf(avg) +" db");
+
+        if(sample.getLocation() instanceof FakeLocation)
+            return;
+
+        SexigesimalLocation location = sample.getLocation().convertLocation();
+        String latitude = MeasureStatistic.getLatitude(location);
+        String longitude = MeasureStatistic.getLongitude(location);
+
+        this.latitude.setText(latitude);
+        this.longitude.setText(longitude);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,44 +121,66 @@ public class Measure extends Fragment{
         super.onActivityCreated(savedInstanceState);
         Activity activity = getActivity();
         context = activity.getBaseContext();
-        currentNoiseLevel = (TextView) activity.findViewById(R.id.current_db_measure_fragment);
-        currentLatitude = (TextView) activity.findViewById(R.id.latitude_measure_fragment);
-        currentLongitude = (TextView) activity.findViewById(R.id.longitude_measure_fragment);
-        measureButton = (Button) activity.findViewById(R.id.measure_button_fragment);
-
+        setUpViewContent(activity);
+        preferences = new PreferenceParser(context);
         measureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onMeasureButtonClick(v);
             }
         });
+        statistic =  new MeasurementStatistics();
+        setUpFilters();
+        setUpPowerManager();
+        changeUiDependOnServiceRunning();
+    }
+
+    public void setUpViewContent(Activity activity) {
+        currentNoiseLevel = (TextView) activity.findViewById(R.id.current_db_measure_fragment);
+        measureButton = (Button) activity.findViewById(R.id.measure_button_fragment);
+        min = (TextView) activity.findViewById(R.id.min_measure);
+        max = (TextView) activity.findViewById(R.id.max_measure);
+        avg = (TextView) activity.findViewById(R.id.avg_measure);
+        latitude = (TextView) activity.findViewById(R.id.latitude_measure);
+        longitude = (TextView) activity.findViewById(R.id.longitude_measure);
+    }
+
+    public void setUpFilters() {
         IntentFilter filter =  new IntentFilter();
         filter.addAction(IntentActionsAndKeys.ERROR_MEASURE_ACTION.toString());
         filter.addAction(IntentActionsAndKeys.SAMPLE_RECEIVE_ACTION.toString());
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, filter);
+    }
 
+    public void setUpPowerManager() {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         lock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
     }
 
     @Override
     public void onResume() {
+        changeUiDependOnServiceRunning();
+        stopBackgroundService();
+        super.onResume();
+    }
+
+
+    public void changeUiDependOnServiceRunning() {
         boolean isMeasureServiceRunning = isMeasureServiceRunning();
         if(isMeasureServiceRunning){
+            lock.acquire();
             measureButton.setText("Stop");
         }else{
             measureButton.setText("Start");
             currentNoiseLevel.setText("0 db");
         }
-
-        super.onResume();
     }
 
     @Override
     public void onPause() {
-        sendEndActionToMeasureService();
         if(lock.isHeld())
             lock.release();
+        startBackgroundService();
         super.onPause();
     }
 
@@ -132,12 +200,30 @@ public class Measure extends Fragment{
 
     }
 
-    private void sendEndActionToMeasureService() {
+    public void sendEndActionToMeasureService() {
+        statistic = new MeasurementStatistics();
+        counterSampleAvg = new MutableInteger();
         Intent stopServiceIntent = new Intent(IntentActionsAndKeys.END_ACTION.toString());
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(stopServiceIntent);
     }
 
     private boolean isMeasureServiceRunning() {
         return ServiceDetector.isMyServiceRunning(pl.gda.pg.eti.kask.soundmeterpg.Services.Measure.class, context);
+    }
+
+    public void startBackgroundService() {
+        if(preferences.hasPermissionToWorkInBackground() && !ServiceDetector.isMyServiceRunning(pl.gda.pg.eti.kask.soundmeterpg.Services.BackgroundWork.class, context)){
+            Intent intent = new Intent(getActivity(), pl.gda.pg.eti.kask.soundmeterpg.Services.BackgroundWork.class);
+            getActivity().startService(intent);
+        }else if(!preferences.hasPermissionToWorkInBackground()){
+            sendEndActionToMeasureService();
+        }
+    }
+
+    private void stopBackgroundService() {
+        if(ServiceDetector.isMyServiceRunning(pl.gda.pg.eti.kask.soundmeterpg.Services.BackgroundWork.class, context)){
+            Intent stopServiceIntent = new Intent(IntentActionsAndKeys.END_ACTION_WORKING_BACKGROUND.toString());
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(stopServiceIntent);
+        }
     }
 }

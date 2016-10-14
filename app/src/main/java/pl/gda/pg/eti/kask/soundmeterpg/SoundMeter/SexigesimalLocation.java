@@ -5,11 +5,11 @@ package pl.gda.pg.eti.kask.soundmeterpg.SoundMeter;
  */
 
 public class SexigesimalLocation {
-    int degreesLatitude;
-    int minutesLatitude;
-    int secondsLatitude;
+    public int degreesLatitude;
+    public int minutesLatitude;
+    public int secondsLatitude;
 
-    int degreesLongitude;
-    int minutesLongitude;
-    int secondsLongitude;
+    public int degreesLongitude;
+    public int minutesLongitude;
+    public int secondsLongitude;
 }
