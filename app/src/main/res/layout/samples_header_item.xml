@@ -1,46 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primary_dark">
+
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom|left"
-        >
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:text="Average sound"
-            android:id="@+id/decibelsCols" />
+        android:layout_weight="0.20"
+        android:text="Stored on server"
+        android:id="@+id/stored_sampleCols"
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".30"
-            android:text="Latitude"
-            android:id="@+id/latitudeCols" />
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".30"
-            android:text="Longitude"
-            android:id="@+id/longitudeCols" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.20"
+        android:text="Date"
+        android:id="@+id/dateCols"
+        android:gravity="center"
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".30"
-            android:text="Stored on server"
-            android:id="@+id/stored_sampleCols" />
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:padding="10dp"
+        android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".15"
-            android:text="Remove from database"
-            android:id="@+id/textView" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.20"
+        android:text="Average sound"
+        android:id="@+id/decibelsCols"
+        android:autoText="false"
+        android:gravity="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:padding="10dp"
+        android:textSize="18sp" />
+
 </LinearLayout>

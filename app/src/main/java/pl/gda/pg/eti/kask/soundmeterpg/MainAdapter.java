@@ -2,41 +2,53 @@ package pl.gda.pg.eti.kask.soundmeterpg;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import java.util.ArrayList;
 
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
+import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Database.MeasurementDataBaseObject;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 
 /**
  * Created by gierl on 28.09.2016.
  */
-public class MainAdapter  extends ArrayAdapter<Sample> {
-    public MainAdapter(Context context, ArrayList<Sample> users) {
-        super(context, 0, users);
+public class MainAdapter  extends ArrayAdapter<MeasurementDataBaseObject> implements  CompoundButton.OnCheckedChangeListener{
+    private  final Context context;
+    private  ArrayList<MeasurementDataBaseObject> measurementArrayList;
+    public MainAdapter(Context context, ArrayList<MeasurementDataBaseObject> measurements) {
+        super(context, R.layout.samples_item, measurements);
+        this.measurementArrayList = measurements;
+        this.context = context;
     }
-
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-       Sample sample = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.samples_item, parent, false);
-        }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = inflater.inflate(R.layout.samples_item, parent, false);
+        TextView tvAVG = (TextView) rowView.findViewById(R.id.decibels);
+        TextView tvLatitude = (TextView) rowView.findViewById(R.id.dateMeasurement);
+        CheckBox cbStoredSample = (CheckBox) rowView.findViewById(R.id.stored_measurement);
+        MeasurementDataBaseObject measurement = getItem(position);
+        tvAVG.setText( String.valueOf(measurement.getAvg()));
+        tvLatitude.setText(measurement.getDate());
+        if(measurement.getStoredState())
+            cbStoredSample.setChecked(true);
+        cbStoredSample.setTag(position);
+        cbStoredSample.setOnCheckedChangeListener(this);
 
-        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+
+        //convertView.setOnLongClickListener(this);
+        /*convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View view) {
-                final Sample sample = getItem(position);
+                final Measurement measurement = getItem(position);
                 PopupMenu popupMenu = new PopupMenu(getContext(), view, Gravity.RIGHT);
                 popupMenu.getMenuInflater().inflate(R.menu.options_menu_sample, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -50,7 +62,7 @@ public class MainAdapter  extends ArrayAdapter<Sample> {
                                 builder1.setPositiveButton("Yes",
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
-                                                remove(sample);
+                                                remove(measurement);
                                             }
                                         });
                                 builder1.setNegativeButton("No",
@@ -82,7 +94,6 @@ public class MainAdapter  extends ArrayAdapter<Sample> {
 
 
 
-
         /*convertView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
@@ -108,17 +119,34 @@ public class MainAdapter  extends ArrayAdapter<Sample> {
         });
 
 */
-        TextView tvAVG = (TextView) convertView.findViewById(R.id.decibels);
-        TextView tvLatitude = (TextView) convertView.findViewById(R.id.latitude);
-        TextView tvLongitude = (TextView) convertView.findViewById(R.id.longitude);
-        CheckBox cbStoredSample = (CheckBox) convertView.findViewById(R.id.stored_sample);
 
-        //tvAVG.setText( String.valueOf(sample.getAvgNoiseLevel()));
-       // tvLatitude.setText(String.valueOf(sample.getLatitude()));
-       // tvLongitude.setText(String.valueOf(sample.getLongitude()));
-       // if(sample.getState())
-        cbStoredSample.setChecked(true);
-        // Return the completed view to render on screen
-        return convertView;
+        return rowView;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        Log.i("Main Adapter", "value = " + b);
+        int position = (int) compoundButton.getTag();
+        MeasurementDataBaseObject measurement = measurementArrayList.get(position);
+        if(measurement.getLocation().equals(new FakeLocation())) {
+            createAlert();
+            measurement.storedOnWebServer = false;
+        }
+        else {
+
+            DataBaseHandler dataBaseHandler = new DataBaseHandler(context, context.getResources().getString(R.string.database_name));
+            dataBaseHandler.changeStoreOnServerFlag(position + 1, b);
+            measurementArrayList.get(position).storedOnWebServer = b;
+        }
+        notifyDataSetChanged();
+
+
+    }
+
+    private void createAlert() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setMessage("Cannot store measurement which not have real location !");
+        dialog.create();
+        dialog.show();
     }
 }

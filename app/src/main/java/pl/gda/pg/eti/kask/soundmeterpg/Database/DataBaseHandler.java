@@ -3,6 +3,7 @@ package pl.gda.pg.eti.kask.soundmeterpg.Database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.icu.util.MeasureUnit;
@@ -81,6 +82,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             ContentValues contentValues = createContentValue(measurement);
             int return_value = -1;
             return_value = (int) db.insert(MEASUREMENT, null, contentValues);
+            checkSpaceIntoDataBase();
             db.close();
             if (return_value <= 0) {
                 return false;
@@ -95,14 +97,18 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return false;
     }
 
-    private boolean throwException() throws InsufficientInternalStoragePermissionsException {
-        throw new InsufficientInternalStoragePermissionsException("Cannot store object in database.\n" +
-                "You don't have inssuficient permission to use internal storage");
+    public void checkSpaceIntoDataBase() {
+        int countItemsThatCanBeStored = preferenceParser.howManyMeasurementsInStorage();
+        while(countItemsThatCanBeStored < getItemCount()){
+             MeasurementDataBaseObject oldestRow = getTheOldestRow();
+             erease(oldestRow.getID());
+         }
     }
 
-    public Measurement getMeasurement(int ID) throws NullRecordException {
+
+    public MeasurementDataBaseObject getMeasurement(int ID) throws NullRecordException {
         String query = "SELECT * from " + MEASUREMENT + " WHERE ID=" + ID;
-        Measurement measurement = null;
+        MeasurementDataBaseObject measurement = null;
         SQLiteDatabase db = this.getReadableDatabase();
         cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst() && cursor.getCount() != 0) {
@@ -117,8 +123,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    public Measurement  getLastAddedRow() throws NullRecordException {
-        Measurement measurement = null;
+    public MeasurementDataBaseObject  getLastAddedRow() throws NullRecordException {
+        MeasurementDataBaseObject measurement = null;
         String query = "Select * from " + MEASUREMENT + " ORDER BY " + ID + " DESC LIMIT 1";
         SQLiteDatabase db = this.getReadableDatabase();
         cursor = db.rawQuery(query, null);
@@ -135,12 +141,28 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return  measurement;
     }
 
-    public ArrayList<Measurement> getMeasurementArray(){
-        ArrayList<Measurement> measurementArrayList = new ArrayList<>();
-        Measurement measurement = null;
+    public MeasurementDataBaseObject getTheOldestRow() throws  NullRecordException{
+        MeasurementDataBaseObject measurement = null;
+        String query = "Select * from " + MEASUREMENT + " ORDER BY datetime(" + DATE + ")" + " ASC LIMIT 1";
+        SQLiteDatabase db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            measurement = createMeasurement();
+            cursor.close();
+            db.close();
+            return measurement;
+        }
+        if(measurement == null){   cursor.close();
+            db.close();
+            throw new NullRecordException("Cannot get object from database. Empty database?");
+        }
+        return  measurement;
+    }
+    public ArrayList<MeasurementDataBaseObject> getMeasurementArray(){
+        ArrayList<MeasurementDataBaseObject> measurementArrayList = new ArrayList<>();
+        MeasurementDataBaseObject measurement = null;
         String query = "SELECT * from " + MEASUREMENT + ";";
         SQLiteDatabase db = this.getReadableDatabase();
-        int counter = 0;
         cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst() && cursor.getCount() != 0) {
             measurement = createMeasurement();
@@ -153,6 +175,16 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return measurementArrayList;
+    }
+    public void changeStoreOnServerFlag(int ID, boolean sendToServer){
+        int valueToChange = (sendToServer == true ? 1 : 0);
+        String query = "UPDATE " + MEASUREMENT + " SET " + STORED_ON_SERVER + "=" +valueToChange + " where ID=" + ID + ";";
+        ContentValues cv = new ContentValues();
+        cv.put(STORED_ON_SERVER, valueToChange);
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int value = db.update(MEASUREMENT, cv, "ID="+ID,null);
+        db.close();
     }
 
     public boolean erease(int ID) throws NullRecordException {
@@ -173,16 +205,20 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     }
 
+    private boolean throwException() throws InsufficientInternalStoragePermissionsException {
+        throw new InsufficientInternalStoragePermissionsException("Cannot store object in database.\n" +
+                "You don't have inssuficient permission to use internal storage");
+    }
     @NonNull
-    private Measurement createMeasurement() {
-        Measurement measurement;
+    private MeasurementDataBaseObject createMeasurement() {
+        MeasurementDataBaseObject measurement;
         MeasurementStatistics statistics = new MeasurementStatistics();
         statistics.min = getMin();
         statistics.max = getMax();
         statistics.avg = getAvg();
         Location location = new Location(getLatitude(), getLongitude());
         Date date = getDate();
-        measurement = new Measurement(statistics, location ,getStoredOnServer(), date);
+        measurement = new MeasurementDataBaseObject(statistics, location ,getStoredOnServer(), date, getID(), getUserID());
         return measurement;
     }
 
@@ -194,10 +230,20 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         contentValues.put(LATITUDE, measurement.getLocation().getLatitude());
         contentValues.put(LONGITUDE, measurement.getLocation().getLongitude());
         contentValues.put(DATE, measurement.getDate());
-        contentValues.put(USER_ID, 12);
+        contentValues.put(USER_ID, "TEST");
         contentValues.put(STORED_ON_SERVER, measurement.getStoredState());
         return contentValues;
     }
+
+    private  int getItemCount(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int itemCount = 0;
+        itemCount = (int) DatabaseUtils.queryNumEntries(db, MEASUREMENT);
+        db.close();
+        return  itemCount;
+    }
+
+    private int getID(){ return  cursor.getInt(0);}
 
     private int getMin(){
         return cursor.getInt(1);
@@ -231,8 +277,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return date;
     }
 
-    private int getUserID(){
-        return cursor.getInt(7);
+    private String getUserID(){
+        return cursor.getString(7);
     }
 
     private boolean getStoredOnServer(){

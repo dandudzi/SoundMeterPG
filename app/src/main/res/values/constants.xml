@@ -5,6 +5,10 @@
     <integer name="samples_per_minute">60</integer>
     <integer name="time_of_sample">3750</integer>
     <integer name="milisecond_in_minute">1000</integer>
-
+<string-array name="menuMeasurement">
+    <item>More information</item>
+    <item>Delete sample</item>
+    <item>Send to server now</item>
+</string-array>
 
 </resources>

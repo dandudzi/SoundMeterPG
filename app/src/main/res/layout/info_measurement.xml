@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:text="Measurement information:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:padding="20dp"
+        android:gravity="center"
+        android:elegantTextHeight="false"
+        android:textStyle="bold" />
+
+    <TextView
+        android:text="Min : "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="20dp"
+        android:id="@+id/measurementInfo_min" />
+
+    <TextView
+    android:text="@string/max_measure"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="20dp"
+        android:id="@+id/measurementInfo_max" />
+
+    <TextView
+        android:text="@string/avg_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:id="@+id/measurementInfo_avg"
+        android:padding="20dp" />
+        android:padding="20dp" />
+
+    <TextView
+        android:text="@string/latitude_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/measurementInfo_latitude"
+        android:textSize="18sp"
+        android:padding="20dp" />
+
+    <TextView
+        android:text="@string/longitude_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/measurementInfo_longitude"
+        android:textSize="18sp"
+        android:padding="20dp" />
+
+    <TextView
+        android:text="@string/date_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/measurementInfo_date"
+        android:textSize="18sp"
+        android:padding="20dp" />
+
+    <TextView
+        android:text="@string/stored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/measurementInfo_stored"
+        android:textSize="18sp"
+        android:padding="20dp" />
+</LinearLayout>

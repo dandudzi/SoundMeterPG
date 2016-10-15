@@ -5,5 +5,5 @@ package pl.gda.pg.eti.kask.soundmeterpg;
  */
 
 public class MutableInteger {
-    public int value =0;
+    public int value =1;
 }

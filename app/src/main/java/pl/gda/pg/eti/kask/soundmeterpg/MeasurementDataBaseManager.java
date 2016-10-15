@@ -25,6 +25,7 @@ public class MeasurementDataBaseManager {
     private ArrayList<Sample> list  = new ArrayList<>();
     private long startTime = -1;
     private PreferenceParser preference;
+    private Context context;
 
     public MeasurementDataBaseManager(Context context, PreferenceParser preference){
         this.context = context;
@@ -58,7 +59,8 @@ public class MeasurementDataBaseManager {
             location = new FakeLocation();
 
         //TODO is logIN
-        if(preference.hasPermissionToUseInternet())
+        //Trzeba sprawdzac czy lokacja fake, jezeli tak to nie moze tego wysyłąć na serwer.
+        if(preference.hasPermissionToUseInternet() && !(location instanceof FakeLocation))
             isStoreOnWebServer = true;
 
         Date date =  new Date();
@@ -66,7 +68,7 @@ public class MeasurementDataBaseManager {
         list.clear();
 
         //TODO sendTOSERVER
-        DataBaseHandler dataBaseHandler =new DataBaseHandler(context, context.getResources().getString(R.string.table));
+        DataBaseHandler dataBaseHandler =new DataBaseHandler(context, context.getResources().getString(R.string.database_name));
         try {
             dataBaseHandler.insert(measurement);
         } catch (InsufficientInternalStoragePermissionsException e) {

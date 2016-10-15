@@ -54,6 +54,8 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
+
 public class SeekBarPreference extends Preference implements
         SeekBar.OnSeekBarChangeListener {
 
@@ -63,17 +65,22 @@ public class SeekBarPreference extends Preference implements
     private int defValue = 50;
     private TextView Indicator;
     private boolean trackingTouch;
-
+    private DataBaseHandler dataBaseHandler;
     public SeekBarPreference(Context context) {
         super(context);
+        dataBaseHandler = new DataBaseHandler(context , context.getResources().getString(R.string.database_name));
     }
 
     public SeekBarPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        dataBaseHandler = new DataBaseHandler(context , context.getResources().getString(R.string.database_name));
+
     }
 
     public SeekBarPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        dataBaseHandler = new DataBaseHandler(context , context.getResources().getString(R.string.database_name));
+
     }
 
     @Override
@@ -143,6 +150,8 @@ public class SeekBarPreference extends Preference implements
             syncProgress(seekBar);
             this.Indicator.setText(""+oldValue);
             updatePreference(oldValue);
+
+            dataBaseHandler.checkSpaceIntoDataBase();
             notifyChanged();
         }
 

@@ -65,11 +65,11 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
         if (googleApiClient != null)
             googleApiClient.connect();
         if (googleApiClient.isConnected()) {
-        checkPlayServices();
-        if (googleApiClient!=null && googleApiClient.isConnected()) {
-            startLocationUpdates();
+            checkPlayServices();
+            if (googleApiClient != null && googleApiClient.isConnected()) {
+                startLocationUpdates();
+            }
         }
-
         return localBinder;
     }
 

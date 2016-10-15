@@ -118,22 +118,15 @@
     <string name="site">http://soundmeterpg.cba.pl/insert.php/</string>
     <string name="ping_site">soundmeterpg.cba.pl</string>
 
-    <!-- Sender and DataBaseHandler-->
-    <string name="noise">Noise</string>
-    <string name="variance">Variance</string>
-    <string name="latitude">Latitude</string>
-    <string name="longitude">Longitude</string>
-    <string name="date">Date</string>
-    <string name="userID">UserID</string>
-    <string name="stored">StoredOnServer</string>
-
+    <string name="stored">Store sample on server :</string>
+    <string name="date_measure">Date :</string>
 
     <!--Measure Main activity -->
-    <string name="min_measure">Min:</string>
-    <string name="max_measure">Max:</string>
-    <string name="avg_measure">Avg:</string>
-    <string name="longitude_measure">Longitude</string>
-    <string name="latitude_measure">Latitude</string>
+    <string name="min_measure">Min :</string>
+    <string name="max_measure">Max :</string>
+    <string name="avg_measure">Avg :</string>
+    <string name="longitude_measure">Longitude :</string>
+    <string name="latitude_measure">Latitude :</string>
     <string name="unknown_error_title_measure">Unknown Error</string>
     <string name="unknown_error_msg_measure">Unknown error. Look at logcat or contact with authors.</string>
     <string name="turn_off_microphone_title_measure">Microphone Permission</string>
