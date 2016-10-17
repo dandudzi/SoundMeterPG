@@ -74,6 +74,7 @@ public class BackgroundWork extends IntentService {
                 e.printStackTrace();
             }
         }
+        manager.cancelAll();
         Log.i("Backgroundwork","end");
     }
 
@@ -96,13 +97,19 @@ public class BackgroundWork extends IntentService {
 
     private void createNotification() {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(),0,intent,0);
         notification = new NotificationCompat.Builder(this)
                                                 .setSmallIcon(R.mipmap.ic_politechnika)
                                                 .setContentTitle("Actual measure")
                                                 .setContentText("0db")
                                                 .setPriority(2)
-                                                .setContentIntent(contentIntent);
+                                                .setContentIntent(contentIntent)
+                                                .setOngoing(true);
+
 
         manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(notifyId, notification.build());

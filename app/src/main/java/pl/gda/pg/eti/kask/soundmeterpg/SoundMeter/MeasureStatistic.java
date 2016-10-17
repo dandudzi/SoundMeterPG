@@ -37,6 +37,8 @@ public class MeasureStatistic {
             ++counterSampleAvg.value;
 
         statistic.avg += noiseLevel;
+        if(counterSampleAvg.value == 0)
+            return  0;
         return statistic.avg / counterSampleAvg.value;
     }
 }

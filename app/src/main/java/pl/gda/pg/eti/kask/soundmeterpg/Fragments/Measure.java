@@ -212,12 +212,18 @@ public class Measure extends Fragment{
     }
 
     public void startBackgroundService() {
-        if(preferences.hasPermissionToWorkInBackground() && !ServiceDetector.isMyServiceRunning(pl.gda.pg.eti.kask.soundmeterpg.Services.BackgroundWork.class, context)){
+        if(canStartBackgroundWork()){
             Intent intent = new Intent(getActivity(), pl.gda.pg.eti.kask.soundmeterpg.Services.BackgroundWork.class);
             getActivity().startService(intent);
         }else if(!preferences.hasPermissionToWorkInBackground()){
             sendEndActionToMeasureService();
         }
+    }
+
+    public boolean canStartBackgroundWork() {
+        return preferences.hasPermissionToWorkInBackground()
+                && !ServiceDetector.isMyServiceRunning(pl.gda.pg.eti.kask.soundmeterpg.Services.BackgroundWork.class, context)
+                && ServiceDetector.isMyServiceRunning(pl.gda.pg.eti.kask.soundmeterpg.Services.Measure.class, context);
     }
 
     private void stopBackgroundService() {
