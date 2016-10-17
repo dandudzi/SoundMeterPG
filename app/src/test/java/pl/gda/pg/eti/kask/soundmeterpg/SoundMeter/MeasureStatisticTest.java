@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  */
 public class MeasureStatisticTest {
     @Test
-    public void setUpStatistic() throws Exception {
+    public void statisticTest() throws Exception {
         MeasurementStatistics statistics =  new MeasurementStatistics();
         int noiseLevel = 20;
         MutableInteger counterSampleAvg = new MutableInteger();
@@ -50,7 +50,19 @@ public class MeasureStatisticTest {
         assertEquals(noiseLevel, statistics.max);
         assertEquals(40 + noiseLevel, statistics.avg);
         assertEquals(expected, counterSampleAvg.value);
+    }
 
+    @Test
+    public void statisticZeroTest() throws Exception {
+        MeasurementStatistics statistics = new MeasurementStatistics();
+        int noiseLevel = 0;
+        MutableInteger counterSampleAvg = new MutableInteger();
+        int expected = 0;
 
+        assertEquals(noiseLevel, MeasureStatistic.setUpStatistic(noiseLevel, statistics, counterSampleAvg));
+        assertEquals(noiseLevel, statistics.min);
+        assertEquals(noiseLevel, statistics.max);
+        assertEquals(noiseLevel, statistics.avg);
+        assertEquals(expected, counterSampleAvg.value);
     }
 }

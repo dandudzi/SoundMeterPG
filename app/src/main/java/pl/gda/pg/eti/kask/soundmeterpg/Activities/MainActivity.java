@@ -28,6 +28,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
 
@@ -137,15 +138,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         Log.i("Navigation Drawer","User chose position number "+item.getTitle());
         drawerLayout.closeDrawer(GravityCompat.START);
+        FragmentManager fragmentManager = this.getFragmentManager();
+        Fragment frag = fragmentManager.findFragmentById(R.id.content_frame);
 
         switch(item.getItemId()){
             case R.id.settings_drawer:
                 startActivity(SettingsActivity.class);
                 break;
             case R.id.measure_drawer:
+                if(frag != null && frag instanceof Measure)
+                    return false;
                 setFragmentContent(new Measure());
                 break;
             case R.id.measurements_drawer:
+                if(frag != null && frag instanceof Measurements)
+                    return false;
                 setFragmentContent(new Measurements());
                 break;
             case R.id.log_in_drawer:
@@ -163,14 +170,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(isMeasure) {
                 FragmentManager fragmentManager = this.getFragmentManager();
                 Measure frag = (Measure) fragmentManager.findFragmentById(R.id.content_frame);
-                if (preference.hasPermissionToWorkInBackground()){
+                if (preference.hasPermissionToWorkInBackground()) {
                     frag.startBackgroundService();
-                    super.onBackPressed();
-                }else {
-                    super.onBackPressed();
                 }
             }
-
+            super.onBackPressed();
         }
 
     }
