@@ -21,7 +21,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 
 public class MeasurementDataBaseManager {
     private static final int MINUTES_PER_MEASUREMENT = 1;
-    private static final int MINUTE_IN_MILLISECONDS = 60000;
+    private static final int MINUTE_IN_MILLISECONDS = 300000;
     private ArrayList<Sample> list  = new ArrayList<>();
     private long startTime = -1;
     private PreferenceParser preference;
