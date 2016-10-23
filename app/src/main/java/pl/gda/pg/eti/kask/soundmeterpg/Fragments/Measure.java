@@ -60,9 +60,30 @@ public class Measure extends Fragment{
                 case ERROR_MEASURE_ACTION:
                     String key =  intent.getExtras().getString(IntentActionsAndKeys.ERROR_KEY.toString());
                     Measure.this.handleMeasureError(key);
+                    break;
+                case ON_BACKGROUND_END_ACTION:
+                    synchronized (statistic) {
+                        onEndOfBackgroundWork(intent);
+                    }
+                    break;
             }
         }
     };
+
+    public void onEndOfBackgroundWork(Intent intent) {
+        MeasurementStatistics statistic = intent.getExtras().getParcelable(IntentActionsAndKeys.MEASUREMENT_STATISTICS_KEY.toString());
+        int counter = intent.getExtras().getInt(IntentActionsAndKeys.COUNTER_KEY.toString());
+        if((this.statistic.avg + statistic.avg) < 0){
+            this.statistic.avg /= counterSampleAvg.value;
+            counterSampleAvg.value = 1;
+        }
+        this.statistic.avg += statistic.avg;
+        if(statistic.min > 0 && this.statistic.min > statistic.min)
+            this.statistic.min = statistic.min;
+        if(this.statistic.max < statistic.max)
+            this.statistic.max = statistic.max;
+        counterSampleAvg.value += counter;
+    }
 
     private void handleMeasureError(String _key) {
         if(lock.isHeld())
@@ -92,8 +113,9 @@ public class Measure extends Fragment{
     private  void changeUIMeasurement(Sample sample) {
         int noiseLevel =sample.getNoiseLevel();
         int avg;
-        avg = MeasureStatistic.setUpStatistic(noiseLevel,statistic,counterSampleAvg);
-
+        synchronized (statistic) {
+            avg = MeasureStatistic.setUpStatistic(noiseLevel, statistic, counterSampleAvg);
+        }
         currentNoiseLevel.setText(String.valueOf(noiseLevel)+" db");
         min.setText(String.valueOf(statistic.min) +" db");
         max.setText(String.valueOf(statistic.max) +" db");
@@ -149,6 +171,7 @@ public class Measure extends Fragment{
         IntentFilter filter =  new IntentFilter();
         filter.addAction(IntentActionsAndKeys.ERROR_MEASURE_ACTION.toString());
         filter.addAction(IntentActionsAndKeys.SAMPLE_RECEIVE_ACTION.toString());
+        filter.addAction(IntentActionsAndKeys.ON_BACKGROUND_END_ACTION.toString());
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, filter);
     }
 
@@ -214,6 +237,8 @@ public class Measure extends Fragment{
     public void startBackgroundService() {
         if(canStartBackgroundWork()){
             Intent intent = new Intent(getActivity(), pl.gda.pg.eti.kask.soundmeterpg.Services.BackgroundWork.class);
+            intent.putExtra(IntentActionsAndKeys.MEASUREMENT_STATISTICS_KEY.toString(),statistic);
+            intent.putExtra(IntentActionsAndKeys.COUNTER_KEY.toString(),counterSampleAvg.value);
             getActivity().startService(intent);
         }else if(!preferences.hasPermissionToWorkInBackground()){
             sendEndActionToMeasureService();
