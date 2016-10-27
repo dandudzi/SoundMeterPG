@@ -53,7 +53,7 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
 
     @Override
     public void onDestroy() {
-        if (googleApiClient.isConnected()) {
+        if (googleApiClient !=  null && googleApiClient.isConnected()) {
             stopLocationUpdates();
             googleApiClient.disconnect();
         }
@@ -75,7 +75,7 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
 
     @Override
     public boolean onUnbind(Intent intent) {
-        if (googleApiClient.isConnected()) {
+        if (googleApiClient !=  null && googleApiClient.isConnected()) {
             stopLocationUpdates();
             googleApiClient.disconnect();
         }

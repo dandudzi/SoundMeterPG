@@ -7,20 +7,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
-import pl.gda.pg.eti.kask.soundmeterpg.Fragments.*;
 import pl.gda.pg.eti.kask.soundmeterpg.IntentActionsAndKeys;
-import pl.gda.pg.eti.kask.soundmeterpg.MeasurementDataBaseManager;
 import pl.gda.pg.eti.kask.soundmeterpg.MutableInteger;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasureStatistic;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasurementStatistics;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.SexigesimalLocation;
 
@@ -30,13 +27,13 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.SexigesimalLocation;
 
 public class BackgroundWork extends IntentService {
 
-    private volatile boolean endWork =false;
+    private volatile boolean endWork =true;
     private MutableInteger counterSampleAvg = new MutableInteger();
     private MeasurementStatistics statistic;
     private NotificationCompat.Builder notification;
     private NotificationManager manager;
     private int notifyId = 1;
-
+    private int avg = 0;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 
         @Override
@@ -66,6 +63,10 @@ public class BackgroundWork extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        this.statistic = intent.getExtras().getParcelable(IntentActionsAndKeys.MEASUREMENT_STATISTICS_KEY.toString());
+        this.counterSampleAvg.value = intent.getExtras().getInt(IntentActionsAndKeys.COUNTER_KEY.toString());
+        endWork = false;
+
         createNotification();
         while(!endWork){
             try{
@@ -74,13 +75,17 @@ public class BackgroundWork extends IntentService {
                 e.printStackTrace();
             }
         }
+        Intent avgIntent = new Intent(IntentActionsAndKeys.ON_BACKGROUND_END_ACTION.toString());
+        avgIntent.putExtra(IntentActionsAndKeys.MEASUREMENT_STATISTICS_KEY.toString(),statistic);
+        avgIntent.putExtra(IntentActionsAndKeys.COUNTER_KEY.toString(),counterSampleAvg.value);
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(avgIntent);
         manager.cancelAll();
         Log.i("Backgroundwork","end");
     }
 
     private void updateNotification(Sample sample){
         int noiseLevel =sample.getNoiseLevel();
-        int avg;
+
         avg = MeasureStatistic.setUpStatistic(noiseLevel,statistic,counterSampleAvg);
         String msg = String.valueOf(noiseLevel)+" db";
 
@@ -125,6 +130,5 @@ public class BackgroundWork extends IntentService {
         filter.addAction(IntentActionsAndKeys.SAMPLE_RECEIVE_ACTION.toString());
         filter.addAction(IntentActionsAndKeys.END_ACTION_WORKING_BACKGROUND.toString());
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
-
     }
 }
