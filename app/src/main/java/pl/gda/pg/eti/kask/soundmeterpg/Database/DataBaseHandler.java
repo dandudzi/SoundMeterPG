@@ -158,6 +158,24 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
         return  measurement;
     }
+
+    public MeasurementDataBaseObject getTheOldestRowToSendToServer(){
+        MeasurementDataBaseObject measurement = null;
+        String query = "Select * from " + MEASUREMENT + " WHERE " + STORED_ON_SERVER + "=1  ORDER BY datetime(" + DATE + ")" + " ASC LIMIT 1";
+        SQLiteDatabase db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            measurement = createMeasurement();
+            cursor.close();
+            db.close();
+            return measurement;
+        }
+        if(measurement == null){   cursor.close();
+            db.close();
+        }
+        return  measurement;
+    }
+
     public ArrayList<MeasurementDataBaseObject> getMeasurementArray(){
         ArrayList<MeasurementDataBaseObject> measurementArrayList = new ArrayList<>();
         MeasurementDataBaseObject measurement = null;

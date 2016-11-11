@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showAlertDialog() {
         AlertDialog aboutAlert = null;
         try {
+
             aboutAlert = About.create(this);
         } catch (VersionException | LastDateException e) {
             e.printStackTrace();

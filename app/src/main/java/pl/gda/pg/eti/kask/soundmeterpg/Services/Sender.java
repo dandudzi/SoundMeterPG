@@ -1,12 +1,18 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Services;
 
+import android.app.IntentService;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,29 +23,69 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Database.MeasurementDataBaseObject;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
+import pl.gda.pg.eti.kask.soundmeterpg.IntentActionsAndKeys;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
-public class Sender extends Service {
+public class Sender extends IntentService {
 
-    private final IBinder localBinder = new LocalBinder();
     private ConnectionInternetDetector connectionInternetDetector;
     private PreferenceParser preferenceParser;
+    private DataBaseHandler dataBaseHandler;
+    private String SITE ;
+    private volatile boolean endMeasure = false;
 
-    public class LocalBinder extends Binder {
-        public Sender getService() {
-            return Sender.this;
+    private BroadcastReceiver endTaskReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            IntentActionsAndKeys action =  IntentActionsAndKeys.valueOf(intent.getAction());
+            switch(action){
+                case END_ACTION:
+                    synchronized (Sender.this) {
+                        endMeasure =  true;
+                    }
+                    break;
+            }
         }
+    };
+
+    public Sender(){ super("Sender"); }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+MeasurementDataBaseObject measurementDataBaseObject;
+            while (!endMeasure) {
+                try {
+                    Thread.sleep(10000);
+                    if(!endMeasure && isConnectionWithServer(SITE))
+                    {
+                        measurementDataBaseObject = dataBaseHandler.getTheOldestRowToSendToServer();
+                        if(measurementDataBaseObject != null && insert(measurementDataBaseObject)){
+                            dataBaseHandler.erease(measurementDataBaseObject.getID());
+                        }
+
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        Log.i("Sender class", "STOPING SERVICE");
+
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public void onCreate() {
+        super.onCreate();
+        SITE = getBaseContext().getResources().getString(R.string.ping_site);
         connectionInternetDetector = new ConnectionInternetDetector(getBaseContext());
         preferenceParser = new PreferenceParser(getBaseContext());
-        return localBinder;
+        dataBaseHandler = new DataBaseHandler(getBaseContext(), getBaseContext().getResources().getString(R.string.database_name));
+        LocalBroadcastManager.getInstance(this).registerReceiver(endTaskReceiver, new IntentFilter(IntentActionsAndKeys.END_ACTION.toString()));
     }
 
     public boolean isConnectionWithServer(String url) {
@@ -73,7 +119,7 @@ public class Sender extends Service {
         return networkOperator.contains("Android");
     }
 
-    public boolean insert(Measurement measurement){
+    public boolean insert(MeasurementDataBaseObject measurement){
         if (measurement == null) {
            return  false;
         }
@@ -133,13 +179,14 @@ public class Sender extends Service {
         return connection;
     }
 
-    private String createStringParametr(Measurement measurement) {
+    private String createStringParametr(MeasurementDataBaseObject measurement) {
         String parametrs = DataBaseHandler.MIN + "=" + measurement.getMin() + "&" +
                 DataBaseHandler.MAX + "=" + measurement.getMax() + "&" +
                 DataBaseHandler.AVG + "=" + measurement.getAvg() + "&" +
                 DataBaseHandler.LATITUDE + "=" + measurement.getLocation().getLatitude() + "&" +
                 DataBaseHandler.LONGITUDE + "=" + measurement.getLocation().getLongitude() + "&" +
-                DataBaseHandler.DATE + "='" + measurement.getDate() + "'";
+                DataBaseHandler.DATE + "='" + measurement.getDate() + "'&"+
+                DataBaseHandler.USER_ID+ "='"+ measurement.getUserID()+ "'";
         return  parametrs;
     }
 }

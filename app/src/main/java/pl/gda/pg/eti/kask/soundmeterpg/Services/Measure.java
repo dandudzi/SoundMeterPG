@@ -33,7 +33,6 @@ public class Measure extends IntentService {
     private Sender sender;
 
     private ServiceConnection localizationConnection = new GoogleApiServiceConnection(this);
-    private ServiceConnection senderConnection= new SenderServiceConnection(this);
     private Thread binderThread;
 
     private MeasurementDataBaseManager dataBaseManger;
@@ -50,6 +49,7 @@ public class Measure extends IntentService {
                     case END_ACTION:
                         synchronized (Measure.this) {
                             endMeasure =  true;
+                            stopSenderService();
                         }
                         break;
                 }
@@ -74,10 +74,7 @@ public class Measure extends IntentService {
 
     private void bindServices() {
         Intent googleIntent = new Intent(getBaseContext(),GoogleAPILocalization.class);
-        Intent senderIntent = new Intent(getBaseContext(),Sender.class);
-        getBaseContext().bindService(googleIntent, localizationConnection, Context.BIND_AUTO_CREATE);
-        getBaseContext().bindService(senderIntent, senderConnection, Context.BIND_AUTO_CREATE);
-    }
+        getBaseContext().bindService(googleIntent, localizationConnection, Context.BIND_AUTO_CREATE);}
 
     private void setUpThreads() {
         binderThread = new Thread(new Runnable() {
@@ -89,7 +86,7 @@ public class Measure extends IntentService {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (sender != null && googleAPILocalization != null)
+                    if ( googleAPILocalization != null)
                         break;
                 }
             }
@@ -99,7 +96,7 @@ public class Measure extends IntentService {
     @Override
     protected void onHandleIntent(Intent _intent) {
         waitForBindAllService();
-
+        startSenderService();
         try {
             initializeAudioRecorder();
             while (!endMeasure) {
@@ -107,6 +104,13 @@ public class Measure extends IntentService {
             }
         }catch (Exception e) {
             handleMeasureError(e);
+        }
+    }
+
+    private void stopSenderService() {
+        if(ServiceDetector.isMyServiceRunning(Sender.class, getApplicationContext())){
+            Intent stopServiceIntent = new Intent(IntentActionsAndKeys.END_ACTION_SENDER.toString());
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(stopServiceIntent);
         }
     }
 
@@ -118,6 +122,12 @@ public class Measure extends IntentService {
         }
     }
 
+    private void startSenderService() {
+        if(!ServiceDetector.isMyServiceRunning(Sender.class,getApplicationContext())){
+            Intent intent = new Intent(getApplicationContext(), Sender.class);
+            getApplicationContext().startService(intent);
+        }
+    }
     private void initializeAudioRecorder() throws InsufficientMicrophonePermissionsException {
         synchronized (this) {
             if(preferences.hasPermissionToUseMicrophone()){
@@ -208,17 +218,11 @@ public class Measure extends IntentService {
             if (googleAPILocalization != null)
                 getBaseContext().unbindService(localizationConnection);
 
-            if(sender !=  null)
-                getBaseContext().unbindService(senderConnection);
-
             if(dataBaseManger != null)
                 dataBaseManger.flush();
         }
     }
 
-    synchronized public void setSender(Sender sender){
-        this.sender = sender;
-    }
 
     synchronized public void  setGoogleAPILocalization(GoogleAPILocalization googleAPILocalization){
         this.googleAPILocalization = googleAPILocalization;

@@ -19,15 +19,13 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
-    android:paddingEnd="?android:attr/scrollbarSize"
-    android:paddingStart="?android:attr/scrollbarSize">
+    android:background="@color/background">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center">
-        <!-- ToDO dla każdego checkboxa własny layout z własną ikoną-->
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,8 +53,11 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:fadingEdge="horizontal"
-            android:singleLine="true"
-            android:ellipsize="end"/>
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:textSize="18sp"
+            android:singleLine="false"
+            android:textColor="@color/text_color" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,8 +67,9 @@
             android:layout_alignStart="@android:id/title"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
-            android:maxLines="4"
-            android:ellipsize="end"/>
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <LinearLayout

@@ -94,7 +94,7 @@ public class GoogleAPILocalizationTest {
     @Test(expected = TurnOffGPSException.class)
     public void getLocationWhenGPSisOffTest() throws UiObjectNotFoundException, TurnOffGPSException, TimeoutException, InterruptedException {
         if(ServiceDetector.isGPSEnabled(context))
-            UIAutomotorTestHelper.turnOnGps(device, context);
+           UIAutomotorTestHelper.turnOnGPS(device, context);
         Location location = service.getLocation();
 
     }
@@ -103,7 +103,7 @@ public class GoogleAPILocalizationTest {
     public void getLocationTest() throws TurnOffGPSException, UiObjectNotFoundException, InterruptedException, TimeoutException {
         mockLocationProvider = new MockLocationProvider(LocationManager.GPS_PROVIDER, context);
         if (!ServiceDetector.isGPSEnabled(context))
-            UIAutomotorTestHelper.turnOnGps(device, context);
+         //   UIAutomotorTestHelper.turnOnGps(device, context);
         for (int i = 0; i < MAX_PROBE; i++) {
             mockLocationProvider.pushLocation(latitude.get(i), longitude.get(i));
             Thread.sleep(3000);

@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Random;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
+import pl.gda.pg.eti.kask.soundmeterpg.Database.MeasurementDataBaseObject;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientInternalStoragePermissionsException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper;
@@ -111,7 +112,7 @@ public class DataBaseHandlerTest {
 
     @Test
     public void getAllMeasurementFromDataBaseTest(){
-       ArrayList<Measurement> arrayMeasurement  = dataBaseHandler.getMeasurementArray();
+       ArrayList<MeasurementDataBaseObject> arrayMeasurement  = dataBaseHandler.getMeasurementArray();
         for(int i = 0;i < LIMIT_PROBE; i++){
             veryfyRecords(i,arrayMeasurement.get(i));
         }

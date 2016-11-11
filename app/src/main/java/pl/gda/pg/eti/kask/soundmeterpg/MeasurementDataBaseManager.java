@@ -60,7 +60,7 @@ public class MeasurementDataBaseManager {
 
         //TODO is logIN
         //Trzeba sprawdzac czy lokacja fake, jezeli tak to nie moze tego wysyłąć na serwer.
-        if(preference.hasPermissionToUseInternet() && !(location instanceof FakeLocation))
+        if(preference.hasPermissionToSendToServer() && !(location instanceof FakeLocation))
             isStoreOnWebServer = true;
 
         Date date =  new Date();

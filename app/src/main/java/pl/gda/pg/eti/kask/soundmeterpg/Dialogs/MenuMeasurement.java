@@ -6,20 +6,14 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Database.MeasurementDataBaseObject;
-import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
-import pl.gda.pg.eti.kask.soundmeterpg.MainAdapter;
+import pl.gda.pg.eti.kask.soundmeterpg.ViewAdapter;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasureStatistic;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.SexigesimalLocation;
 
 import static pl.gda.pg.eti.kask.soundmeterpg.R.id.measurementInfo_avg;
@@ -35,13 +29,13 @@ import static pl.gda.pg.eti.kask.soundmeterpg.R.id.measurementInfo_stored;
 
 public class MenuMeasurement implements  DialogInterface.OnClickListener {
     private Activity ownerDialog;
-    private  MainAdapter mainAdapter;
+    private ViewAdapter viewAdapter;
     private  int position;
     private static final String SUCCESS = "Succesfuly deleted !";
     private static final String ERROR = "Can not delete object.";
-    public MenuMeasurement(Activity ownerDialog, MainAdapter adapter, int position){
+    public MenuMeasurement(Activity ownerDialog, ViewAdapter adapter, int position){
         this.ownerDialog = ownerDialog;
-        this.mainAdapter = adapter;
+        this.viewAdapter = adapter;
         //ListView numeruje od 1 a adapter od 0 stąd to odejmowanie
         if(position >0)
             this.position = position -1;
@@ -76,7 +70,7 @@ public class MenuMeasurement implements  DialogInterface.OnClickListener {
                 this.createMoreInfoView().show();
                 break;
             case 1:
-                final MeasurementDataBaseObject measurement = mainAdapter.getItem(position);
+                final MeasurementDataBaseObject measurement = viewAdapter.getItem(position);
                 AlertDialog alert = createQuestionBeforeDelete(measurement);
                 alert.show();
                 break;
@@ -114,13 +108,13 @@ public class MenuMeasurement implements  DialogInterface.OnClickListener {
             dialog.setMessage(ERROR);
         dialog.create();
         dialog.show();
-        mainAdapter.remove(measurement);
+        viewAdapter.remove(measurement);
 
     }
 
     private void initializeMeasurementInfo(View dialogView) {
 
-        MeasurementDataBaseObject measurement = mainAdapter.getItem(position);
+        MeasurementDataBaseObject measurement = viewAdapter.getItem(position);
 
             TextView tmp = (TextView) dialogView.findViewById(R.id.measurementInfo_min);
             tmp.setText(tmp.getText() + String.valueOf(measurement.getMin()));

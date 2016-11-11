@@ -16,6 +16,14 @@ import android.widget.TextView;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.Login;
 import pl.gda.pg.eti.kask.soundmeterpg.InformationAboutThisApplication;
@@ -85,6 +93,20 @@ public class LoginActivity extends AppCompatActivity {
     private void logIn() {
         AlertDialog dialog = Login.create(this, result);
         dialog.show();
+
+
+
+      /*  try {
+            url = new URL("https://soundmeterpg.pl");
+            URLConnection urlConnection = url.openConnection();
+            InputStream in = urlConnection.getInputStream();
+          String wynik ;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
     }
 
     private void resultListener(Object newValue) {

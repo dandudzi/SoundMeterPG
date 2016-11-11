@@ -20,6 +20,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.SimpleDialogWithTextView;
 import pl.gda.pg.eti.kask.soundmeterpg.IntentActionsAndKeys;
 import pl.gda.pg.eti.kask.soundmeterpg.MutableInteger;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+import pl.gda.pg.eti.kask.soundmeterpg.Services.Sender;
 import pl.gda.pg.eti.kask.soundmeterpg.Services.ServiceDetector;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasureStatistic;
@@ -228,6 +229,8 @@ public class Measure extends Fragment{
         counterSampleAvg = new MutableInteger();
         Intent stopServiceIntent = new Intent(IntentActionsAndKeys.END_ACTION.toString());
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(stopServiceIntent);
+        Intent stopSenderService = new Intent(IntentActionsAndKeys.END_ACTION_SENDER.toString());
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(stopSenderService);
     }
 
     private boolean isMeasureServiceRunning() {

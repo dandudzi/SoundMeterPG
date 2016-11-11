@@ -2,44 +2,30 @@ package pl.gda.pg.eti.kask.soundmeterpg.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Random;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Database.MeasurementDataBaseObject;
-import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.Login;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.MenuMeasurement;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.InsufficientInternalStoragePermissionsException;
-import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
-import pl.gda.pg.eti.kask.soundmeterpg.MainAdapter;
+import pl.gda.pg.eti.kask.soundmeterpg.ViewAdapter;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasurementStatistics;
-import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Sample;
 
 /**
  * Created by Daniel on 10.08.2016 at 18:3;i0 :).
  */
 public class Measurements extends Fragment  implements AdapterView.OnItemLongClickListener{
 ListView listView;
-    MainAdapter adapter;
+    ViewAdapter adapter;
     ArrayList<MeasurementDataBaseObject> arrayOfMeasurements ;
     DataBaseHandler dataBaseHandler;
     @Override
@@ -69,7 +55,7 @@ ListView listView;
         arrayOfMeasurements.add(new Measurement(new MeasurementStatistics(), new Location(11.2, 11.4), false, new Date()));
         */
         arrayOfMeasurements = dataBaseHandler.getMeasurementArray();
-        adapter = new MainAdapter(activity, arrayOfMeasurements);;
+        adapter = new ViewAdapter(activity, arrayOfMeasurements);;
     }
 
 

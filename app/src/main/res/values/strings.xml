@@ -9,69 +9,109 @@
 
         <!--Settings Application-->
         <string name="application_settings">Application Settings</string>
-
         <!--Preference Application-->
         <string name="private_data_key_preference">processing_private_data</string>
-        <string name="private_data_title_preference">Allow processing private data</string>
-        <string name="private_data_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="private_data_title_preference">Processing personal data</string>
+        <string name="private_data_summary_preference">When creating a measurement application retrieves data from devices such as location, cellular data and device ID.</string>
 
         <string name="working_in_background_key_preference">working_in_background</string>
-        <string name="working_in_background_title_preference">Allow working in background</string>
-        <string name="working_in_background_summary_preference"><!-- TODO --> 5Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="working_in_background_title_preference">Working in background</string>
+        <string name="working_in_background_summary_preference">The application does not interrupt his work after leaving it.</string>
 
-    <string name="number_of_samples_preference">processing_private_data</string>
-    <string name="number_of_samples_title_preference">Number of samples stored on device</string>
-    <string name="number_of_samples_summary_preference"><!-- TODO --> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-
+        <string name="sending_measurement_key_preferenece">sending_measurement</string>
+        <string name="sending_measurement_title_preference">Send data to server</string>
+        <string name="sending_measurement_summary_preference">Creating a measurement that is will be sent to the server.</string>
         <!--Settings Device-->
         <string name="device_settings">Device Settings</string>
 
         <!--Preference Device-->
         <string name="recording_audio_key_preference">recording_audio</string>
-        <string name="recording_audio_title_preference">Allow recording audio</string>
-        <string name="recording_audio_summary_preference"><!-- TODO --> 4Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="recording_audio_title_preference">Using microphone</string>
+        <string name="recording_audio_summary_preference">The use of a microphone device for testing noise levels. The application does not save any interviews or recorded sounds.</string>
 
         <string name="gps_key_preference">access_to_gps</string>
-        <string name="gps_title_preference">Allow access to GPS </string>
-        <string name="gps_summary_preference"><!-- TODO --> 3Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-        <string name="no_gps_text_dialog"><!-- TODO --> Nie ma GPS. Chcesz włączyć?</string>
+        <string name="gps_title_preference">Using GPS location</string>
+        <string name="gps_summary_preference">The location is only used to create a measurement. The application does not track the user.</string>
+        <string name="no_gps_text_dialog">It seems that the GPS is turned off. Do you want to turn it on?</string>
 
         <string name="internet_key_preference">access_to_internet</string>
-        <string name="internet_title_preference">Allow access to Internet </string>
-        <string name="internet_summary_preference"><!-- TODO --> 2Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-        <string name="no_internet_text_dialog"><!-- TODO --> Nie ma Internetu. Chcesz włączyć?</string>
+        <string name="internet_title_preference">Using cellular data</string>
+        <string name="internet_summary_preference">The use of an Internet connection to transmit the measurements to the server. The application sends only measure constructed by the application. Does not provide anywhere user data.</string>
+        <string name="no_internet_text_dialog">It seems that the Internet connection is turned off. Do you want to turn it on?</string>
 
         <string name="internal_storage_key_preference">access_to_internal_storage</string>
-        <string name="internal_storage_title_preference">Allow access to internal storage </string>
-        <string name="internal_storage_summary_preference"><!-- TODO --> 1Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        <string name="internal_storage_title_preference">Using internal storage</string>
+        <string name="internal_storage_summary_preference">The application uses the device memory to collect measurements in the local database of the device. The current contents of the database can be seen in the \'Measurements\' bookmark.</string>
 
-        <string name="measurements_in_storage_key_preference">measurement_key_preference</string>
-        <string name="title_seek_bar_preference">Number of measurements save on local storage</string>
+
+        <string name="number_of_samples_preference">processing_private_data</string>
+        <string name="number_of_samples_title_preference">Number of samples stored on device</string>
+      <!--  <string name="number_of_samples_summary_preference"> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+        -->
+
+    <string name="measurements_in_storage_key_preference">measurement_key_preference</string>
+        <string name="title_seek_bar_preference">Maximum number of measurements stored in the device.</string>
 
         <string name="calibrate_key_preference">calibrate_key_preference</string>
         <string name="calibrate_title_preference">Calibrate your device</string>
+        <string name="calibrate_summary_preference">Calibrate the device in order to improve the quality of measurements.</string>
         <string name="calibrate_msg_preference">db</string>
         <string name="negative_value_calibration_dialog">Negative Value</string>
         <string name="switch_text_calibration_dialog">value*(-1)</string>
 
         <!-- About Dialog MainActivity-->
         <string name="title_about_dialog">About</string>
-        <string name="author_about_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
+        <string name="author_about_dialog">Created by Dudziak Daniel and Gierłowski Filip for Gdańsk University of Technology</string>
         <string name="icon_description_about_dialog">Politechnika Gdańska</string>
         <string name="contact_us_title_about_dialog">Contact us:</string>
         <string name="version_about_title_dialog">Version:</string>
         <string name="last_build_about_title_dialog">Last Build:</string>
 
-        <!--FAQ Dialog MainActivity--><!-- TODO - opisy-->
-        <string name="title_faq_dialog">FAQ</string>
+        <!--FAQ Dialog MainActivity-->
+
+    <!-- Question 1 -->
+    <string name="question_about_app">1. What does this application?</string>
+    <string name="answer_about_app">The main purpose of this application is to measure the noise level. Wider functionality depends on the permissions granted by the user.</string>
+
+    <!-- Question 2 -->
+    <string name="question_about_author">2. Who is the creator?</string>
+    <string name="answer_about_author">Created by Dudziak Daniel and Gierłowski Filip for Gdańsk Univeristy of Technology</string>
+
+    <!-- Question 3 -->
+    <string name="question_about_full_funcional">3. How to get full functionality?</string>
+    <string name="answer_about_full_funcional">The user must have an account in the system and be logged on the mobile device.
+        To get full functionality user must give permission in the preferences panel.</string>
+
+    <!-- Question 4 -->
+    <string name="question_about_panel_preference">4. Where is preferences panel? </string>
+    <string name="answer_about_panel_preference">You have to return to main page. Then click menu options and select Settings.</string>
+
+    <!-- Question 5 -->
+    <string name="question_about_license">5. Where is placed the project license?</string>
+    <string name="answer_about_license">You can find project licence <a href="https://github.com/dandudzi/SoundMeterPG/blob/master/licence">here</a></string>
+
+
+    <!-- Question 6 -->
+    <string name="question_about_register">6. Where I can register account?</string>
+    <string name="answer_about_register">If you want to create account click <a href="http://www.wp.pl">here.</a> </string>
+
+    <!-- Question 7 -->
+    <string name="question_about_project_source">7. Where is source code?</string>
+    <string name="answer_about_project_source">Our project is a free software so you can see the source code <a href="https://github.com/dandudzi/SoundMeterPG/">here</a></string>
+
+    <!-- Question 8 -->
+    <string name="question_about_web_page">8. What is the address of the page?</string>
+    <string name="answer_about_web_page">Our WebSite address is <a href="http://soundmeterpg.cba.pl">http://soundmeterpg.cba.pl</a></string>
+        <string name="title_faq_dialog">Frequency Asked Question</string>
         <string name="application_description_faq_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
         <string name="icon_description_faq_dialog">Politechnika Gdańska</string>
 
-        <string name="github_link_faq_dialog">You can find project at <a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
+       <!-- <string name="github_link_faq_dialog">You can find project at <a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
         <string name="github_url_faq_dialog">https://github.com/dandudzi/SoundMeterPG/</string>
 
         <string name="licence_link_faq_dialog">You can find projects licence <a href="https://github.com/dandudzi/SoundMeterPG/blob/master/licence">here</a></string>
         <string name="licence_url_faq_dialog">https://github.com/dandudzi/SoundMeterPG/blob/master/licence</string>
+
 
         <string name="website_link_faq_dialog">Application <a href="http://www.wp.pl">web page</a></string>
         <string name="website_url_faq_dialog">http://www.wp.pl</string>
@@ -79,6 +119,7 @@
         <string name="help_link_faq_dialog">If you need help click <a href="http://www.wp.pl">here</a></string>
         <string name="help_url_faq_dialog">http://www.wp.pl</string>
 
+    -->
     <!-- Login Activity-->
     <string name="login_button_text">Login</string>
     <string name="skip_button_text_login_activity">Skip</string>
@@ -133,6 +174,10 @@
     <string name="turn_off_microphone_msg_measure">Microphone permission is turn off. Pleas turn on it in Settings and try again.</string>
     <string name="turn_off_location_title_measure">Localization </string>
     <string name="turn_off_location_msg_measure">Application has got permission to use localization but it is turn off. Pleas turn on Localization and try again.</string>
+    <string name="cancel_btn_text">cancel</string>
+    <string name="calibrate_btn">Calibrate</string>
+
+    <string name="ok_default">OK</string>
 
 
 </resources>

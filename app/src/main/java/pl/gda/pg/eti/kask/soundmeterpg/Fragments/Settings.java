@@ -3,13 +3,19 @@ package pl.gda.pg.eti.kask.soundmeterpg.Fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoGPS;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.NoInternet;
@@ -28,6 +34,7 @@ public class Settings extends PreferenceFragment {
     private CheckBoxPreference GPSPreference;
     private CheckBoxPreference internetPreference;
     private CheckBoxPreference recordingPreference;
+    private CheckBoxPreference sendingToServerPreference;
     private String privateDataKey;
     private String workingInBackgroundKey;
     private Activity activity;
@@ -47,6 +54,7 @@ public class Settings extends PreferenceFragment {
         internetDetector = new ConnectionInternetDetector(activity.getBaseContext());
         preference = new PreferenceParser(activity);
         setCheckboxInternetAndGpsStartingValueDependentOnAccessToService();
+
     }
 
     private void setUpCheckBoxesAndKeysPreference() {
@@ -57,6 +65,7 @@ public class Settings extends PreferenceFragment {
         String keyAccessToGPS = resources.getString(R.string.gps_key_preference);
         String keyAccessToInternet = resources.getString(R.string.internet_key_preference);
         String keyRecording = resources.getString(R.string.recording_audio_key_preference);
+        String keySending = resources.getString(R.string.sending_measurement_key_preferenece);
 
         internalStoragePreference = (CheckBoxPreference) findPreference(keyAccessToInternalStorage);
         workingInBackground = (CheckBoxPreference)findPreference(workingInBackgroundKey);
@@ -64,6 +73,7 @@ public class Settings extends PreferenceFragment {
         GPSPreference = (CheckBoxPreference) findPreference(keyAccessToGPS);
         internetPreference = (CheckBoxPreference) findPreference(keyAccessToInternet);
         recordingPreference = (CheckBoxPreference) findPreference(keyRecording);
+        sendingToServerPreference =  (CheckBoxPreference) findPreference(keySending);
     }
 
     private void setUpListener() {

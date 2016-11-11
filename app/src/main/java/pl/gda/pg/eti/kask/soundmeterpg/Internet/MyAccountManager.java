@@ -2,8 +2,20 @@ package pl.gda.pg.eti.kask.soundmeterpg.Internet;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.EndTaskException;
 import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.AccountManager;
@@ -16,7 +28,8 @@ public class MyAccountManager implements AccountManager {
     public static final int MAX_DURATION_OF_LOG_IN = 30000;
     public static final String login = "filgirel";
     public static final String password = "Nadal123Podresla!@$$";
-
+    public static final int CONNECTION_TIMEOUT=10000;
+    public static final int READ_TIMEOUT=15000;
     private SynchronizedPreference prefs;
     private final String key = "isLogIn";
     private Activity activity;
@@ -36,12 +49,79 @@ public class MyAccountManager implements AccountManager {
     }
 
     @Override
-    public void logIn(String login, String password, String mac) {
+    public void logIn(final String login, final String password, String mac) {
         progressOfLogging=0;
         //TODO usuń ta linijkę jak zrobisz panel wylogowania
         prefs.putBoolean(key,false,activity);
 
         endTask = false;
+        loggingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection conn = null;
+                URL url = null;
+                try {
+                    url = new URL("https://soundmeterpg.pl/login.php");
+                    conn = (HttpURLConnection)url.openConnection();
+                    conn.setReadTimeout(READ_TIMEOUT);
+                    conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    Uri.Builder builder = new Uri.Builder()
+                            .appendQueryParameter("username", login)
+                            .appendQueryParameter("password", password);
+                    String query = builder.build().getEncodedQuery();
+
+                    // Open connection for sending data
+                    OutputStream os = conn.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(query);
+                    writer.flush();
+                    writer.close();
+                    os.close();
+                    conn.connect();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                    try {
+                        int response_code = conn.getResponseCode();
+
+                        // Check if successful connection made
+                        if (response_code == HttpURLConnection.HTTP_OK) {
+
+                            // Read data sent from server
+                            InputStream input = conn.getInputStream();
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                            StringBuilder result = new StringBuilder();
+                            String line;
+
+                            while ((line = reader.readLine()) != null) {
+                                result.append(line);
+                            }
+                            if (result.toString().contains("Succesfuly logged!")) {
+                                // Pass data to onPostExecute method
+                                prefs.putBoolean(key, true, activity);
+                            }
+                            else{
+                                prefs.putBoolean(key, false, activity);
+                                String msg = activity.getString(R.string.incorrect_credentials_login_activity);
+                                setErrorMessage(msg);
+                                setProgressOfLogging(MAX_DURATION_OF_LOG_IN);
+                            }
+
+                            conn.disconnect();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+        });
+        /*
         if(login.equals(MyAccountManager.login) && password.equals(MyAccountManager.password))
             loggingThread = new Thread(new Runnable() {
                 @Override
@@ -93,6 +173,7 @@ public class MyAccountManager implements AccountManager {
 
                 }
             });
+            */
         loggingThread.start();
     }
 

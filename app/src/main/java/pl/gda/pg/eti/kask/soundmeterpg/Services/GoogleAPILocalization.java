@@ -62,12 +62,13 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
 
     @Override
     public IBinder onBind(Intent intent) {
-        if (googleApiClient != null)
+        if (googleApiClient != null) {
             googleApiClient.connect();
-        if (googleApiClient.isConnected()) {
-            checkPlayServices();
-            if (googleApiClient != null && googleApiClient.isConnected()) {
-                startLocationUpdates();
+            if (googleApiClient.isConnected()) {
+                checkPlayServices();
+                if (googleApiClient != null && googleApiClient.isConnected()) {
+                    startLocationUpdates();
+                }
             }
         }
         return localBinder;

@@ -57,6 +57,10 @@ public class PreferenceParser implements PreferenceManager {
     public boolean hasPermissionToWorkInBackground() {
         return preferences.getBoolean(context.getResources().getString(R.string.working_in_background_key_preference), true);
     }
+    @Override
+    public boolean hasPermissionToSendToServer(){
+        return preferences.getBoolean(context.getResources().getString(R.string.sending_measurement_key_preferenece),true);
+    }
 
     @Override
     public int howManyMeasurementsInStorage() {

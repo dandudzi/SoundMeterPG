@@ -16,7 +16,7 @@ public class NoGPS {
 
     public static AlertDialog create(final Activity ownerDialog, final Fragment ownerFragment){
         Intent intent =new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_GPS, R.layout.no_gps_dialog);
+        InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_GPS, R.layout.gsp_internet_dialog);
         return SimpleDialogWithTextView.createDialogForResultOnYes(info);
     }
 }

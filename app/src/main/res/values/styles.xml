@@ -1,18 +1,72 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/color_accent</item>
+        <item name="colorAccent">#1A237E</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:textColorPrimaryInverse">@color/background</item>
+        <item name="android:textColorSecondary">@color/text_color</item>
     </style>
 
     <style name="AppTheme.Launcher" parent="@android:style/Theme.NoTitleBar">
         <item name="android:windowBackground">@layout/launch_screen</item>
     </style>
 
+    <style name="MyTheme" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="colorAccent">@color/primary</item>
+    </style>
+    <style name="SwitchCustom" >
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@android:drawable/progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_horizontal</item>
+        <item name="android:minHeight">20dip</item>
+        <item name="android:maxHeight">20dip</item>
+        <item name="android:thumbOffset">8dip</item>
+        <item name="android:focusable">true</item>
+        <item name="colorAccent">@color/primary</item>
+
+    </style>
+
+    <style name="question_text_view_custom">
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">@color/question_title_faq_dialog</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:layout_weight">0.05</item>
+        <item name="android:layout_marginTop">10dp</item>
+
+    </style>
+    <style name="answer_text_view_custom">
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:layout_weight">0.05</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:linksClickable">true</item>
+
+
+    </style>
+    <style name="PreferencesActivityTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:alertDialogTheme">@style/Theme.MyDialog</item>
+    </style>
+
+    <style name="Theme.MyDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+    </style>
 
 </resources>

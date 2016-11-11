@@ -16,7 +16,7 @@ public class NoInternet {
 
     public static AlertDialog create(final Activity ownerDialog, final Fragment ownerFragment){
         Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-        InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_INTERNET, R.layout.no_internet_dialog);
-        return SimpleDialogWithTextView.createDialogForResultOnYes(info);
+        InformationToCreateDialog info = new InformationToCreateDialog(intent,ownerDialog,ownerFragment,REQUEST_CODE_INTERNET, R.layout.gsp_internet_dialog);
+     return SimpleDialogWithTextView.createDialogForResultOnYes(info);
     }
 }

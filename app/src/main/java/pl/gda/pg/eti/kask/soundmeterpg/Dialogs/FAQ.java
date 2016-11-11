@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import pl.gda.pg.eti.kask.soundmeterpg.R;
@@ -18,22 +19,35 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 public class FAQ {
     public static AlertDialog create(Activity ownerDialog) {
         AlertDialog.Builder aboutDialog = new AlertDialog.Builder(ownerDialog);
-
+        aboutDialog.setPositiveButton(null,null);
         LayoutInflater inflater = ownerDialog.getLayoutInflater();
+
+        final AlertDialog faqDialog = aboutDialog.create();
 
         @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.faq_dialog, null);
 
-        TextView tmp = (TextView) dialogView.findViewById(R.id.github_hyperlink_text_view_faq_dialog);
+        TextView tmp = (TextView) dialogView.findViewById(R.id.question_5);
+        if(tmp.getLinksClickable())
         tmp.setMovementMethod(LinkMovementMethod.getInstance());
 
-        tmp = (TextView) dialogView.findViewById(R.id.help_hyperlink_text_view_faq_dialog);
+        tmp = (TextView) dialogView.findViewById(R.id.question_6);
         tmp.setMovementMethod(LinkMovementMethod.getInstance());
 
-        tmp = (TextView) dialogView.findViewById(R.id.soundmeterpg_hyperlink_text_view_faq_dialog);
+        tmp = (TextView) dialogView.findViewById(R.id.question_7);
         tmp.setMovementMethod(LinkMovementMethod.getInstance());
 
-        tmp = (TextView) dialogView.findViewById(R.id.licence_hyperlink_text_view_faq_dialog);
+        tmp = (TextView) dialogView.findViewById(R.id.question_8);
         tmp.setMovementMethod(LinkMovementMethod.getInstance());
+
+        Button btnOK = (Button) dialogView.findViewById(R.id.ok_btn);
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                faqDialog.dismiss();
+            }
+        });
+
 
         aboutDialog.setView(dialogView);
         aboutDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -42,6 +56,7 @@ public class FAQ {
                 Log.i("FAQ Dialog","Press OK");
             }
         });
-        return aboutDialog.create();
+        faqDialog.setView(dialogView);
+        return faqDialog;
     }
 }

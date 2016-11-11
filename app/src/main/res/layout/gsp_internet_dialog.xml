@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="@color/background">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_text_no_gps_dialog"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/no_gps_text_dialog"
+        android:textColor="@color/primary"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif"
+        android:gravity="center" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="YES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@color/background"
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/accept_btn" />
+
+        <Button
+            android:text="NO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:id="@+id/cancel_btn"
+            android:layout_alignParentTop="true"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_toStartOf="@+id/accept_btn" />
+    </RelativeLayout>
+</LinearLayout>

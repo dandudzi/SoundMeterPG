@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,18 +27,19 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 public class InformationAboutThisApplication {
 
     public static String getLastDateBuildApplication(Context ownerContext) throws LastDateException {
-        String lastBuild;
-        ApplicationInfo appInfo ;
+        String lastBuild = null;
+        ApplicationInfo appInfo;
         try {
             appInfo = ownerContext.getPackageManager().getApplicationInfo(ownerContext.getPackageName(), 0);
-            ZipFile file = new ZipFile(appInfo.sourceDir);
-            ZipEntry entry = file.getEntry("classes.dex");
-            long time = entry.getTime();
-            lastBuild = SimpleDateFormat.getInstance().format(new Date(time));
-        } catch (PackageManager.NameNotFoundException | IOException e) {
-            Log.e("Last build", e.getLocalizedMessage() + '\n' + e.getMessage());
-            throw new LastDateException(e.getMessage());
+            String appPath = appInfo.sourceDir;
+            long time = new File(appPath).lastModified();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            lastBuild = formatter.format(time);
         }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         return lastBuild;
     }

@@ -25,6 +25,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Database.MeasurementDataBaseObject;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.NullRecordException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.OverRangeException;
 import pl.gda.pg.eti.kask.soundmeterpg.PreferenceTestHelper;
@@ -64,7 +65,7 @@ public class SenderTest {
         sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    @Before
+   /* @Before
     public void boundService() throws TimeoutException, InterruptedException {
         Intent senderIntent = new Intent(context, Sender.class);
         IBinder binder = mServiceRule.bindService(senderIntent);
@@ -75,7 +76,7 @@ public class SenderTest {
         sender = ((Sender.LocalBinder) binder).getService();
         measurement = createMeasurement();
     }
-
+*/
     @Test
     public void bindingTest() throws TimeoutException, InterruptedException {
         Assert.assertTrue(ServiceDetector.isMyServiceRunning(Sender.class, context));
@@ -102,20 +103,20 @@ public class SenderTest {
     @Test
     public void sendToServerWithoutCellularDataTest() throws UiObjectNotFoundException {
         UIAutomotorTestHelper.turnOffInternetData(device, context);
-        Assert.assertFalse(sender.insert(measurement));
+        Assert.assertFalse(sender.insert((MeasurementDataBaseObject) measurement));
     }
 
     @Test
     public void sendToServerWithoutPermissionTest(){
         checkWithoutPermission();
-        Assert.assertFalse(sender.insert(measurement));
+        Assert.assertFalse(sender.insert((MeasurementDataBaseObject) measurement));
     }
 
     @Test
     public void sendToServerTest() throws UiObjectNotFoundException {
         checkWithPermission();
         UIAutomotorTestHelper.turnOnInternetData(device, context);
-        Assert.assertTrue(sender.insert(measurement));
+        Assert.assertTrue(sender.insert((MeasurementDataBaseObject) measurement));
     }
 
     private void checkWithoutPermission() {

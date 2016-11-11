@@ -14,5 +14,7 @@ public interface PreferenceManager {
 
     boolean hasPermissionToWorkInBackground();
 
+    boolean hasPermissionToSendToServer();
+
     int howManyMeasurementsInStorage();
 }

@@ -66,7 +66,7 @@ public class BackgroundWork extends IntentService {
         this.statistic = intent.getExtras().getParcelable(IntentActionsAndKeys.MEASUREMENT_STATISTICS_KEY.toString());
         this.counterSampleAvg.value = intent.getExtras().getInt(IntentActionsAndKeys.COUNTER_KEY.toString());
         endWork = false;
-
+       startSenderService();
         createNotification();
         while(!endWork){
             try{
@@ -81,6 +81,12 @@ public class BackgroundWork extends IntentService {
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(avgIntent);
         manager.cancelAll();
         Log.i("Backgroundwork","end");
+    }
+    private void startSenderService() {
+        if(!ServiceDetector.isMyServiceRunning(Sender.class,getApplicationContext())){
+            Intent intent = new Intent(getApplicationContext(), Sender.class);
+            getApplicationContext().startService(intent);
+        }
     }
 
     private void updateNotification(Sample sample){

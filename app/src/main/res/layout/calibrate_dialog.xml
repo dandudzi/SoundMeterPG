@@ -1,63 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="false">
+
+        <TextView
+            android:text="@string/calibrate_title_preference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:id="@+id/title_calibrate_dialog"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:textColor="@color/primary" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@color/background"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp">
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/number_picker_calibrate_dialog"
+            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentBottom="false"
+            android:gravity="center"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:text="@string/calibrate_msg_preference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/number_picker_calibrate_dialog"
+            android:paddingLeft="20dp"
+            android:textColor="@color/primary"
+            android:textSize="18sp" />
 
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <NumberPicker
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/number_picker_calibrate_dialog"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top|right|center">
 
-                <TextView
-                    android:text="@string/calibrate_msg_preference"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="38dp"
-                    android:id="@+id/textView2"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/number_picker_calibrate_dialog"
-                    android:singleLine="true"/>
+        <Button
+            android:text="@string/cancel_btn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:id="@+id/cancel_btn"
+            android:layout_alignParentTop="true"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_toStartOf="@+id/calibrate_btn" />
 
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/relativeLayout">
-                    <Switch
-                        android:text="@string/switch_text_calibration_dialog"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/switch_calibration_dialog"
-                        android:textSize="12sp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="16dp" />
+        <Button
+            android:text="@string/calibrate_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@color/background"
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/calibrate_btn" />
 
-                    <TextView
-                        android:text="@string/negative_value_calibration_dialog"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:id="@+id/textView4"
-                        android:textStyle="bold"
-                        android:singleLine="true"
-                         />
-                </RelativeLayout>
+    </RelativeLayout>
 
-            </RelativeLayout>
-
-    </ScrollView>
 </LinearLayout>

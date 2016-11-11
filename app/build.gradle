@@ -11,6 +11,8 @@ android {
         multiDexEnabled true
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField 'String', 'BUILD_TIME', 'new java.text.SimpleDateFormat("MM.dd.yy HH:mm", java.util.Locale.US).format(new java.util.Date(' + System.currentTimeMillis() +'L))'
+
     }
     buildTypes {
         release {

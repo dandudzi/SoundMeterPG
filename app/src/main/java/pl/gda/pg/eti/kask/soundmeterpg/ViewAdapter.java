@@ -20,10 +20,10 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 /**
  * Created by gierl on 28.09.2016.
  */
-public class MainAdapter  extends ArrayAdapter<MeasurementDataBaseObject> implements  CompoundButton.OnCheckedChangeListener{
+public class ViewAdapter extends ArrayAdapter<MeasurementDataBaseObject> implements  CompoundButton.OnCheckedChangeListener{
     private  final Context context;
     private  ArrayList<MeasurementDataBaseObject> measurementArrayList;
-    public MainAdapter(Context context, ArrayList<MeasurementDataBaseObject> measurements) {
+    public ViewAdapter(Context context, ArrayList<MeasurementDataBaseObject> measurements) {
         super(context, R.layout.samples_item, measurements);
         this.measurementArrayList = measurements;
         this.context = context;
