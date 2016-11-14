@@ -15,6 +15,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
 import pl.gda.pg.eti.kask.soundmeterpg.IntentActionsAndKeys;
 import pl.gda.pg.eti.kask.soundmeterpg.MutableInteger;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
+
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.FakeLocation;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasureStatistic;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasurementStatistics;
@@ -34,6 +35,7 @@ public class BackgroundWork extends IntentService {
     private NotificationManager manager;
     private int notifyId = 1;
     private int avg = 0;
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 
         @Override

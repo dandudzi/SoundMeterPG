@@ -16,18 +16,21 @@ public class AudioRecorder {
     private short[] buffer;
     private AudioRecord recorder;
     private Context context;
+    private  PreferenceParser preferenceParser;
 
     public AudioRecorder(Context context){
         this.context = context;
         recorder =  findAudioRecorder();
         buffer =  new short[BUFFER_SIZE];
         recorder.startRecording();
+        preferenceParser = new PreferenceParser(context);
         getAmplitude();
     }
 
 
     public int getNoiseLevel() {
         int noiseLevel = Sample.getNoiseLevelFromAmplitude(getAmplitude());
+        noiseLevel+= preferenceParser.calibrateValue();
         if(noiseLevel < 0)
             noiseLevel = 0;
         return  noiseLevel;

@@ -67,6 +67,11 @@ public class PreferenceParser implements PreferenceManager {
         return preferences.getInt(context.getResources().getString(R.string.measurements_in_storage_key_preference), 50);
     }
 
+    @Override
+    public int calibrateValue(){
+        return preferences.getInt(context.getResources().getString(R.string.calibrate_key_preference),0);
+    }
+
     public void setPreferenceIfDifferentThanPermission(String key, boolean defaultValue, boolean isServiceNotAvailable) {
         Boolean isAvailable = preferences.getBoolean(key,defaultValue);
         SharedPreferences.Editor editor = preferences.edit();

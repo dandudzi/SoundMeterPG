@@ -11,13 +11,14 @@ public class MeasurementStatistics implements Parcelable {
     public int min;
     public int max;
     public int avg;
+    public double sumAvg;
 
     public MeasurementStatistics(){
 
     }
     @Override
     public String toString() {
-        return "Min: " + min + " Max: " + max + " Avg: " + avg +"\n";
+        return "Min: " + min + " Max: " + max + " Avg: " + avg + "Sum avg : " + sumAvg + "\n";
     }
 
     @Override
@@ -30,12 +31,14 @@ public class MeasurementStatistics implements Parcelable {
         parcel.writeInt(min);
         parcel.writeInt(max);
         parcel.writeInt(avg);
+        parcel.writeDouble(sumAvg);
     }
 
     private MeasurementStatistics(Parcel in){
         this.min = in.readInt();
         this.max = in.readInt();
         this.avg = in.readInt();
+        this.sumAvg = in.readDouble();
     }
 
     public static final Parcelable.Creator<MeasurementStatistics> CREATOR = new Parcelable.Creator<MeasurementStatistics>() {

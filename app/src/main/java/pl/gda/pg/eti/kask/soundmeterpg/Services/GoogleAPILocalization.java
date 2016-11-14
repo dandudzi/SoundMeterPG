@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -19,7 +20,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.TurnOffGPSException;
+import pl.gda.pg.eti.kask.soundmeterpg.MeasurementDataBaseManager;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
 
@@ -39,11 +42,14 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
     private Location lastKnownLocation;
     private Context context;
     private PreferenceParser preferenceParser;
+    private MeasurementDataBaseManager measurementDataBaseManager;
 
     @Override
     public void onCreate() {
         context = getBaseContext();
         preferenceParser = new PreferenceParser(context);
+        measurementDataBaseManager = new MeasurementDataBaseManager(context,preferenceParser);;
+
         if (checkPlayServices()) {
             buildGoogleApiClient();
             createLocationRequest();
@@ -158,6 +164,8 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
 
     @Override
     public void onLocationChanged(android.location.Location location) {
+        if(lastKnownLocation != null)
+            measurementDataBaseManager.flush();
         lastKnownLocation = new Location(location.getLatitude(), location.getLongitude());
     }
 

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class Measure extends Fragment{
     private PreferenceParser preferences;
     private Button measureButton;
     private PowerManager.WakeLock lock;
-
+    private int counter =0;
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -57,6 +58,7 @@ public class Measure extends Fragment{
                 case SAMPLE_RECEIVE_ACTION:
                     Sample sample = intent.getExtras().getParcelable(IntentActionsAndKeys.SAMPLE_KEY.toString());
                     changeUIMeasurement(sample);
+                    counter++;
                     break;
                 case ERROR_MEASURE_ACTION:
                     String key =  intent.getExtras().getString(IntentActionsAndKeys.ERROR_KEY.toString());
@@ -213,6 +215,7 @@ public class Measure extends Fragment{
         if(isMeasureServiceRunning){
             measureButton.setText("Start");
             sendEndActionToMeasureService();
+            Log.e("MeasureFragment ","Counter samples : " + String.valueOf(counter));
             if(lock.isHeld())
                 lock.release();
         }else{

@@ -17,4 +17,6 @@ public interface PreferenceManager {
     boolean hasPermissionToSendToServer();
 
     int howManyMeasurementsInStorage();
+
+    int calibrateValue();
 }
