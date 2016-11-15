@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,6 +23,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -36,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button skipButton;
     private EditText login;
     private EditText password;
-    private AccountManager manager;
+    private MyAccountManager manager;
     private MyProperty result;
     private View loginForm;
     private View progressBarView;
@@ -91,8 +93,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn() {
-        AlertDialog dialog = Login.create(this, result);
-        dialog.show();
+        manager.checkIfUserIsLogged();
+       AlertDialog dialog = Login.create(this, result);
+       dialog.show();
 
 
 
@@ -155,10 +158,15 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
             progressBarView.setVisibility(View.GONE);
             loginForm.setVisibility(View.VISIBLE);
-            if (result)
-                finish();
-            else
+            if (result) {
+                Toast.makeText(getApplicationContext(), "Successfully logged !", Toast.LENGTH_LONG).show();
+                manager.checkIfUserIsLogged();
+                //finish();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Failed logged !", Toast.LENGTH_LONG).show();
                 errorMessage.setText(manager.getErrorMessage());
+            }
         }
     }
 

@@ -5,7 +5,10 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.HttpAuthHandler;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,10 +17,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookieStore;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.EndTaskException;
 import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.AccountManager;
@@ -26,7 +37,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.R;
 /**
  * Created by Daniel on 15.08.2016 at 11:10 :).
  */
-public class MyAccountManager implements AccountManager {
+public class MyAccountManager implements AccountManager  {
     public static final int MAX_DURATION_OF_LOG_IN = 30000;
     public static final int CONNECTION_TIMEOUT=10000;
     public static final int READ_TIMEOUT=15000;
@@ -37,9 +48,19 @@ public class MyAccountManager implements AccountManager {
     private String errorMessage;
     private volatile boolean endTask = false;
     private Thread loggingThread;
-
+    private Thread loggedThread;
+    private  String sessionId = "sec_session_id=4ec58d39958f0sde8d1a3841c0b4304660";
+    CookieManager cookieManager = null;
+    URLConnection urlConnection = null;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     public MyAccountManager(Activity activity){
+        preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        editor = preferences.edit();
+
         this.activity = activity;
+        cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
         prefs = SynchronizedPreference.getInstance();
     }
 
@@ -117,6 +138,7 @@ public class MyAccountManager implements AccountManager {
         loggingThread = new Thread(new Runnable() {
             @Override
             public void run() {
+
                 HttpURLConnection conn = null;
                 URL url = null;
 
@@ -131,10 +153,104 @@ public class MyAccountManager implements AccountManager {
                 catch (IOException e1) {
                 e1.printStackTrace();
                 }
+
                 getResponse(conn);
             }
         });
     }
+
+
+    public void checkIfUserIsLogged(){
+        createLoggedThread();
+        loggedThread.start();
+    }
+    private void createLoggedThread() {
+
+        loggedThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                URL uUrl = null;
+                try {
+                    /*if(cookieManager != null && cookieManager.getCookieStore().getCookies().size()>0) {
+                        List coockies = cookieManager.getCookieStore().getCookies();
+                        String daj = coockies.get(0).toString();
+                    }
+                    */
+
+                    uUrl = new URL("https://soundmeterpg.pl/checkSessionAndroid");
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                HttpURLConnection huc = null;
+                try {
+                     huc = (HttpURLConnection) uUrl.openConnection();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+              /* if (cookieManager.getCookieStore().getCookies().size() > 0) {
+                    // While joining the Cookies, use ',' or ';' as needed. Most of the servers are using ';'
+                    huc.setRequestProperty("Cookie",
+                          TextUtils.join(";",  cookieManager.getCookieStore().getCookies()));
+             }
+*/
+           // sessionId = preferences.getString("session_id","");
+              //  huc.setRequestProperty("Cookie", sessionId);
+             //   sessionId = preferences.getString("session_id","");
+              // huc.setRequestProperty("Cookie", sessionId);    //Why is "Cookie", open Chrome press F12 and check!
+              //  if(cookieManager != null)
+              //  {
+
+                //        String expiers = TextUtils.join(";",  cookieManager.getCookieStore().getCookies());
+               //     huc.setRequestProperty("Cookie",
+                            //TextUtils.join(";",  cookieManager.getCookieStore().getCookies()));
+//
+             //   }
+              ///  huc.setRequestProperty("Cookie", sessionId);
+
+                try {
+                    huc.connect();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                BufferedReader br = null;
+                try {
+                    br = new BufferedReader(new InputStreamReader(huc.getInputStream()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String data = "";
+                    String line = "";
+                try {
+                   // String[] aaa = huc.getHeaderField("Set-Cookie").split(";");
+
+                 //   sessionId = aaa[0];
+                    //editor.putString("session_id", String.valueOf(aaa));
+                   // editor.apply();
+                    while ((line = br.readLine()) != null) {
+                        data = data + line;
+                    }
+                    Map<String, List<String>> headerFields = huc.getHeaderFields();
+                    List<String> cookiesHeader = headerFields.get("Set-Cookie");
+
+                   // if (cookiesHeader != null) {
+                       // for (String cookie : cookiesHeader) {
+                      //      cookieManager.getCookieStore().add(null,HttpCookie.parse(cookie).get(0));
+                      //  }
+                  //  }
+                    huc.disconnect();
+                    Log.i("LoginCheck", data);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+    }
+
+
 
     private void getResponse(HttpURLConnection conn) {
         try {
@@ -143,7 +259,28 @@ public class MyAccountManager implements AccountManager {
 
                 StringBuilder result = getStringResponse(conn);
 
-                if (result.toString().contains("Succesfuly logged!")) {
+               //
+
+
+                if (result.toString().contains("success")) {
+                 /*   String[] aaa = conn.getHeaderField("Set-Cookie").split(";");
+                    // sessionId = aaa[0];
+                   ;
+                    //editor.apply();
+                   // editor.putString("session_id", String.valueOf(aaa))
+                    Map<String, List<String>> headerFields = conn.getHeaderFields();
+                    List<String> cookiesHeader = headerFields.get("Set-Cookie");
+
+                    if (cookiesHeader != null) {
+                        for (String cookie : cookiesHeader) {
+                            cookieManager.getCookieStore().add(null,HttpCookie.parse(cookie).get(0));
+                        }
+                    }
+
+                  //  urlConnection.getContent();
+                   // CookieStore cookieStore = cookieManager.getCookieStore();
+                   // List cookieList = cookieStore.getCookies();
+*/
                     prefs.putBoolean(key, true, activity);
                 }
                 else{
@@ -199,12 +336,13 @@ public class MyAccountManager implements AccountManager {
     private HttpURLConnection initializeConnection(HttpURLConnection conn, URL url){
         try {
             conn = (HttpURLConnection)url.openConnection();
-            conn.setReadTimeout(READ_TIMEOUT);
-            conn.setConnectTimeout(CONNECTION_TIMEOUT);
             conn.setRequestMethod("POST");
+          //  conn.addRequestProperty("Coockie", sessionId);
+             urlConnection = url.openConnection();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         conn.setDoInput(true);
         conn.setDoOutput(true);
         return conn;
