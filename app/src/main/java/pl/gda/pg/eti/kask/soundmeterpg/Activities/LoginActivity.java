@@ -1,12 +1,15 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 import android.os.AsyncTask;
+import android.support.design.internal.NavigationMenu;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -97,19 +100,6 @@ public class LoginActivity extends AppCompatActivity {
        AlertDialog dialog = Login.create(this, result);
        dialog.show();
 
-
-
-      /*  try {
-            url = new URL("https://soundmeterpg.pl");
-            URLConnection urlConnection = url.openConnection();
-            InputStream in = urlConnection.getInputStream();
-          String wynik ;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
     }
 
     private void resultListener(Object newValue) {
@@ -160,8 +150,7 @@ public class LoginActivity extends AppCompatActivity {
             loginForm.setVisibility(View.VISIBLE);
             if (result) {
                 Toast.makeText(getApplicationContext(), "Successfully logged !", Toast.LENGTH_LONG).show();
-                manager.checkIfUserIsLogged();
-                //finish();
+                finish();
             }
             else {
                 Toast.makeText(getApplicationContext(), "Failed logged !", Toast.LENGTH_LONG).show();

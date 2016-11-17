@@ -5,10 +5,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +22,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.About;
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.FAQ;
@@ -27,6 +34,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.LastDateException;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.VersionException;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measure;
 import pl.gda.pg.eti.kask.soundmeterpg.Fragments.Measurements;
+import pl.gda.pg.eti.kask.soundmeterpg.Internet.MyAccountManager;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Measurement;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.PreferenceParser;
@@ -39,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView drawerList;
     private PreferenceParser preference;
     private boolean isMeasure = false;
+    private MyAccountManager accountManager;
+
 
 
     @Override
@@ -48,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.main_activity);
         setFragmentContent(new Measure());
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //Menu menu = (Menu) drawerLayout.findViewById(R.id.log_out_drawer);
+        //menu = drawerLayout.findViewById(R.id.log_in_drawer);
+
         setUpToolbar();
         setUpDrawer();
         preference = new PreferenceParser(getBaseContext());
@@ -55,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /*once onFirst start app*/
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
         preference.askUserForPermission(this);
+        accountManager = new MyAccountManager(getBaseContext());
 
     }
 
@@ -87,12 +101,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 myToolbar,
                 R.string.drawer_open,
                 R.string.drawer_close
-        );
+        ){
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                NavigationView drawerList = (NavigationView) findViewById(R.id.left_drawer);
+                NavigationMenu menu = (NavigationMenu) drawerList.getMenu();
+                //get Header to Drawer
+                View headerLayout = drawerList.getHeaderView(0);
+                TextView header = (TextView) headerLayout.findViewById(R.id.login_info);
+
+                //get Item from Menu
+                MenuItem loginActivity = menu.findItem(R.id.log_in_drawer);
+
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                long timeInMillis = prefs.getLong(getBaseContext().getResources().getString(R.string.cookie_expired_time), (long)0);
+                if(timeInMillis != 0) {
+                    Date resultdate = new Date(timeInMillis);
+                    if (resultdate.after(new Date())) {
+                        String login = prefs.getString(getBaseContext().getResources().getString(R.string.login_key), "logout");
+                        header.setText("Hello " + login + " !\n" + "Your account log out automatically on : " + formatter.format(resultdate));
+                        loginActivity.setTitle("Log out");
+                    }
+                    else{
+                        header.setText("You are logout");
+                        loginActivity.setTitle("Sign in");
+                    }
+                }
+               else{
+                    header.setText("You are logout");
+                    loginActivity.setTitle("Sign in");
+                }
+                invalidateOptionsMenu();
+            }
+        };
+
+        drawerLayout.setDrawerListener(drawerToggle);
     }
 
     private void setUpDrawer() {
         drawerList = (NavigationView) findViewById(R.id.left_drawer);
         drawerList.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -156,7 +214,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setFragmentContent(new Measurements());
                 break;
             case R.id.log_in_drawer:
+                NavigationMenu menu = (NavigationMenu) drawerList.getMenu();
+                MenuItem loginActivity = menu.findItem(R.id.log_in_drawer);
+                if(loginActivity.getTitle() == "Sign in")
                 startActivity(LoginActivity.class);
+                else
+                    accountManager.logOut();
                 break;
         }
         return false;

@@ -157,7 +157,7 @@
     <!-- Sender -->
     <string name="confirmation_added_record"><!-- TODO -->Succesfuly added!</string>
     <string name="site">http://soundmeterpg.cba.pl/insert.php/</string>
-    <string name="ping_site">soundmeterpg.cba.pl</string>
+    <string name="ping_site">soundmeterpg.pl</string>
 
     <string name="stored">Store sample on server :</string>
     <string name="date_measure">Date :</string>
@@ -179,5 +179,16 @@
 
     <string name="ok_default">OK</string>
 
+    <!-- Login keys -->
+    <string name="expired_time_key">expired_time</string>
+    <string name="login_key">login</string>
+    <string name="logged_key">logged</string>
+
+    <string name="cookie_name">cookie_name</string>
+    <string name="cookie_value">cookie_value</string>
+    <string name="cookie_path">cookie_path</string>
+    <string name="cookie_domain">cookie_domain</string>
+    <string name="cookie_expired_time">cookie_expired_time</string>
+    <string name="cookie_secure">cookie_secure</string>
 
 </resources>

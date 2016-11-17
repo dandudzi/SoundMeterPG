@@ -13,8 +13,8 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.MeasurementStatistics;
 public class MeasurementDataBaseObject extends Measurement {
     private int ID;
     private String UserID;
-    public MeasurementDataBaseObject(MeasurementStatistics statistics, Location location, boolean storedOnWebServer, Date date, int ID, String UserID){
-        super(statistics, location, storedOnWebServer, date);
+    public MeasurementDataBaseObject(MeasurementStatistics statistics, Location location, boolean storedOnWebServer, Date date, int weight, int ID, String UserID){
+        super(statistics, location, storedOnWebServer, date, weight);
         this.UserID = UserID;
         this.ID = ID;
     }
@@ -25,4 +25,4 @@ public class MeasurementDataBaseObject extends Measurement {
         return UserID;
     }
 
-}
+    }

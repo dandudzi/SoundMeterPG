@@ -2,11 +2,13 @@ package pl.gda.pg.eti.kask.soundmeterpg.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.icu.util.MeasureUnit;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -43,14 +45,17 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public static final String LONGITUDE = "Longitude";
     public static final String DATE = "Date";
     public static final String USER_ID = "UserID";
+    public static final String WEIGHT = "Weight";
     private static final String STORED_ON_SERVER = "StoredOnServer";
     private Cursor cursor;
     private PreferenceParser preferenceParser;
+    private SharedPreferences sharedPreferences;
 
     public DataBaseHandler(Context ctx, String name) {
         super(ctx, name, null, DATABASE_VERSION);
         this.context = ctx;
         preferenceParser = new PreferenceParser(context);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
     }
 
@@ -65,6 +70,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 LONGITUDE + " double(14,11) not null," +
                 DATE + "  character(19) not null," +
                 USER_ID + " character(20) not null," +
+                WEIGHT + " int not null, " +
                 STORED_ON_SERVER + " integer default 0);");
     }
 
@@ -236,7 +242,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         statistics.avg = getAvg();
         Location location = new Location(getLatitude(), getLongitude());
         Date date = getDate();
-        measurement = new MeasurementDataBaseObject(statistics, location ,getStoredOnServer(), date, getID(), getUserID());
+        measurement = new MeasurementDataBaseObject(statistics, location ,getStoredOnServer(), date, getWeight(), getID(), getUserID());
         return measurement;
     }
 
@@ -248,7 +254,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         contentValues.put(LATITUDE, measurement.getLocation().getLatitude());
         contentValues.put(LONGITUDE, measurement.getLocation().getLongitude());
         contentValues.put(DATE, measurement.getDate());
-        contentValues.put(USER_ID, "TEST");
+        contentValues.put(USER_ID, sharedPreferences.getString(context.getResources().getString(R.string.login_key),""));
+        contentValues.put(WEIGHT, measurement.getWeight());
         contentValues.put(STORED_ON_SERVER, measurement.getStoredState());
         return contentValues;
     }
@@ -285,7 +292,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     private Date getDate() {
         String dateString = cursor.getString(6);
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date date = null;
         try {
             date =  format.parse(dateString);
@@ -299,8 +306,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return cursor.getString(7);
     }
 
+    private int getWeight() { return cursor.getInt(8); }
     private boolean getStoredOnServer(){
-        int storedOnWebServer = cursor.getInt(8);
+        int storedOnWebServer = cursor.getInt(9);
         return (storedOnWebServer ==0 ? false : true);
     }
 }

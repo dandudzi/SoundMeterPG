@@ -19,9 +19,10 @@ public class Measurement {
     public Location location;
     public Date date;
     public boolean storedOnWebServer = false;
+    public int weight;
     public MeasurementStatistics statistics;
 
-    public Measurement(MeasurementStatistics statistics, Location location, boolean storedOnWebServer, Date date) throws OverRangeException {
+    public Measurement(MeasurementStatistics statistics, Location location, boolean storedOnWebServer, Date date, int weight) throws OverRangeException {
         if(isCorrectStatistics(statistics))
             this.statistics = statistics;
         else
@@ -29,6 +30,7 @@ public class Measurement {
         this.location = location;
         this.date = date;
         this.storedOnWebServer = storedOnWebServer;
+        this.weight = weight;
     }
 
     @NonNull
@@ -47,7 +49,7 @@ public class Measurement {
         return location;
     }
     public String getDate(){
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
        return formatter.format(date);
     }
     public int getMin(){
@@ -59,6 +61,8 @@ public class Measurement {
     public int getAvg(){
         return statistics.avg;
     }
+
+    public int getWeight() { return  weight;}
     public boolean getStoredState(){
         return storedOnWebServer;
     }

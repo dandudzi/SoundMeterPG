@@ -81,7 +81,7 @@ public class MeasurementDataBaseManager {
             isStoreOnWebServer = true;
 
         Date date =  new Date();
-        Measurement measurement =  new Measurement(avg, location, isStoreOnWebServer, date);
+        Measurement measurement =  new Measurement(avg, location, isStoreOnWebServer, date, wynik_normalizacji);
         Log.i("MeasureService","Counter samples : " + list.size());
         list.clear();
 
