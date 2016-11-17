@@ -69,7 +69,7 @@ public class Sender extends IntentService {
         final int REFRESH_SESSION = 5; //po 5* czas sleepa = 50sekund
         MyAccountManager accountManager = new MyAccountManager(getBaseContext());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         MeasurementDataBaseObject measurementDataBaseObject;
 
         while (!endMeasure) {
