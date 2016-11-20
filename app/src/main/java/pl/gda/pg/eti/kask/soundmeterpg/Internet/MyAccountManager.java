@@ -1,10 +1,10 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Internet;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,13 +13,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +30,9 @@ import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.ConnectionInternetDetector;
  * Created by Daniel on 15.08.2016 at 11:10 :).
  */
 public class MyAccountManager implements AccountManager  {
+
     public static final int MAX_DURATION_OF_LOG_IN = 30000;
+
     private SynchronizedPreference prefs;
     private Context context;
     private int progressOfLogging =0;
@@ -40,13 +40,12 @@ public class MyAccountManager implements AccountManager  {
     private Thread loggingThread;
     private Thread loggedThread;
     private Thread logOutThread;
-    CookieManager cookieManager = null;
-    ConnectionInternetDetector connectionInternetDetector ;
+    private CookieManager cookieManager = null;
+    private ConnectionInternetDetector connectionInternetDetector ;
 
     public MyAccountManager(Context context){
         this.context = context;
-        cookieManager = new CookieManager();
-        CookieHandler.setDefault(cookieManager);
+        cookieManager = SingletonCookieManager.getInstance();
         prefs = SynchronizedPreference.getInstance();
         connectionInternetDetector = new ConnectionInternetDetector(context);
     }
@@ -57,15 +56,45 @@ public class MyAccountManager implements AccountManager  {
     }
 
     @Override
-    public void logIn(final String login, final String password, String mac) {
+    public void logIn(final String login, final String password) {
         progressOfLogging=0;
         prefs.putBoolean(context.getResources().getString(R.string.logged_key),false,context);
         createLoginThread(login, password);
         loggingThread.start();
     }
 
+
+    @Override
+    public void logOut() {
+        createLogOutThread();;
+        logOutThread.start();
+    }
+
+
+
+
+    @Override
+    public synchronized int getProgress() {
+        return progressOfLogging;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    @Override
+    public String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
     public boolean checkIfUserIsLogged(){
-        createIfUserIsLoggedThread();
+        createCheckUserIsLoggedThread();
         loggedThread.start();
         try {
             loggedThread.join();
@@ -76,84 +105,57 @@ public class MyAccountManager implements AccountManager  {
 
     }
 
-    private void createIfUserIsLoggedThread() {
+    @Override
+    public  void setCookies(HttpURLConnection conn) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        long timeInMillis = preferences.getLong(context.getResources().getString(R.string.cookie_expired_time), 0);
+        if(timeInMillis >0) {
+            Date currentTime = new Date();
+            Date resultdate = new Date(timeInMillis);
 
-        loggedThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (connectionInternetDetector.isConnectingToInternet()) {
-                    URL url = null;
-                    try {
-                        url = new URL("https://soundmeterpg.pl/checkSessionAndroid");
-                        HttpURLConnection conn = null;
-                        conn = (HttpURLConnection) url.openConnection();
+            if (resultdate.after(currentTime)) {
+                long maxAge = resultdate.getTime() - currentTime.getTime();
+                maxAge /= 1000;
+                String name = preferences.getString(context.getResources().getString(R.string.cookie_name), "");
+                String value = preferences.getString(context.getResources().getString(R.string.cookie_value), "");
+                String path = preferences.getString(context.getResources().getString(R.string.cookie_path), "");
+                String domain = preferences.getString(context.getResources().getString(R.string.cookie_domain), "");
 
-                        // Prawdopodobnie zamknięto aplikacje //
-                        if (cookieManager.getCookieStore().getCookies().size() == 0) {
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                            long timeInMillis = preferences.getLong(context.getResources().getString(R.string.cookie_expired_time), 0);
-                            Date currentTime = new Date();
-                            Date resultdate = new Date(timeInMillis);
-
-                            if (resultdate.after(currentTime)) {
-                                long maxAge = resultdate.getTime() - currentTime.getTime();
-                                maxAge /= 1000;
-                                String name = preferences.getString(context.getResources().getString(R.string.cookie_name), "");
-                                String value = preferences.getString(context.getResources().getString(R.string.cookie_value), "");
-                                String path = preferences.getString(context.getResources().getString(R.string.cookie_path), "");
-                                String domain = preferences.getString(context.getResources().getString(R.string.cookie_domain), "");
-
-                                boolean secure = preferences.getBoolean(context.getResources().getString(R.string.cookie_secure), false);
-                                HttpCookie cookie = new HttpCookie(name, value);
-                                cookie.setPath(path);
-                                cookie.setDomain(domain);
-                                cookie.setMaxAge(maxAge);
-                                cookie.setSecure(secure);
-                                String cookiesss = name + "=" + value + ";" + "Path=" + path + ";" + "Domain=" + domain + ";maxAge=" + maxAge;
-                                // String[] cookieString  = cookie.toString().split(";");
-                                // Cookie", "cookieName=cookieValue; domain=www.test.com"
-                                // String connections = preferences.getString(activity.getBaseContext().getString(R.string.cookie_name) ) + "=" +
-                                //      name + ";" +  preferences.getString(activity.getBaseContext().getResources().getString(R.string.cookie_value) + "=" +
-                                //      value);
-                                //    conn.setRequestProperty("Cookie", preferences.getString(activity.getBaseContext().getString(R.string.cookie_name)) + "=" +
-                                //   name + ";" +  preferences.getString(activity.getBaseContext().getResources().getString(R.string.cookie_value)) + "="+
-                                //  value);;
-                                conn.setRequestProperty("Cookie", cookiesss);
-                            }
-                        }
-
-                        // HttpURLConnection conn = null;
-                        //conn = (HttpURLConnection) url.openConnection();
-                        conn.connect();
-                        BufferedReader br = null;
-                        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        String data = "";
-                        String line = "";
-                        while ((line = br.readLine()) != null) {
-                            data = data + line;
-                        }
-                        if (data.contains("you are still logged")) {
-                            prefs.putBoolean(context.getResources().getString(R.string.logged_key), true, context);
-                            List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
-                            if (cookies != null && cookies.size() >0) {
-                                //  String as = cookies
-                                HttpCookie cookie = cookies.get(0);
-                                storeCookie(cookie);
-                            }
-                        } else
-                            prefs.putBoolean(context.getResources().getString(R.string.logged_key), false, context);
-                        conn.disconnect();
-                        Log.i("LoginCheck", data);
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    prefs.putBoolean(context.getResources().getString(R.string.logged_key), false, context);
-                }
+                boolean secure = preferences.getBoolean(context.getResources().getString(R.string.cookie_secure), false);
+                HttpCookie cookie = new HttpCookie(name, value);
+                cookie.setPath(path);
+                cookie.setDomain(domain);
+                cookie.setMaxAge(maxAge);
+                cookie.setSecure(secure);
+                String cookiesss = name + "=" + value + ";" + "Path=" + path + ";" + "Domain=" + domain + ";maxAge=" + maxAge;
+                // String[] cookieString  = cookie.toString().split(";");
+                // Cookie", "cookieName=cookieValue; domain=www.test.com"
+                // String connections = preferences.getString(activity.getBaseContext().getString(R.string.cookie_name) ) + "=" +
+                //      name + ";" +  preferences.getString(activity.getBaseContext().getResources().getString(R.string.cookie_value) + "=" +
+                //      value);
+                //    conn.setRequestProperty("Cookie", preferences.getString(activity.getBaseContext().getString(R.string.cookie_name)) + "=" +
+                //   name + ";" +  preferences.getString(activity.getBaseContext().getResources().getString(R.string.cookie_value)) + "="+
+                //  value);;
+                conn.setRequestProperty("Cookie", cookiesss);
             }
-        });
+        }
+    }
+
+    @Override
+    public void storeCookies() {
+
+        Calendar calendar = Calendar.getInstance();
+        List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
+        if(cookies != null && cookies.size() >0) {
+            HttpCookie cookie = cookies.get(0);
+            long timeInMillis = calendar.getTimeInMillis() + 1000 * cookie.getMaxAge();
+            prefs.putString(context.getResources().getString(R.string.cookie_name), cookie.getName(), context);
+            prefs.putString(context.getResources().getString(R.string.cookie_value), cookie.getValue(), context);
+            prefs.putString(context.getResources().getString(R.string.cookie_path), cookie.getPath(), context);
+            prefs.putString(context.getResources().getString(R.string.cookie_domain), cookie.getDomain(), context);
+            prefs.putLong(context.getResources().getString(R.string.cookie_expired_time), timeInMillis, context);
+            prefs.putBoolean(context.getResources().getString(R.string.cookie_secure), cookie.getSecure(), context);
+        }
     }
 
     private void createLoginThread(final String login, final String password) {
@@ -164,7 +166,7 @@ public class MyAccountManager implements AccountManager  {
                     HttpURLConnection conn = null;
                     URL url = null;
                     try {
-                        url = new URL("https://soundmeterpg.pl/insert_android");
+                        url = new URL("https://soundmeterpg.pl/login_android");
                         conn = initializeConnection(conn, url);
                         String query = initializeArguments(login, password);
                         openConnection(conn, query);
@@ -172,13 +174,14 @@ public class MyAccountManager implements AccountManager  {
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
-                    getResponse(conn, login);
+                    getResponse(conn, login, password);
                 }
                 else
                     prefs.putBoolean(context.getResources().getString(R.string.logged_key),false,context);
             }
         });
     }
+
     private HttpURLConnection initializeConnection(HttpURLConnection conn, URL url){
         try {
             conn = (HttpURLConnection)url.openConnection();
@@ -214,22 +217,14 @@ public class MyAccountManager implements AccountManager  {
         }
     }
 
-    private void getResponse(HttpURLConnection conn, String login) {
+    private void getResponse(HttpURLConnection conn, String login, String password) {
         try {
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                StringBuilder result = getStringResponse(conn);
+                String result = getStringResponse(conn);
                 if (result.toString().contains("success")) {
-                    int index = result.indexOf(":");
-                    //String login = result.substring(result.indexOf(":")+2);
-
                     prefs.putString(context.getResources().getString(R.string.login_key),login,context);
-                    List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
-                    if(cookies != null && cookies.size() >0) {
-                        HttpCookie cookie = cookies.get(0);
-                       String coossss = cookie.toString();
-                        storeCookie(cookie);
-                    }
-
+                    prefs.putString(context.getResources().getString(R.string.password), password, context);
+                    storeCookies();
                     prefs.putBoolean(context.getResources().getString(R.string.logged_key), true, context);
                 }
                 else{
@@ -245,27 +240,47 @@ public class MyAccountManager implements AccountManager  {
         }
     }
 
-    private void storeCookie(HttpCookie cookie) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        //calendar.add(Calendar.DATE, (int) cookie.getMaxAge());
-        long timeInMillis = calendar.getTimeInMillis() + 1000 * cookie.getMaxAge();
-        //Date resultdate = new Date(calendar.getTimeInMillis() + 1000* cookie.getMaxAge());
-        // long resultDates = resultdate.getTime();
-
-        //  String dateString = formatter.format(new Date(seconds * 1000L));
 
 
-        prefs.putString(context.getResources().getString(R.string.cookie_name), cookie.getName(), context);
-        prefs.putString(context.getResources().getString(R.string.cookie_value), cookie.getValue(), context);
-        prefs.putString(context.getResources().getString(R.string.cookie_path), cookie.getPath(), context);
-        prefs.putString(context.getResources().getString(R.string.cookie_domain), cookie.getDomain(), context);
-        prefs.putLong(context.getResources().getString(R.string.cookie_expired_time), timeInMillis, context);
-        prefs.putBoolean(context.getResources().getString(R.string.cookie_secure), cookie.getSecure(), context);
+    private void createCheckUserIsLoggedThread() {
+
+        loggedThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (connectionInternetDetector.isConnectingToInternet()) {
+                    try {
+                         URL url = new URL("https://soundmeterpg.pl/checkSessionAndroid");
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        //Prawdopodobnie zmaknięto aplikację, trzeba sprawdzić, czy są cookiesy.
+                        if (cookieManager.getCookieStore().getCookies().size() == 0) {
+                            setCookies(conn);
+                            conn.connect();
+
+                            String response = getStringResponse(conn);
+                            if (response.contains("you are still logged")) {
+                                prefs.putBoolean(context.getResources().getString(R.string.logged_key), true, context);
+                                storeCookies();
+                            } else
+                                prefs.putBoolean(context.getResources().getString(R.string.logged_key), false, context);
+                            conn.disconnect();
+                            Log.i("LoginCheck", response);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    prefs.putBoolean(context.getResources().getString(R.string.logged_key), false, context);
+                }
+            }
+        });
     }
 
-    private StringBuilder getStringResponse(HttpURLConnection conn) throws IOException {
+
+
+
+
+
+    private String getStringResponse(HttpURLConnection conn) throws IOException {
         InputStream input = conn.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         StringBuilder result = new StringBuilder();
@@ -273,25 +288,13 @@ public class MyAccountManager implements AccountManager  {
         while ((line = reader.readLine()) != null) {
             result.append(line);
         }
-        return result;
+        return result.toString();
     }
 
 
 
 
 
-    @Override
-    public void logOut() {
-
-      //  prefs.putBoolean(context.getResources().getString(R.string.logged_key),false,context);
-        createLogOutThread();;
-        logOutThread.start();
-       // try {
-         //   loggedThread.join();
-     //   } catch (InterruptedException e) {
-     //       e.printStackTrace();
-      //  }
-    }
 
 
     private void createLogOutThread() {
@@ -321,18 +324,19 @@ public class MyAccountManager implements AccountManager  {
                                 String path = preferences.getString(context.getResources().getString(R.string.cookie_path), "");
                                 String domain = preferences.getString(context.getResources().getString(R.string.cookie_domain), "");
 
-                                boolean secure = preferences.getBoolean(context.getResources().getString(R.string.cookie_secure), false);
-                                HttpCookie cookie = new HttpCookie(name, value);
-                                cookie.setPath(path);
-                                cookie.setDomain(domain);
-                                cookie.setMaxAge(maxAge);
-                                cookie.setSecure(secure);
                                 String cookiesss = name + "=" + value + ";" + "Path=" + path + ";" + "Domain=" + domain + ";maxAge=" + maxAge;
                                 conn.setRequestProperty("Cookie", cookiesss);
                             }
                         }
                         conn.connect();
                         prefs.putLong(context.getResources().getString(R.string.cookie_expired_time), 0, context);
+                        prefs.putString(context.getResources().getString(R.string.cookie_name),"",context);
+                        prefs.putString(context.getResources().getString(R.string.cookie_value),"",context);
+                        prefs.putString(context.getResources().getString(R.string.cookie_path),"",context);
+                        prefs.putString(context.getResources().getString(R.string.cookie_domain),"",context);
+                        prefs.putString(context.getResources().getString(R.string.login_key),"",context);
+                        prefs.putString(context.getResources().getString(R.string.password),"",context);
+                        prefs.putBoolean(context.getResources().getString(R.string.logged_key),false, context);
                         conn.disconnect();
                         } catch (MalformedURLException e) {
                         e.printStackTrace();
@@ -346,14 +350,25 @@ public class MyAccountManager implements AccountManager  {
 
 
 
-    @Override
-    public synchronized int getProgress() {
-        return progressOfLogging;
-    }
 
-    @Override
-    public String getErrorMessage() {
-        return errorMessage;
+        private  String capitalize(String str) {
+            if (TextUtils.isEmpty(str)) {
+                return str;
+            }
+            char[] arr = str.toCharArray();
+            boolean capitalizeNext = true;
+            StringBuilder phrase = new StringBuilder();
+            for (char c : arr) {
+                if (capitalizeNext && Character.isLetter(c)) {
+                    phrase.append(Character.toUpperCase(c));
+                    capitalizeNext = false;
+                    continue;
+                } else if (Character.isWhitespace(c)) {
+                    capitalizeNext = true;
+                }
+                phrase.append(c);
+            }
+            return phrase.toString();
     }
 
     private synchronized void setProgressOfLogging(int value){progressOfLogging = value;}
@@ -379,14 +394,12 @@ class SynchronizedPreference{
         return prefs.getBoolean(key, defValue);
     }
 
-
     public synchronized void putBoolean(String key, boolean value,  Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(key,value);
         editor.commit();
     }
-
 
     public synchronized void putLong(String key, long value,  Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

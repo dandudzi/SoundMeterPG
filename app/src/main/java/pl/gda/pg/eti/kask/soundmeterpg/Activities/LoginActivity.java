@@ -71,6 +71,8 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        String device = manager.getDeviceName();
     }
 
     private void makeRegistrationHyperlinkWorkable() {
@@ -108,13 +110,13 @@ public class LoginActivity extends AppCompatActivity {
             progressBarView.setVisibility(View.VISIBLE);
             AsyncTask loginThread = new LoggingTask();
 
-            String login = this.login.getText().toString();
+            String login = this.login.getText().toString().replaceAll("\\s+","");
             String password = this.password.getText().toString();
             String macAddress = InformationAboutThisApplication.getMACAddress();
             this.login.setText("");
             this.password.setText("");
 
-            manager.logIn(login, password, macAddress);
+            manager.logIn(login, password);
             loginThread.execute("Daj");
         }
     }

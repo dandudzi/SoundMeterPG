@@ -7,13 +7,13 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.20"
-        android:text="Stored on server"
-        android:id="@+id/stored_sampleCols"
-
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:text="Average sound"
+        android:id="@+id/decibelsCols"
+        android:autoText="false"
         android:gravity="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:padding="10dp"
         android:textSize="18sp" />
 
@@ -31,13 +31,13 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0.20"
-        android:text="Average sound"
-        android:id="@+id/decibelsCols"
-        android:autoText="false"
-        android:gravity="center"
+        android:text="Stored on server"
+        android:id="@+id/stored_sampleCols"
+
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:gravity="center"
         android:padding="10dp"
         android:textSize="18sp" />
 

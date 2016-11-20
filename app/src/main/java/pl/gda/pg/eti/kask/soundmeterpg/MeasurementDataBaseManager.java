@@ -42,7 +42,6 @@ public class MeasurementDataBaseManager {
             startTime = System.currentTimeMillis();
 
         list.add(sample);
-        //Log.i("Sample", sample.toString() + " counter: " + list.size());
 
         long currentTime = System.currentTimeMillis();
         if((currentTime - startTime) >= (MINUTES_PER_MEASUREMENT * MINUTE_IN_MILLISECONDS)){

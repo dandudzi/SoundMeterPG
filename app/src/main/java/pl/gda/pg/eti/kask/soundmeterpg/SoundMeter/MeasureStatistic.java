@@ -23,7 +23,7 @@ public class MeasureStatistic {
     }
 
     public static int setUpStatistic(int noiseLevel, MeasurementStatistics statistic, MutableInteger counterSampleAvg) {
-
+        /*
         double leq = 0.0;
         if(statistic.min == 0)
             statistic.min = noiseLevel;
@@ -54,5 +54,34 @@ public class MeasureStatistic {
         if(counterSampleAvg.value == 0)
             return  0;
         return statistic.avg ;
+        */
+
+        double leq = 0.0;
+        if(statistic.min == 0)
+            statistic.min = noiseLevel;
+        if(noiseLevel > 0 && statistic.min > noiseLevel)
+            statistic.min = noiseLevel;
+        if(noiseLevel > statistic.max)
+            statistic.max = noiseLevel;
+        if((statistic.avg + noiseLevel) < 0){
+            statistic.avg /= counterSampleAvg.value;
+            counterSampleAvg.value = 1;
+        }
+        if(noiseLevel!=0)
+            ++counterSampleAvg.value;
+
+        leq = noiseLevel/10.0;
+        leq = Math.pow(10,leq);
+        if(statistic.sumAvg == 0.0)
+            statistic.sumAvg = leq;
+        else
+            statistic.sumAvg+= leq;
+
+
+
+        statistic.avg += noiseLevel;
+        if(counterSampleAvg.value == 0)
+            return  0;
+        return statistic.avg / counterSampleAvg.value;
     }
 }

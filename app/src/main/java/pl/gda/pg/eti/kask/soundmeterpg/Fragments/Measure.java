@@ -216,6 +216,7 @@ public class Measure extends Fragment{
             measureButton.setText("Start");
             sendEndActionToMeasureService();
             Log.e("MeasureFragment ","Counter samples : " + String.valueOf(counter));
+            counter = 0;
             if(lock.isHeld())
                 lock.release();
         }else{

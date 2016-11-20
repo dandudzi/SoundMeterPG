@@ -104,6 +104,9 @@ public class BackgroundWork extends IntentService {
             msg = msg + "\n" + MeasureStatistic.getLatitude(location) +lat;
             msg = msg + "\n" + MeasureStatistic.getLongitude(location)+lon;
         }
+        if(notification == null)
+            createNotification();
+
         notification.setContentText(msg);
         manager.notify(notifyId, notification.build());
     }

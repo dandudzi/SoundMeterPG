@@ -70,7 +70,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         preference.askUserForPermission(this);
         accountManager = new MyAccountManager(getBaseContext());
 
+        saveDeviceName();
+
+
+
     }
+
+
 
     private void setFragmentContent(Fragment newFragment){
         if(newFragment instanceof Measure)
@@ -151,6 +157,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerList = (NavigationView) findViewById(R.id.left_drawer);
         drawerList.setNavigationItemSelectedListener(this);
 
+    }
+
+    private void saveDeviceName() {
+        SharedPreferences preferences;
+        preferences =  PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(getResources().getString(R.string.deviceID),accountManager.getDeviceName());
+        editor.commit();
     }
 
     @Override

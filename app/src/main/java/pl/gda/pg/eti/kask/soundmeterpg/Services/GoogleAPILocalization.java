@@ -42,13 +42,11 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
     private Location lastKnownLocation;
     private Context context;
     private PreferenceParser preferenceParser;
-    private MeasurementDataBaseManager measurementDataBaseManager;
 
     @Override
     public void onCreate() {
         context = getBaseContext();
         preferenceParser = new PreferenceParser(context);
-        measurementDataBaseManager = new MeasurementDataBaseManager(context,preferenceParser);;
 
         if (checkPlayServices()) {
             buildGoogleApiClient();
@@ -164,8 +162,8 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
 
     @Override
     public void onLocationChanged(android.location.Location location) {
-        if(lastKnownLocation != null)
-            measurementDataBaseManager.flush();
+       /* if(lastKnownLocation != null)
+            measurementDataBaseManager.flush(); */
         lastKnownLocation = new Location(location.getLatitude(), location.getLongitude());
     }
 
