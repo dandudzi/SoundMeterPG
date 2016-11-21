@@ -53,14 +53,19 @@ public class MeasurementDataBaseManager {
     public void flush(){
         long currentTime = System.currentTimeMillis();
         long diffTime = currentTime - startTime;
-        int x = (int) TimeUnit.MILLISECONDS.toSeconds(diffTime);
+        int x = 0;
+        if(diffTime <10)
+            x = (int) TimeUnit.MILLISECONDS.toSeconds(MINUTES_PER_MEASUREMENT * MINUTE_IN_MILLISECONDS);
+        else
+         x = (int) TimeUnit.MILLISECONDS.toSeconds(diffTime);
 
 
 
         double y=0;
         y = functionToCalculateWeight(x);
+        Log.i("Y Value", String.valueOf(y));
         int wynik_normalizacji =  normalization(y);
-
+        Log.i("Norm value", String.valueOf(wynik_normalizacji));
 
 
         MeasurementStatistics avg = Measurement.calculateMeasureStatistics(list);
@@ -82,6 +87,7 @@ public class MeasurementDataBaseManager {
         Date date =  new Date();
         Measurement measurement =  new Measurement(avg, location, isStoreOnWebServer, date, wynik_normalizacji);
         Log.i("MeasureService","Counter samples : " + list.size());
+        Log.i("MeasureService","Weight samples : " + wynik_normalizacji);
         list.clear();
 
         //TODO sendTOSERVER
