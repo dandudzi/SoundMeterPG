@@ -15,7 +15,7 @@ public class MeasureStatisticTest {
         MeasurementStatistics statistics =  new MeasurementStatistics();
         int noiseLevel = 20;
         MutableInteger counterSampleAvg = new MutableInteger();
-        int expected = 1;
+        int expected = 2;
 
         assertEquals(noiseLevel, MeasureStatistic.setUpStatistic(noiseLevel,statistics,counterSampleAvg));
         assertEquals(noiseLevel, statistics.min);
@@ -43,12 +43,12 @@ public class MeasureStatisticTest {
         noiseLevel = 123;
         statistics.avg = 2147483646;
         counterSampleAvg.value = 53687091;
-        expected = 2;
+        expected = 3;
 
-        assertEquals((40+noiseLevel)/2, MeasureStatistic.setUpStatistic(noiseLevel,statistics,counterSampleAvg));
+        assertEquals((39+noiseLevel)/2, MeasureStatistic.setUpStatistic(noiseLevel,statistics,counterSampleAvg));
         assertEquals(16, statistics.min);
         assertEquals(noiseLevel, statistics.max);
-        assertEquals(40 + noiseLevel, statistics.avg);
+        assertEquals(39 + noiseLevel, statistics.avg);
         assertEquals(expected, counterSampleAvg.value);
     }
 
@@ -57,7 +57,7 @@ public class MeasureStatisticTest {
         MeasurementStatistics statistics = new MeasurementStatistics();
         int noiseLevel = 0;
         MutableInteger counterSampleAvg = new MutableInteger();
-        int expected = 0;
+        int expected = 1;
 
         assertEquals(noiseLevel, MeasureStatistic.setUpStatistic(noiseLevel, statistics, counterSampleAvg));
         assertEquals(noiseLevel, statistics.min);

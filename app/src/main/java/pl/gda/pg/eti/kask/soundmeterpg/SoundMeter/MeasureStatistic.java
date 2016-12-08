@@ -63,12 +63,11 @@ public class MeasureStatistic {
             statistic.min = noiseLevel;
         if(noiseLevel > statistic.max)
             statistic.max = noiseLevel;
-        if((statistic.avg + noiseLevel) < 0){
-            statistic.avg /= counterSampleAvg.value;
-            counterSampleAvg.value = 1;
-        }
-        if(noiseLevel!=0)
+        if(noiseLevel!=0) {
             ++counterSampleAvg.value;
+        }
+
+
 
         leq = noiseLevel/10.0;
         leq = Math.pow(10,leq);
@@ -77,11 +76,16 @@ public class MeasureStatistic {
         else
             statistic.sumAvg+= leq;
 
-
+        if((statistic.avg + noiseLevel) < 0){
+            statistic.avg /= counterSampleAvg.value;
+            counterSampleAvg.value = 3;
+        }
 
         statistic.avg += noiseLevel;
         if(counterSampleAvg.value == 0)
             return  0;
-        return statistic.avg / counterSampleAvg.value;
+        if(counterSampleAvg.value-1 == 0)
+            return 0;
+        return statistic.avg / (counterSampleAvg.value-1);
     }
 }

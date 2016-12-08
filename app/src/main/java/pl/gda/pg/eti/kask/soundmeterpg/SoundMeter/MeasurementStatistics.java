@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by Daniel on 06.10.2016 at 14:05 :).
  */
 
-public class MeasurementStatistics implements Parcelable {
+public class MeasurementStatistics implements Parcelable, Cloneable {
     public int min;
     public int max;
     public int avg;

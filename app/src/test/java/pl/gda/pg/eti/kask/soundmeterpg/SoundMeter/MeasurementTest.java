@@ -19,7 +19,7 @@ public class MeasurementTest {
         MeasurementStatistics statistics =  new MeasurementStatistics();
         statistics.min = 12;
         statistics.max = 44;
-        statistics.avg = 36;
+        statistics.avg = 20;
 
         List<Sample> list =  new ArrayList<>();
 

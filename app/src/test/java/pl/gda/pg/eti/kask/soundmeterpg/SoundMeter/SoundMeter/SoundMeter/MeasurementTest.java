@@ -30,11 +30,11 @@ public class MeasurementTest {
 
     @BeforeClass
     public static void setUp(){
-        measurement = new Measurement(measurementStatistics, CORRECT_LOCATION, true, date);
+        measurement = new Measurement(measurementStatistics, CORRECT_LOCATION, true, date,0);
     }
     @Test
 public void measurementStatisticsTest(){
-    Measurement measurement = new Measurement(measurementStatistics, CORRECT_LOCATION, true, date);
+    Measurement measurement = new Measurement(measurementStatistics, CORRECT_LOCATION, true, date,0);
     veryfyMeasureStatistics(measurement);
 }
     @Test
@@ -50,7 +50,7 @@ public void measurementStatisticsTest(){
 
     @Test
     public void dateTest(){
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Assert.assertEquals(formatter.format(date), measurement.getDate());
     }
 
@@ -58,21 +58,21 @@ public void measurementStatisticsTest(){
     public void measurementStatisticsLessThanMinValueTest(){
         MeasurementStatistics measurementStatistics = new MeasurementStatistics();
         measurementStatistics.min = -1;
-        Measurement measurement = new Measurement(measurementStatistics, location, true, date);
+        Measurement measurement = new Measurement(measurementStatistics, location, true, date,0);
     }
 
     @Test(expected = OverRangeException.class)
     public void measurementStatisticsLessThanMaxValueTest(){
         MeasurementStatistics measurementStatistics = new MeasurementStatistics();
         measurementStatistics.max = Sample.MAX_NOISE_LEVEL * 2;
-        Measurement measurement = new Measurement(measurementStatistics, location, true, date);
+        Measurement measurement = new Measurement(measurementStatistics, location, true, date,0);
     }
 
     @Test(expected = OverRangeException.class)
     public void measurementStatisticsLessThaAvgValueTest(){
         MeasurementStatistics measurementStatistics = new MeasurementStatistics();
         measurementStatistics.avg = -2;
-        Measurement measurement = new Measurement(measurementStatistics, location, true, date);
+        Measurement measurement = new Measurement(measurementStatistics, location, true, date,0);
     }
 
     private void veryfyMeasureStatistics(Measurement measurement) {

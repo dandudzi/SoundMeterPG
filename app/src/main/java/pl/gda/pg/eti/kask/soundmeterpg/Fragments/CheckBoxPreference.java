@@ -28,7 +28,7 @@ public class CheckBoxPreference extends android.preference.CheckBoxPreference{
                 imageView.setImageResource(R.mipmap.ic_wokring_background);
                 break;
             case R.string.recording_audio_key_preference:
-                imageView.setImageResource(R.mipmap.ic_mic);
+                imageView.setImageResource(R.mipmap.ic_wokring_background);
                 break;
             case R.string.internal_storage_key_preference:
                 imageView.setImageResource(R.mipmap.ic_internal_storage);
