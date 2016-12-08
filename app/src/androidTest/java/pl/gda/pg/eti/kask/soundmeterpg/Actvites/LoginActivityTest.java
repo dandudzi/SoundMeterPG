@@ -52,7 +52,7 @@ public class LoginActivityTest {
     @Test
     public void loginEditTextWorksCorrectly(){
         String loginText = "NadalPodkreslaGierlowski";
-        ViewInteraction login = onView(withId(R.id.login_edit_text_login_activity));
+        ViewInteraction login = onView(withId(R.id.email_edit_text_login_activity));
 
         EditTextTestHelper.typingTextOnEditTextTest(loginText, login);
     }
@@ -73,18 +73,18 @@ public class LoginActivityTest {
 
     @Test
     public void cancelLoginTest(){
-        pressButton(withId(R.id.login_button_login_activity));
+        pressButton(withId(R.id.email_button_login_activity));
 
         pressButton(withId(android.R.id.button2));
 
-        onView(withId(R.id.login_button_login_activity)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.email_button_login_activity)).check(matches(isCompletelyDisplayed()));
     }
 
     @Test
     public void inCorrectLoginTest(){
-        onView(withId(R.id.login_edit_text_login_activity)).perform(typeText("daj"));
+        onView(withId(R.id.email_edit_text_login_activity)).perform(typeText("daj"));
         onView(withId(R.id.password_edit_text_login_activity)).perform(typeText("daj"));
-        pressButton(withId(R.id.login_button_login_activity));
+        pressButton(withId(R.id.email_button_login_activity));
 
         pressButton(withId(android.R.id.button1));
 
@@ -95,7 +95,7 @@ public class LoginActivityTest {
 
     @Test
     public void timeOutLoginTest(){
-        pressButton(withId(R.id.login_button_login_activity));
+        pressButton(withId(R.id.email_button_login_activity));
 
         pressButton(withId(android.R.id.button1));
 
@@ -107,10 +107,10 @@ public class LoginActivityTest {
 
     @Test
     public void correctLoginTest(){
-        onView(withId(R.id.login_edit_text_login_activity)).perform(typeText("daniel.dudziak2@gmail.com"));
+        onView(withId(R.id.email_edit_text_login_activity)).perform(typeText("daniel.dudziak2@gmail.com"));
         onView(withId(R.id.password_edit_text_login_activity)).perform(typeText("daj123"));
 
-        pressButton(withId(R.id.login_button_login_activity));
+        pressButton(withId(R.id.email_button_login_activity));
 
         pressButton(withId(android.R.id.button1));
 

@@ -15,7 +15,7 @@
         android:dependency="@string/recording_audio_key_preference"
         android:id="@+id/private_data_check_box_preference"
         android:layout="@layout/checkbox_preference"
-        android:shouldDisableView="false" />
+       />
 
       <pl.gda.pg.eti.kask.soundmeterpg.Fragments.CheckBoxPreference
         android:key="@string/working_in_background_key_preference"

@@ -1,15 +1,12 @@
 package pl.gda.pg.eti.kask.soundmeterpg.Activities;
 
 import android.os.AsyncTask;
-import android.support.design.internal.NavigationMenu;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,26 +17,16 @@ import android.widget.Toast;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.concurrent.ExecutionException;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Dialogs.Login;
 import pl.gda.pg.eti.kask.soundmeterpg.InformationAboutThisApplication;
-import pl.gda.pg.eti.kask.soundmeterpg.Interfaces.AccountManager;
 import pl.gda.pg.eti.kask.soundmeterpg.Internet.MyAccountManager;
 import pl.gda.pg.eti.kask.soundmeterpg.R;
 
 public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button skipButton;
-    private EditText login;
+    private EditText email;
     private EditText password;
     private MyAccountManager manager;
     private MyProperty result;
@@ -81,9 +68,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setUpPrivateVariable() {
-        loginButton = (Button) findViewById(R.id.login_button_login_activity);
+        loginButton = (Button) findViewById(R.id.email_button_login_activity);
         skipButton = (Button) findViewById(R.id.skip_button_login_activity);
-        login = (EditText) findViewById(R.id.login_edit_text_login_activity);
+        email = (EditText) findViewById(R.id.email_edit_text_login_activity);
         password = (EditText) findViewById(R.id.password_edit_text_login_activity);
         loginForm = findViewById(R.id.login_form);
         progressBarView = findViewById(R.id.progress_bar_view);
@@ -110,14 +97,14 @@ public class LoginActivity extends AppCompatActivity {
             progressBarView.setVisibility(View.VISIBLE);
             AsyncTask loginThread = new LoggingTask();
 
-            String login = this.login.getText().toString().replaceAll("\\s+","");
+            String login = this.email.getText().toString().replaceAll("\\s+","");
             String password = this.password.getText().toString();
             String macAddress = InformationAboutThisApplication.getMACAddress();
-            this.login.setText("");
+            this.email.setText("");
             this.password.setText("");
 
             manager.logIn(login, password);
-            loginThread.execute("Daj");
+            loginThread.execute();
         }
     }
 

@@ -27,7 +27,7 @@ public class LoginTest extends LoginDisplayCorrectly{
     @Before
     public  void setUp(){
         super.context = mActivityRule.getActivity().getBaseContext();
-        onView(withId(R.id.login_button_login_activity)).perform(click());
+        onView(withId(R.id.email_button_login_activity)).perform(click());
     }
 
 }

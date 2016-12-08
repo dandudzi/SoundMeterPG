@@ -40,7 +40,7 @@ public class DataBaseHandlerTest {
     static Random random = new Random();
     private static Map<Integer, Measurement> measurementMap = new HashMap<Integer, Measurement>();
     private static SharedPreferences sharedPreferences;
-/*
+
     @BeforeClass
     public static void setUp() {
         context.deleteDatabase(context.getResources().getString(R.string.database_test));
@@ -48,7 +48,7 @@ public class DataBaseHandlerTest {
         for (int i = 0; i < LIMIT_PROBE; i++) {
             MeasurementStatistics statistics = createFakeMeasurementStatistics();
             Location location = createFakeLocation();
-            Measurement measurement = new Measurement(statistics, location, (i % 2 == 0 ? true : false), new Date());
+            Measurement measurement = new Measurement(statistics, location, (i % 2 == 0 ? true : false), new Date(),1000);
             measurementMap.put(i, measurement);
         }
     }
@@ -56,7 +56,7 @@ public class DataBaseHandlerTest {
     @Before
     public void initializeDataBase () throws InsufficientInternalStoragePermissionsException {
         PreferenceTestHelper.setPrivilages(context.getResources().getString(R.string.internal_storage_key_preference),sharedPreferences,true);
-        dataBaseHandler = new DataBaseHandler(context, context.getResources().getString(R.string.database_test));
+        dataBaseHandler = new DataBaseHandler(context, context.getResources().getString(R.string.database_name));
         for (int i = 0; i < LIMIT_PROBE; i++) {
             dataBaseHandler.insert(measurementMap.get( i));
         }
@@ -64,17 +64,17 @@ public class DataBaseHandlerTest {
     }
     @After
     public void clearDataBase() {
-       context.deleteDatabase(context.getResources().getString(R.string.database_test));
+       context.deleteDatabase(context.getResources().getString(R.string.database_name));
     }
 
     @Test
     public void checkIfDataBaseExist() {
-        context.deleteDatabase(context.getResources().getString(R.string.database_test));
-        File dbPath = context.getDatabasePath(context.getResources().getString(R.string.database_test));
+        context.deleteDatabase(context.getResources().getString(R.string.database_name));
+        File dbPath = context.getDatabasePath(context.getResources().getString(R.string.database_name));
         Assert.assertFalse(dbPath.exists());
-        dataBaseHandler = new DataBaseHandler(context, context.getResources().getString(R.string.database_test));
+        dataBaseHandler = new DataBaseHandler(context, context.getResources().getString(R.string.database_name));
         dataBaseHandler.getReadableDatabase();
-        dbPath = context.getDatabasePath(context.getResources().getString(R.string.database_test));
+        dbPath = context.getDatabasePath(context.getResources().getString(R.string.database_name));
         Assert.assertTrue(dbPath.exists());
     }
 
@@ -153,5 +153,4 @@ public class DataBaseHandlerTest {
         Assert.assertEquals(measurementMap.get(i).getStoredState(), measurement.getStoredState());
         Assert.assertEquals(measurementMap.get(i).getDate(), measurement.getDate());
     }
-*/
 }

@@ -1,6 +1,8 @@
 package pl.gda.pg.eti.kask.soundmeterpg;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -30,11 +32,13 @@ public class MeasurementDataBaseManager {
     private ArrayList<Sample> list  = new ArrayList<>();
     private long startTime = -1;
     private PreferenceParser preference;
+    private SharedPreferences sharedPreferences;
     private Context context;
 
     public MeasurementDataBaseManager(Context context, PreferenceParser preference){
         this.context = context;
         this.preference = preference;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void sendToDataBase(Sample sample){
@@ -49,6 +53,8 @@ public class MeasurementDataBaseManager {
             flush();
         }
     }
+
+
 
     public void flush(){
         long currentTime = System.currentTimeMillis();
@@ -69,19 +75,28 @@ public class MeasurementDataBaseManager {
 
 
         MeasurementStatistics avg = Measurement.calculateMeasureStatistics(list);
-        Location location;
+        Location location = null;
         boolean isStoreOnWebServer = false;
         if(list.isEmpty())
             return;
 
         if(preference.hasPermissionToUseGPS() )
-            location =  list.get(0).getLocation();
-        else
-            location = new FakeLocation();
+        {
+            for (int i  = 0 ; i<list.size(); i++){
+                if(list.get(i).getLocation() instanceof  FakeLocation)
+                    continue;
+                else{
+                 location  = list.get(i).getLocation();
+                }
+            }
+        }
+           if(location == null)
+               location = new FakeLocation();
 
         //TODO is logIN
         //Trzeba sprawdzac czy lokacja fake, jezeli tak to nie moze tego wysyłąć na serwer.
-        if(preference.hasPermissionToSendToServer() && !(location instanceof FakeLocation))
+        if(preference.hasPermissionToSendToServer() && !(location instanceof FakeLocation)
+                && sharedPreferences.getBoolean(context.getResources().getString(R.string.logged_key),false))
             isStoreOnWebServer = true;
 
         Date date =  new Date();

@@ -2,7 +2,7 @@
         <string name="app_name">SoundMeterPG</string>
         <string name="app_description">SoundMeterPG app created for Politechnika Gdańska</string>
         <string name="main_icon_description">SoundMeterPGIcon</string>
-        <string name="email_contact">soundmeterpg@gmail.com</string>
+        <string name="email_contact">help@soundmeterpg.pl</string>
 
         <!--Settings MainActivity-->
         <string name="title_settings">Settings</string>
@@ -106,7 +106,7 @@
         <string name="application_description_faq_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
         <string name="icon_description_faq_dialog">Politechnika Gdańska</string>
 
-       <!-- <string name="github_link_faq_dialog">You can find project at <a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
+       <string name="github_link_faq_dialog">You can find project at <a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
         <string name="github_url_faq_dialog">https://github.com/dandudzi/SoundMeterPG/</string>
 
         <string name="licence_link_faq_dialog">You can find projects licence <a href="https://github.com/dandudzi/SoundMeterPG/blob/master/licence">here</a></string>
@@ -119,12 +119,11 @@
         <string name="help_link_faq_dialog">If you need help click <a href="http://www.wp.pl">here</a></string>
         <string name="help_url_faq_dialog">http://www.wp.pl</string>
 
-    -->
     <!-- Login Activity-->
     <string name="login_button_text">Login</string>
     <string name="skip_button_text_login_activity">Skip</string>
     <string name="password_hint">Password</string>
-    <string name="login_hint">Login</string>
+    <string name="login_hint">Email</string>
     <string name="registration_link_login_activity">http://www.wp.pl</string>
     <string name="registration_text_login_activity"><a href="http://www.wp.pl">If you don\'t have account, register here.</a></string>
     <string name="title_activity_login">Login</string>

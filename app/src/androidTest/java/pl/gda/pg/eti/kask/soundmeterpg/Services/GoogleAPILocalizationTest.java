@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.ServiceTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -35,7 +36,10 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.Database.DataBaseHandler;
 import pl.gda.pg.eti.kask.soundmeterpg.Exceptions.TurnOffGPSException;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
 import pl.gda.pg.eti.kask.soundmeterpg.SoundMeter.Location;
 import pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper;
 
@@ -50,14 +54,17 @@ public class GoogleAPILocalizationTest {
     private Intent localizationIntent = new Intent(InstrumentationRegistry.getTargetContext(), GoogleAPILocalization.class);
     private IBinder binder;
     private GoogleAPILocalization service;
-    private static Context context = InstrumentationRegistry.getTargetContext();
+    private  Context context ;
     private SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getTargetContext());
     private MockLocationProvider mockLocationProvider;
     private static List<Double> latitude;
     private static List<Double> longitude;
     private static UiDevice device;
     @Rule
-    public final ServiceTestRule mServiceRule = new ServiceTestRule().withTimeout(60L, TimeUnit.SECONDS);
+    public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
+    public final ServiceTestRule serviceTestRule = new ServiceTestRule();
+
 
     @BeforeClass
     public static void setUp() {
@@ -76,11 +83,12 @@ public class GoogleAPILocalizationTest {
 
     @Before
     public void boundService() throws TimeoutException, InterruptedException {
+        context = mActivityRule.getActivity().getBaseContext();
         localizationIntent = new Intent(context, GoogleAPILocalization.class);
-        binder = mServiceRule.bindService(localizationIntent);
+        binder = serviceTestRule.bindService(localizationIntent);
         while (binder == null) {
             Thread.sleep(200);
-            binder = mServiceRule.bindService(localizationIntent);
+            binder = serviceTestRule.bindService(localizationIntent);
         }
         service = ((GoogleAPILocalization.LocalBinder) binder).getService();
     }
@@ -94,7 +102,7 @@ public class GoogleAPILocalizationTest {
     @Test(expected = TurnOffGPSException.class)
     public void getLocationWhenGPSisOffTest() throws UiObjectNotFoundException, TurnOffGPSException, TimeoutException, InterruptedException {
         if(ServiceDetector.isGPSEnabled(context))
-           UIAutomotorTestHelper.turnOnGPS(device, context);
+            UIAutomotorTestHelper.turnGPS(device, context);
         Location location = service.getLocation();
 
     }
@@ -102,17 +110,46 @@ public class GoogleAPILocalizationTest {
     @Test
     public void getLocationTest() throws TurnOffGPSException, UiObjectNotFoundException, InterruptedException, TimeoutException {
         mockLocationProvider = new MockLocationProvider(LocationManager.GPS_PROVIDER, context);
-        if (!ServiceDetector.isGPSEnabled(context))
-         //   UIAutomotorTestHelper.turnOnGps(device, context);
-        for (int i = 0; i < MAX_PROBE; i++) {
-            mockLocationProvider.pushLocation(latitude.get(i), longitude.get(i));
-            Thread.sleep(3000);
-            Location l = service.getLocation();
-            Assert.assertEquals(latitude.get(i), l.getLatitude(), 0.000001);
-            Assert.assertEquals(longitude.get(i), l.getLongitude(), 0.000001);
+        if (!ServiceDetector.isGPSEnabled(context)) {
+             UIAutomotorTestHelper.turnGPS(device, context);
+            for (int i = 0; i < MAX_PROBE; i++) {
+               // mockLocationProvider.pushLocation(15.255784 ,15.265889);
+                mockLocationProvider.pushLocation(latitude.get(i), longitude.get(i));
+                Thread.sleep(3000);
+               // mockLocationProvider.pushLocation(15.255614 , 4.489791);
+
+                //Thread.sleep(3000);
+                 Location l = service.getLocation();
+                  Assert.assertEquals(latitude.get(i), l.getLatitude(), 0.000001);
+                 Assert.assertEquals(longitude.get(i), l.getLongitude(), 0.000001);
+            }
+            mockLocationProvider.shutdown();
         }
-        mockLocationProvider.shutdown();
     }
+    @Test
+    public void flushToDataBaseWhenLocaionChange() throws InterruptedException, UiObjectNotFoundException, TurnOffGPSException {
+        context.deleteDatabase(context.getResources().getString(R.string.database_name));
+        DataBaseHandler dataBaseHandler = new DataBaseHandler(context, context.getResources().getString(R.string.database_name));
+
+
+        mockLocationProvider = new MockLocationProvider(LocationManager.GPS_PROVIDER, context);
+        if (!ServiceDetector.isGPSEnabled(context)) {
+            UIAutomotorTestHelper.turnGPS(device, context);
+                mockLocationProvider.pushLocation(15.255784 ,15.265889);
+                Thread.sleep(3000);
+                mockLocationProvider.pushLocation(15.255614 , 4.489791);
+                Thread.sleep(3000);
+
+                Location l = service.getLocation();
+
+      Assert.assertNotNull(dataBaseHandler.getLastAddedRow());
+
+            }
+            mockLocationProvider.shutdown();
+
+    }
+
+
 
     class MockLocationProvider {
         Context context;

@@ -70,6 +70,7 @@ public class Sender extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         MeasurementDataBaseObject measurementDataBaseObject;
         cookieManager = SingletonCookieManager.getInstance();

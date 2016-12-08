@@ -48,7 +48,7 @@ public class LoginIntentTest {
 
     @Test
     public void isCookiesIntentSendCorrectly(){
-        onView(withId(R.id.login_button_login_activity)).perform(click());
+        onView(withId(R.id.email_button_login_activity)).perform(click());
         String link = context.getString(R.string.cookies_link_login_dialog);
         UiObject somethingInView = device.findObject(new UiSelector().resourceId("R.id.icon_login_dialog"));
 

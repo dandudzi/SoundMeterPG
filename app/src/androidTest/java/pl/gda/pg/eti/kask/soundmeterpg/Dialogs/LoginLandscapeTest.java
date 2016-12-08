@@ -15,7 +15,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static pl.gda.pg.eti.kask.soundmeterpg.OrientationChangeAction.orientationLandscape;
-import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.TIME_OUT;
 
 /**
  * Created by Daniel on 06.09.2016 at 18:44 :).
@@ -31,7 +30,7 @@ public class LoginLandscapeTest extends LoginDisplayCorrectly {
     public  void setUp() throws InterruptedException {
         super.context = mActivityRule.getActivity().getBaseContext();
         onView(isRoot()).perform(orientationLandscape());
-        onView(withId(R.id.login_button_login_activity)).perform(click());
+        onView(withId(R.id.email_button_login_activity)).perform(click());
     }
 
 }

@@ -72,9 +72,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         saveDeviceName();
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        long timeInMillis = prefs.getLong(getBaseContext().getResources().getString(R.string.cookie_expired_time), (long)0);
+        if(timeInMillis != 0) {
+            Date resultdate = new Date(timeInMillis);
+            if (!resultdate.after(new Date())) {
+                editor.putBoolean(getBaseContext().getResources().getString(R.string.logged_key), false);
+                editor.putString(getBaseContext().getResources().getString(R.string.login_key), "NOUSER");
+                editor.commit();
+            }
+        }else {
+                editor.putBoolean(getBaseContext().getResources().getString(R.string.logged_key), false);
+                editor.putString(getBaseContext().getResources().getString(R.string.login_key), "NOUSER");
+                editor.commit();
+            }
+        }
 
 
-    }
+
 
 
 

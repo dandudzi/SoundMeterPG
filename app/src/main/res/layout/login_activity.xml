@@ -7,33 +7,6 @@
     android:orientation="horizontal">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/progress_bar_view"
-        android:visibility="gone"
-        android:gravity="center_horizontal"
-        android:background="@color/primary">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/progress_bar"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/logging_text_login_activity"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/logging_text_login_activity"
-            android:layout_below="@+id/progress_bar"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -73,7 +46,7 @@
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/login_edit_text_login_activity"
+                    android:id="@+id/email_edit_text_login_activity"
                     android:layout_marginBottom="10dp"
                     android:padding="10dp"
                     android:background="@color/button_login"
@@ -105,7 +78,7 @@
                     <Button
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/login_button_login_activity"
+                        android:id="@+id/email_button_login_activity"
                         android:layout_weight="1"
                         android:text="@string/login_button_text" />
                 </LinearLayout>
@@ -139,4 +112,32 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progress_bar_view"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:background="@color/primary">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logging_text_login_activity"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/logging_text_login_activity"
+            android:layout_below="@+id/progress_bar"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
 </LinearLayout>

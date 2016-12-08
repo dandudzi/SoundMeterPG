@@ -113,7 +113,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
 
     public MeasurementDataBaseObject getMeasurement(int ID) throws NullRecordException {
-        String query = "SELECT * from " + MEASUREMENT + " WHERE ID=" + ID;
+        String username = sharedPreferences.getString(context.getResources().getString(R.string.login_key),"NOUSER");
+        String query = "SELECT * from " + MEASUREMENT + " WHERE ID=" + ID + " AND UserID='"+ username +"';" ;
         MeasurementDataBaseObject measurement = null;
         SQLiteDatabase db = this.getReadableDatabase();
         cursor = db.rawQuery(query, null);
@@ -129,7 +130,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    public MeasurementDataBaseObject  getLastAddedRow() throws NullRecordException {
+    public MeasurementDataBaseObject  getLastAddedRow()  {
         MeasurementDataBaseObject measurement = null;
         String query = "Select * from " + MEASUREMENT + " ORDER BY " + ID + " DESC LIMIT 1";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -142,7 +143,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
         if(measurement == null){   cursor.close();
             db.close();
-            throw new NullRecordException("Cannot get object from database. Empty database?");
+           return null;
         }
         return  measurement;
     }
@@ -167,7 +168,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     public MeasurementDataBaseObject getTheOldestRowToSendToServer(){
         MeasurementDataBaseObject measurement = null;
-        String query = "Select * from " + MEASUREMENT + " WHERE " + STORED_ON_SERVER + "=1  ORDER BY datetime(" + DATE + ")" + " ASC LIMIT 1";
+        String username = sharedPreferences.getString(context.getResources().getString(R.string.login_key),"NOUSER");
+
+        String query = "Select * from " + MEASUREMENT + " WHERE " + STORED_ON_SERVER + "=1 AND UserID='" + username +"'   ORDER BY datetime(" + DATE + ")" + " ASC LIMIT 1";
         SQLiteDatabase db = this.getReadableDatabase();
         cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
@@ -185,7 +188,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public ArrayList<MeasurementDataBaseObject> getMeasurementArray(){
         ArrayList<MeasurementDataBaseObject> measurementArrayList = new ArrayList<>();
         MeasurementDataBaseObject measurement = null;
-        String query = "SELECT * from " + MEASUREMENT + ";";
+        String username = sharedPreferences.getString(context.getResources().getString(R.string.login_key),"NOUSER");
+
+        String query = "SELECT * from " + MEASUREMENT + " WHERE  UserID='" +  username +"' ;";
         SQLiteDatabase db = this.getReadableDatabase();
         cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst() && cursor.getCount() != 0) {
@@ -202,12 +207,13 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
     public void changeStoreOnServerFlag(int ID, boolean sendToServer){
         int valueToChange = (sendToServer == true ? 1 : 0);
-        String query = "UPDATE " + MEASUREMENT + " SET " + STORED_ON_SERVER + "=" +valueToChange + " where ID=" + ID + ";";
-        ContentValues cv = new ContentValues();
-        cv.put(STORED_ON_SERVER, valueToChange);
-        SQLiteDatabase db = this.getWritableDatabase();
 
-        int value = db.update(MEASUREMENT, cv, "ID="+ID,null);
+        String query = "UPDATE " + MEASUREMENT + " SET " + STORED_ON_SERVER + "=" +valueToChange + " where ID=" + ID +";";
+        //ContentValues cv = new ContentValues();
+       // cv.put(STORED_ON_SERVER, valueToChange);
+        SQLiteDatabase db = this.getWritableDatabase();
+db.execSQL(query);
+        //int value = db.update(MEASUREMENT, cv, "ID="+ID,null);
         db.close();
     }
 
@@ -254,7 +260,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         contentValues.put(LATITUDE, measurement.getLocation().getLatitude());
         contentValues.put(LONGITUDE, measurement.getLocation().getLongitude());
         contentValues.put(DATE, measurement.getDate());
-        contentValues.put(USER_ID, sharedPreferences.getString(context.getResources().getString(R.string.login_key),""));
+        contentValues.put(USER_ID, sharedPreferences.getString(context.getResources().getString(R.string.login_key),"NOUSER"));
         contentValues.put(WEIGHT, measurement.getWeight());
         contentValues.put(STORED_ON_SERVER, measurement.getStoredState());
         return contentValues;
