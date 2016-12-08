@@ -9,14 +9,17 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
 import pl.gda.pg.eti.kask.soundmeterpg.Activities.MainActivity;
+import pl.gda.pg.eti.kask.soundmeterpg.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static pl.gda.pg.eti.kask.soundmeterpg.Fragments.MeasureTestHelper.turnAllSettingsPermission;
 import static pl.gda.pg.eti.kask.soundmeterpg.UIAutomotorTestHelper.turnOnAllPermission;
@@ -44,5 +47,10 @@ public class MeasureDisplayCorrectlyTest extends MeasureDisplayCorrectly {
         turnOnAllPermission(device,context);
         turnAllSettingsPermission(device,prefs,context);
         onView(withText("Start")).perform(click());
+    }
+
+    @After
+    public void after() {
+        onView(withId(R.id.measure_button_fragment)).perform(click());
     }
 }

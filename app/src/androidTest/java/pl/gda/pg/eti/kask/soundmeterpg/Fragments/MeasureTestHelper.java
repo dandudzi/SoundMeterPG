@@ -21,7 +21,7 @@ public class MeasureTestHelper {
         openItemInDrawer(SETTINGS_ITEM,device);
         selectPreference(R.string.recording_audio_key_preference,prefs,context);
         selectPreference(R.string.private_data_key_preference,prefs,context);
-        selectPreference(R.string.working_in_background_key_preference,prefs,context);
+        uncheckPreference(R.string.working_in_background_key_preference,prefs,context);
         selectPreference(R.string.gps_key_preference,prefs,context);
         selectPreference(R.string.internet_key_preference,prefs,context);
         selectPreference(R.string.internal_storage_key_preference,prefs,context);

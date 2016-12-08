@@ -42,10 +42,10 @@ public class MainActivityIntentsTest {
 
     @Test
     public void isSettingsIntentSendCorrectly(){
-//        openContextualActionModeOverflowMenu();
-//        onView(withText(R.string.title_settings)).perform(click());
-//        intended(allOf(hasComponent(hasClassName(SettingsActivity.class.getName())),toPackage("pl.gda.pg.eti.kask.soundmeterpg")));
-//        device.pressBack();
+        openContextualActionModeOverflowMenu();
+        onView(withText(R.string.title_settings)).perform(click());
+        intended(allOf(hasComponent(hasClassName(SettingsActivity.class.getName())),toPackage("pl.gda.pg.eti.kask.soundmeterpg")));
+        device.pressBack();
     }
 
 }

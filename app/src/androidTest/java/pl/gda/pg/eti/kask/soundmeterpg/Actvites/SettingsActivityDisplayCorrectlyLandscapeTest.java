@@ -29,4 +29,18 @@ public class SettingsActivityDisplayCorrectlyLandscapeTest extends SettingsActiv
         onView(isRoot()).perform(orientationLandscape());
     }
 
+    @Override
+    public void isWorkingInBackgroundDisplayCorrectly() {
+        //todo
+    }
+
+    @Override
+    public void isSeekBarDisplayCorrectly() {
+        //todo
+    }
+
+    @Override
+    public void isDeviceSettingsDisplayCorrectly() {
+        //todo
+    }
 }

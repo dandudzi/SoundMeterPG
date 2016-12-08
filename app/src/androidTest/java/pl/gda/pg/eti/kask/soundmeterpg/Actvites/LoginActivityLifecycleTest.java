@@ -46,68 +46,68 @@ public class LoginActivityLifecycleTest {
 
     @Test
     public void openLoginPressBackTest() throws UiObjectNotFoundException {
-//        openLoginActivityAndCheckIsDisplay();
-//        device.pressBack();
-//        if (Build.VERSION.SDK_INT == 23)
-//            device.pressBack();
-//        checkViewIsDisplay(MEASURE_ID,device);
+        openLoginActivityAndCheckIsDisplay();
+        device.pressBack();
+        if (Build.VERSION.SDK_INT == 23)
+            device.pressBack();
+        checkViewIsDisplay(MEASURE_ID,device);
     }
 
     @Test
     public void openLoginStartLogInPressBackOpenLogInAgainNotLogInInProgressTest() throws UiObjectNotFoundException {
-//        openLoginActivityAndCheckIsDisplay();
-//        startLogIn();
-//        checkViewIsDisplay(LOGIN_PROGRESS_ACTIVITY_ID,device);
-//        device.pressBack();
-//        if (Build.VERSION.SDK_INT == 23)
-//            device.pressBack();
-//        checkViewIsDisplay(MEASURE_ID,device);
-//        openLoginActivityAndCheckIsDisplay();
+        openLoginActivityAndCheckIsDisplay();
+        startLogIn();
+        checkViewIsDisplay(LOGIN_PROGRESS_ACTIVITY_ID,device);
+        device.pressBack();
+        if (Build.VERSION.SDK_INT == 23)
+            device.pressBack();
+        checkViewIsDisplay(MEASURE_ID,device);
+        openLoginActivityAndCheckIsDisplay();
     }
 
     @Test
     public void openLoginActivityPressHomeOpenAppByRecentAppTest() throws UiObjectNotFoundException, RemoteException {
-       // openLoginActivityAndPressHomeThenBack(OPEN_APP_BY_RECENT_APP,NOT_START_LOGIN);
+        openLoginActivityAndPressHomeThenBack(OPEN_APP_BY_RECENT_APP,NOT_START_LOGIN);
     }
 
     @Test
     public void openLoginActivityPressHomeOpenAppByIconAppTest() throws UiObjectNotFoundException, RemoteException {
-      ///  openLoginActivityAndPressHomeThenBack(OPEN_APP_BY_ICON_APP,NOT_START_LOGIN);
+        openLoginActivityAndPressHomeThenBack(OPEN_APP_BY_ICON_APP,NOT_START_LOGIN);
     }
 
     @Test
     public void openLoginActivityStartLoginPressHomeOpenAppByIconAppTest() throws RemoteException, UiObjectNotFoundException {
-       // openLoginActivityAndPressHomeThenBack(OPEN_APP_BY_ICON_APP,START_LOGIN);
-       // openLoginActivityAndCheckIsDisplay();
+        openLoginActivityAndPressHomeThenBack(OPEN_APP_BY_ICON_APP,START_LOGIN);
+        openLoginActivityAndCheckIsDisplay();
     }
 
     @Test
     public void openLoginActivityStartLoginPressHomeOpenAppByRecentAppTest() throws RemoteException, UiObjectNotFoundException {
-      //  openLoginActivityAndPressHomeThenBack(OPEN_APP_BY_RECENT_APP,START_LOGIN);
-       // openLoginActivityAndCheckIsDisplay();
+        openLoginActivityAndPressHomeThenBack(OPEN_APP_BY_RECENT_APP,START_LOGIN);
+        openLoginActivityAndCheckIsDisplay();
     }
 
     private void openLoginActivityAndPressHomeThenBack(boolean byRecentAppIfNotByIconApp, boolean startLogIn) throws UiObjectNotFoundException, RemoteException {
         openLoginActivityAndCheckIsDisplay();
-//        if(startLogIn)
-//            startLogIn();
-//        device.pressHome();
-//        if(byRecentAppIfNotByIconApp)
-//            openActivityByRecentApps(device);
-//        else
-//            openActivityByIconApp(device);
-//        checkViewIsDisplay(MEASURE_ID,device);
+        if(startLogIn)
+            startLogIn();
+        device.pressHome();
+        if(byRecentAppIfNotByIconApp)
+            openActivityByRecentApps(device);
+        else
+            openActivityByIconApp(device);
+        checkViewIsDisplay(MEASURE_ID,device);
     }
 
 
     private void openLoginActivityAndCheckIsDisplay() throws UiObjectNotFoundException {
-//        openItemInDrawer(LOGIN_ACTIVITY_ITEM,device);
-//        checkViewIsDisplay(LOGIN_ACTIVITY_ID,device);
+        openItemInDrawer(LOGIN_ACTIVITY_ITEM,device);
+        checkViewIsDisplay(LOGIN_ACTIVITY_ID,device);
     }
 
     private void startLogIn() throws UiObjectNotFoundException {
-//        pressButtonAndWaitForNewWindow(LOGIN_BUTTON_ID,device);
-//        pressButtonAndWaitForNewWindow(ANDROID_POSITIVE_BUTTON_ID,device);
+        pressButtonAndWaitForNewWindow(LOGIN_BUTTON_ID,device);
+        pressButtonAndWaitForNewWindow(ANDROID_POSITIVE_BUTTON_ID,device);
     }
 
 }

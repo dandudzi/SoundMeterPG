@@ -41,7 +41,12 @@ public class LoginActivityTest {
     public void initSettings() {
         context = mActivityRule.getActivity().getBaseContext();
         openDrawer(R.id.drawer_layout);
-        onView(withText("Log in")).perform(click());
+        MyAccountManager mn=  new MyAccountManager(context);
+        if(mn.isLogIn()) {
+            onView(withText("Log out")).perform(click());
+            openDrawer(R.id.drawer_layout);
+        }
+        onView(withText("Sign in")).perform(click());
     }
 
     @Test
@@ -95,21 +100,21 @@ public class LoginActivityTest {
         pressButton(withId(android.R.id.button1));
 
         ViewInteraction errorTextView = onView(withId(R.id.error_message_login_activity));
-        String errorText = context.getString(R.string.timeout_error_message_login_activity);
+        String errorText = context.getString(R.string.incorrect_credentials_login_activity);
         TextViewTestHelper.testSinglelineTextView(errorTextView,errorText);
     }
 
 
     @Test
     public void correctLoginTest(){
-      //  onView(withId(R.id.login_edit_text_login_activity)).perform(typeText(MyAccountManager.login));
-       // onView(withId(R.id.password_edit_text_login_activity)).perform(typeText(MyAccountManager.password));
+        onView(withId(R.id.login_edit_text_login_activity)).perform(typeText("daniel.dudziak2@gmail.com"));
+        onView(withId(R.id.password_edit_text_login_activity)).perform(typeText("daj123"));
 
-      //  pressButton(withId(R.id.login_button_login_activity));
+        pressButton(withId(R.id.login_button_login_activity));
 
-        //pressButton(withId(android.R.id.button1));
+        pressButton(withId(android.R.id.button1));
 
-       // onView(withText(R.string.app_name)).check(matches(isCompletelyDisplayed()));
+        onView(withText(R.string.app_name)).check(matches(isCompletelyDisplayed()));
     }
 
 

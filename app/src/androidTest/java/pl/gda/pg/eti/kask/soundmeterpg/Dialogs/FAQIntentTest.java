@@ -49,36 +49,36 @@ public class FAQIntentTest {
         onView(withText(R.string.title_faq_dialog)).perform(click());
     }
 
-
     @Test
-    public void isIntentGitHubSendCorrectly(){
-     //   textViewIntentTest(R.id.github_hyperlink_text_view_faq_dialog,R.string.github_url_faq_dialog);
+    public void isIntentAnswer5(){
+        textViewIntentTest(R.id.answer5,"https://github.com/dandudzi/SoundMeterPG/blob/master/licence");
     }
 
 
     @Test
-    public void isIntentLicenceSendCorrectly(){
-        //textViewIntentTest(R.id.licence_hyperlink_text_view_faq_dialog,R.string.licence_url_faq_dialog);
+    public void isIntentAnswer6(){
+        textViewIntentTest(R.id.answer6,"https://soundmeterpg.pl/web/register_web");
     }
 
 
     @Test
-    public void isIntentSoundMeterPGSendCorrectly(){
-      //  textViewIntentTest(R.id.soundmeterpg_hyperlink_text_view_faq_dialog,R.string.website_url_faq_dialog);
+    public void isIntentAnswer7(){
+        textViewIntentTest(R.id.answer7,"https://github.com/dandudzi/SoundMeterPG/");
     }
 
 
     @Test
-    public void isIntentHelpSendCorrectly(){
-       // textViewIntentTest(R.id.help_hyperlink_text_view_faq_dialog,R.string.help_url_faq_dialog);
+    public void isIntentAnswer8(){
+        textViewIntentTest(R.id.answer8,"http://soundmeterpg.pl");
     }
 
-    private void textViewIntentTest( int hyperlinkID, int urlID) {
+
+
+    private void textViewIntentTest( int hyperlinkID, String urlID) {
         UiObject somethingInView = device.findObject(new UiSelector().resourceId("R.id.icon_faq_dialog"));
-        String link = context.getString(urlID);
 
-        onView(withId(hyperlinkID)).perform(scrollTo(), openLinkWithUri(link));
-        intended(allOf(hasData(link)));
+        onView(withId(hyperlinkID)).perform(scrollTo(), openLinkWithUri(urlID));
+        intended(allOf(hasData(urlID)));
         somethingInView.waitUntilGone(UIAutomotorTestHelper.TIME_OUT);
         device.pressBack();
     }

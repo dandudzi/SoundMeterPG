@@ -21,6 +21,8 @@ public class SettingsActivityDisplayCorrectlyTest extends  SettingsActivityDispl
     public final ActivityTestRule<SettingsActivity> mActivityRule = new ActivityTestRule<>(
             SettingsActivity.class);
 
+
+
     @Before
     public void initSettings() {
         super.context = mActivityRule.getActivity().getBaseContext();

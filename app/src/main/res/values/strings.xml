@@ -93,7 +93,7 @@
 
     <!-- Question 6 -->
     <string name="question_about_register">6. Where I can register account?</string>
-    <string name="answer_about_register">If you want to create account click <a href="http://www.wp.pl">here.</a> </string>
+    <string name="answer_about_register">If you want to create account click <a href="https://soundmeterpg.pl/web/register_web">here.</a> </string>
 
     <!-- Question 7 -->
     <string name="question_about_project_source">7. Where is source code?</string>
@@ -101,7 +101,7 @@
 
     <!-- Question 8 -->
     <string name="question_about_web_page">8. What is the address of the page?</string>
-    <string name="answer_about_web_page">Our WebSite address is <a href="http://soundmeterpg.cba.pl">http://soundmeterpg.cba.pl</a></string>
+    <string name="answer_about_web_page">Our WebSite address is <a href="http://soundmeterpg.pl">http://soundmeterpg.pl</a></string>
         <string name="title_faq_dialog">Frequently Asked Question</string>
         <string name="application_description_faq_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
         <string name="icon_description_faq_dialog">Politechnika Gdańska</string>

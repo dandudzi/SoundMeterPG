@@ -13,6 +13,7 @@ import pl.gda.pg.eti.kask.soundmeterpg.SettingsTestHelper;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
@@ -29,36 +30,39 @@ public class MainActivityToolbar {
     Context context;
     UiDevice device;
 
+
+
     @Test
     public void isNavigationDrawerOpenCorrectly(){
-//        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
-//        onView(withId(R.id.left_drawer)).check(matches(isCompletelyDisplayed()));
-//        onView(withId(R.id.drawer_layout)).perform(DrawerActions.close());
-//        onView(withId(R.id.left_drawer)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.left_drawer)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.close());
+        onView(withId(R.id.left_drawer)).check(matches(not(isDisplayed())));
     }
 
     @Test
     public void isToolbarShowsCorrectly(){
-       // onView(withText(R.string.app_name)).check(matches(isCompletelyDisplayed()));
+        onView(withText(R.string.app_name)).check(matches(isCompletelyDisplayed()));
     }
 
     @Test
     public void isAboutDialogShowsCorrectly() {
-//        openContextualActionModeOverflowMenu();
-//        onView(withText(R.string.title_about_dialog)).check(matches(isCompletelyDisplayed()));
-//        onView(withText(R.string.title_about_dialog)).perform(click());
-//        onView(withText(R.string.author_about_dialog)).check(matches(isCompletelyDisplayed()));
-//        onView(withId(android.R.id.button1)).perform(click());
-//        onView(withText(R.string.author_about_dialog)).check(doesNotExist());
+        openContextualActionModeOverflowMenu();
+        onView(withText(R.string.title_about_dialog)).check(matches(isCompletelyDisplayed()));
+        onView(withText(R.string.title_about_dialog)).perform(click());
+        onView(withText(R.string.author_about_dialog)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.ok_btn)).perform(scrollTo());
+        onView(withId(R.id.ok_btn)).perform(click());
+        onView(withText(R.string.author_about_dialog)).check(doesNotExist());
     }
 
     @Test
     public void isSettingsShowsCorrectly(){
-//        openContextualActionModeOverflowMenu();
-//        onView(withText(R.string.title_settings)).check(matches(isCompletelyDisplayed()));
-//        onView(withText(R.string.title_settings)).perform(click());
-//        SettingsTestHelper.isSettingDisplay();
-//        SettingsTestHelper.backFromSettings(device);
+        openContextualActionModeOverflowMenu();
+        onView(withText(R.string.title_settings)).check(matches(isCompletelyDisplayed()));
+        onView(withText(R.string.title_settings)).perform(click());
+        SettingsTestHelper.isSettingDisplay();
+        SettingsTestHelper.backFromSettings(device);
 
     }
 

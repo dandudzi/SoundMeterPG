@@ -81,7 +81,7 @@ public class NavigationDrawerDisplayCorrectly {
         if(manager.isLogIn())
             text =context.getString(R.string.log_out_drawer);
         else
-            text =context.getString(R.string.log_in_drawer);
+            text ="Sign in";
         return text;
     }
 

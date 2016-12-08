@@ -71,30 +71,30 @@ public class SettingsActivityIntentsTest {
 
     @Test
     public void isGPSWorksCorrectly() throws UiObjectNotFoundException, InterruptedException {
-//        SettingsActivityWorkCorrectlyTest.setUpGPSPreference(prefs,context);
-//        selectPreference(R.string.gps_key_preference,prefs,context);
-//
-//        onView(withText("Yes")).perform(click());
-//        Intent resultData = new Intent();
-//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(0, resultData);
-//
-//        intending(allOf(hasAction("android.settings.LOCATION_SOURCE_SETTINGS"))).respondWith(result);
-//        device.pressBack();
+        SettingsActivityWorkCorrectlyTest.setUpGPSPreference(prefs,context);
+        selectPreference(R.string.gps_key_preference,prefs,context);
+
+        onView(withText("YES")).perform(click());
+        Intent resultData = new Intent();
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(0, resultData);
+
+        intending(allOf(hasAction("android.settings.LOCATION_SOURCE_SETTINGS"))).respondWith(result);
+        device.pressBack();
     }
 
 
 
     @Test
     public void isInternetWorksCorrectly() throws UiObjectNotFoundException {
-//        SettingsActivityWorkCorrectlyTest.setUpInternetPreference(prefs,context);
-//        selectPreference(R.string.internet_key_preference,prefs,context);
-//
-//        onView(withText("Yes")).perform(click());
-//        Intent resultData = new Intent();
-//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(0, resultData);
-//
-//        intending(allOf(hasAction("Settings.ACTION_WIRELESS_SETTINGS"))).respondWith(result);
-//        device.pressBack();
+        SettingsActivityWorkCorrectlyTest.setUpInternetPreference(prefs,context);
+        selectPreference(R.string.internet_key_preference,prefs,context);
+
+        onView(withText("YES")).perform(click());
+        Intent resultData = new Intent();
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(0, resultData);
+
+        intending(allOf(hasAction("Settings.ACTION_WIRELESS_SETTINGS"))).respondWith(result);
+        device.pressBack();
     }
 
 

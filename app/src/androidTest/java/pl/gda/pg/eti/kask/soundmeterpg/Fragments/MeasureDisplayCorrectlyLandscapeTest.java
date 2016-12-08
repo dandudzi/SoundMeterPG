@@ -46,4 +46,5 @@ public class MeasureDisplayCorrectlyLandscapeTest extends MeasureDisplayCorrectl
         turnAllSettingsPermission(device,prefs,context);
         onView(withText("Start")).perform(click());
     }
+
 }

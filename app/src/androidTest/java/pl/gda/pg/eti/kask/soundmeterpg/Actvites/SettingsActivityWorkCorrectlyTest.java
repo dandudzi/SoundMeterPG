@@ -89,101 +89,101 @@ public class SettingsActivityWorkCorrectlyTest {
 
     @Test
     public void isPrivateDataWorksCorrectly() {
-//        selectPreference(R.string.recording_audio_key_preference,prefs,context);
-//        uncheckPreference(R.string.private_data_key_preference,prefs,context);
-//        uncheckPreference(R.string.working_in_background_key_preference,prefs,context);
-//
-//        isPreferenceNotEnabled(R.string.gps_key_preference,context);
-//        isPreferenceNotEnabled(R.string.internet_key_preference,context);
-//        isPreferenceNotEnabled(R.string.internal_storage_key_preference,context);
-//
-//        selectPreference(R.string.private_data_key_preference,prefs,context);
-//        isPreferenceEnabled(R.string.gps_key_preference,context);
-//        isPreferenceEnabled(R.string.internet_key_preference,context);
-//        isPreferenceEnabled(R.string.internal_storage_key_preference,context);
+        selectPreference(R.string.recording_audio_key_preference,prefs,context);
+        uncheckPreference(R.string.private_data_key_preference,prefs,context);
+        uncheckPreference(R.string.working_in_background_key_preference,prefs,context);
+
+        isPreferenceNotEnabled(R.string.gps_key_preference,context);
+        isPreferenceNotEnabled(R.string.internet_key_preference,context);
+        isPreferenceNotEnabled(R.string.internal_storage_key_preference,context);
+
+        selectPreference(R.string.private_data_key_preference,prefs,context);
+        isPreferenceEnabled(R.string.gps_key_preference,context);
+        isPreferenceEnabled(R.string.internet_key_preference,context);
+        isPreferenceEnabled(R.string.internal_storage_key_preference,context);
     }
 
     @Test
     public void isWorkingInBackgroundWorksCorrectly() {
-//        selectPreference(R.string.recording_audio_key_preference,prefs,context);
-//        uncheckPreference(R.string.private_data_key_preference,prefs,context);
-//        uncheckPreference(R.string.working_in_background_key_preference,prefs,context);
-//
-//        isPreferenceNotEnabled(R.string.gps_key_preference,context);
-//        isPreferenceNotEnabled(R.string.internet_key_preference,context);
-//        isPreferenceNotEnabled(R.string.internal_storage_key_preference,context);
-//
-//        selectPreference(R.string.working_in_background_key_preference,prefs,context);
-//        isPreferenceNotEnabled(R.string.gps_key_preference,context);
-//        isPreferenceNotEnabled(R.string.internet_key_preference,context);
-//        isPreferenceEnabled(R.string.internal_storage_key_preference,context);
+        selectPreference(R.string.recording_audio_key_preference,prefs,context);
+        uncheckPreference(R.string.private_data_key_preference,prefs,context);
+        uncheckPreference(R.string.working_in_background_key_preference,prefs,context);
+
+        isPreferenceNotEnabled(R.string.gps_key_preference,context);
+        isPreferenceNotEnabled(R.string.internet_key_preference,context);
+        isPreferenceNotEnabled(R.string.internal_storage_key_preference,context);
+
+        selectPreference(R.string.working_in_background_key_preference,prefs,context);
+        isPreferenceNotEnabled(R.string.gps_key_preference,context);
+        isPreferenceNotEnabled(R.string.internet_key_preference,context);
+        isPreferenceEnabled(R.string.internal_storage_key_preference,context);
     }
 
     @Test
     public void isWorkingInBackgroundAndPrivateDataWorkCorrectly() {
-//        selectPreference(R.string.recording_audio_key_preference,prefs,context);
-//        selectPreference(R.string.private_data_key_preference,prefs,context);
-//        selectPreference(R.string.working_in_background_key_preference,prefs,context);
-//
-//        isPreferenceEnabled(R.string.gps_key_preference,context);
-//        isPreferenceEnabled(R.string.internet_key_preference,context);
-//        isPreferenceEnabled(R.string.internal_storage_key_preference,context);
+        selectPreference(R.string.recording_audio_key_preference,prefs,context);
+        selectPreference(R.string.private_data_key_preference,prefs,context);
+        selectPreference(R.string.working_in_background_key_preference,prefs,context);
+
+        isPreferenceEnabled(R.string.gps_key_preference,context);
+        isPreferenceEnabled(R.string.internet_key_preference,context);
+        isPreferenceEnabled(R.string.internal_storage_key_preference,context);
     }
 
     @Test
     public void isRecordingAudioWorksCorrectly() {
-//        uncheckPreference(R.string.recording_audio_key_preference,prefs,context);
-//
-//        isPreferenceNotEnabled(R.string.private_data_key_preference,context);
-//        isPreferenceNotEnabled(R.string.working_in_background_key_preference,context);
-//        isPreferenceNotEnabled(R.string.gps_key_preference,context);
-//        isPreferenceNotEnabled(R.string.internet_key_preference,context);
-//        isPreferenceNotEnabled(R.string.internal_storage_key_preference,context);
-//
-//        selectPreference(R.string.recording_audio_key_preference,prefs,context);
-//
-//        isPreferenceEnabled(R.string.private_data_key_preference,context);
-//        isPreferenceEnabled(R.string.working_in_background_key_preference,context);
+        uncheckPreference(R.string.recording_audio_key_preference,prefs,context);
+
+        //isPreferenceNotEnabled(R.string.private_data_key_preference,context);
+        isPreferenceNotEnabled(R.string.working_in_background_key_preference,context);
+        isPreferenceNotEnabled(R.string.gps_key_preference,context);
+        isPreferenceNotEnabled(R.string.internet_key_preference,context);
+        isPreferenceNotEnabled(R.string.internal_storage_key_preference,context);
+
+        selectPreference(R.string.recording_audio_key_preference,prefs,context);
+
+        isPreferenceEnabled(R.string.private_data_key_preference,context);
+        isPreferenceEnabled(R.string.working_in_background_key_preference,context);
     }
 
     @Test
     public void isGPSWorksCorrectly() throws Exception{
-//        setUpGPSPreference(prefs, context);
-//
-//        turnOnGPS(device,context);
-//        selectPreference(R.string.gps_key_preference,prefs,context);
-//        isPreferenceChecked(R.string.gps_key_preference,context);
-//
-//        uncheckPreference(R.string.gps_key_preference,prefs,context);
-//        isPreferenceNotChecked(R.string.gps_key_preference,context);
-//
-//        turnOffGPS(device,context);
-//
-//        selectPreference(R.string.gps_key_preference,prefs,context);
-//        pressButtonWithTextOnDialog("android:id/button1",device);
-//        device.pressBack();
-//        isPreferenceNotChecked(R.string.gps_key_preference,context);
-//
-//        selectPreference(R.string.gps_key_preference,prefs,context);
-//        pressButtonWithTextOnDialog("android:id/button2",device);
-//        isPreferenceNotChecked(R.string.gps_key_preference,context);
-//
-//        selectPreference(R.string.gps_key_preference,prefs,context);
-//        pressButtonWithTextOnDialog("android:id/button1",device);
-//        switchLocation();
-//        device.pressBack();
-//        isPreferenceChecked(R.string.gps_key_preference,context);
+        setUpGPSPreference(prefs, context);
+
+        turnOnGPS(device,context);
+        selectPreference(R.string.gps_key_preference,prefs,context);
+        isPreferenceChecked(R.string.gps_key_preference,context);
+
+        uncheckPreference(R.string.gps_key_preference,prefs,context);
+        isPreferenceNotChecked(R.string.gps_key_preference,context);
+
+        turnOffGPS(device,context);
+
+        selectPreference(R.string.gps_key_preference,prefs,context);
+        pressButtonWithTextOnDialog("pl.gda.pg.eti.kask.soundmeterpg:id/accept_btn",device);
+        device.pressBack();
+        isPreferenceNotChecked(R.string.gps_key_preference,context);
+
+        selectPreference(R.string.gps_key_preference,prefs,context);
+        pressButtonWithTextOnDialog("pl.gda.pg.eti.kask.soundmeterpg:id/cancel_btn",device);
+        isPreferenceNotChecked(R.string.gps_key_preference,context);
+
+        selectPreference(R.string.gps_key_preference,prefs,context);
+        pressButtonWithTextOnDialog("pl.gda.pg.eti.kask.soundmeterpg:id/accept_btn",device);
+        switchLocation();
+        device.pressBack();
+        isPreferenceChecked(R.string.gps_key_preference,context);
     }
 
     public static void setUpGPSPreference(SharedPreferences prefs, Context context) {
-//        selectPreference(R.string.recording_audio_key_preference,prefs,context);
-//        selectPreference(R.string.private_data_key_preference,prefs,context);
-//        selectPreference(R.string.working_in_background_key_preference,prefs,context);
-//
-//        isPreferenceEnabled(R.string.gps_key_preference,context);
-//
-//        uncheckPreference(R.string.gps_key_preference,prefs,context);
-//        isPreferenceNotChecked(R.string.gps_key_preference,context);
+        selectPreference(R.string.recording_audio_key_preference,prefs,context);
+        selectPreference(R.string.private_data_key_preference,prefs,context);
+        selectPreference(R.string.working_in_background_key_preference,prefs,context);
+
+        isPreferenceEnabled(R.string.gps_key_preference,context);
+
+        uncheckPreference(R.string.gps_key_preference,prefs,context);
+        isPreferenceNotChecked(R.string.gps_key_preference,context);
     }
 
     private void switchLocation() throws UiObjectNotFoundException {
@@ -205,31 +205,31 @@ public class SettingsActivityWorkCorrectlyTest {
 
     @Test
     public void isInternetWorksCorrectly() throws UiObjectNotFoundException {
-//        setUpInternetPreference(prefs,context);
-//
-//        turnOnInternetData(device,context);
-//        selectPreference(R.string.internet_key_preference,prefs,context);
-//        isPreferenceChecked(R.string.internet_key_preference,context);
-//
-//        uncheckPreference(R.string.internet_key_preference,prefs,context);
-//        isPreferenceNotChecked(R.string.internet_key_preference,context);
-//
-//        turnOffInternetData(device,context);
-//
-//        selectPreference(R.string.internet_key_preference,prefs,context);
-//        pressButtonWithTextOnDialog("android:id/button1",device);
-//        device.pressBack();
-//        isPreferenceNotChecked(R.string.internet_key_preference,context);
-//
-//        selectPreference(R.string.internet_key_preference,prefs,context);
-//        pressButtonWithTextOnDialog("android:id/button2",device);
-//        isPreferenceNotChecked(R.string.internet_key_preference,context);
-//
-//        selectPreference(R.string.internet_key_preference,prefs,context);
-//        pressButtonWithTextOnDialog("android:id/button1",device);
-//        turnOnInternetData(device,context);
-//        device.pressBack();
-//        isPreferenceChecked(R.string.internet_key_preference,context);
+        setUpInternetPreference(prefs,context);
+
+        turnOnInternetData(device,context);
+        selectPreference(R.string.internet_key_preference,prefs,context);
+        isPreferenceChecked(R.string.internet_key_preference,context);
+
+        uncheckPreference(R.string.internet_key_preference,prefs,context);
+        isPreferenceNotChecked(R.string.internet_key_preference,context);
+
+        turnOffInternetData(device,context);
+
+        selectPreference(R.string.internet_key_preference,prefs,context);
+        pressButtonWithTextOnDialog("pl.gda.pg.eti.kask.soundmeterpg:id/accept_btn",device);
+        device.pressBack();
+        isPreferenceNotChecked(R.string.internet_key_preference,context);
+
+        selectPreference(R.string.internet_key_preference,prefs,context);
+        pressButtonWithTextOnDialog("pl.gda.pg.eti.kask.soundmeterpg:id/cancel_btn",device);
+        isPreferenceNotChecked(R.string.internet_key_preference,context);
+
+        selectPreference(R.string.internet_key_preference,prefs,context);
+        pressButtonWithTextOnDialog("pl.gda.pg.eti.kask.soundmeterpg:id/accept_btn",device);
+        turnOnInternetData(device,context);
+        device.pressBack();
+        isPreferenceChecked(R.string.internet_key_preference,context);
     }
 
     public static void setUpInternetPreference(SharedPreferences prefs, Context context) {
@@ -245,38 +245,38 @@ public class SettingsActivityWorkCorrectlyTest {
 
     @Test
     public void isInternalStorageWorksCorrectly(){
-//        selectPreference(R.string.recording_audio_key_preference,prefs,context);
-//        selectPreference(R.string.private_data_key_preference,prefs,context);
-//        selectPreference(R.string.working_in_background_key_preference,prefs,context);
-//
-//        isPreferenceEnabled(R.string.internal_storage_key_preference,context);
-//
-//        uncheckPreference(R.string.internal_storage_key_preference,prefs,context);
-//        isPreferenceNotChecked(R.string.internal_storage_key_preference,context);
-//
-//        selectPreference(R.string.internal_storage_key_preference,prefs,context);
-//        isPreferenceChecked(R.string.internal_storage_key_preference,context);
+        selectPreference(R.string.recording_audio_key_preference,prefs,context);
+        selectPreference(R.string.private_data_key_preference,prefs,context);
+        selectPreference(R.string.working_in_background_key_preference,prefs,context);
+
+        isPreferenceEnabled(R.string.internal_storage_key_preference,context);
+
+        uncheckPreference(R.string.internal_storage_key_preference,prefs,context);
+        isPreferenceNotChecked(R.string.internal_storage_key_preference,context);
+
+        selectPreference(R.string.internal_storage_key_preference,prefs,context);
+        isPreferenceChecked(R.string.internal_storage_key_preference,context);
    }
 
     @Test
     public void isSeekBarWorksCorrectly(){
-//        selectPreference(R.string.recording_audio_key_preference,prefs,context);
-//        selectPreference(R.string.private_data_key_preference,prefs,context);
-//        selectPreference(R.string.working_in_background_key_preference,prefs,context);
-//        uncheckPreference(R.string.internal_storage_key_preference,prefs,context);
-//
-//        int title = R.string.title_seek_bar_preference;
-//        String key = context.getString(R.string.measurements_in_storage_key_preference);
-//
-//        DataInteraction interaction = findPreferencesOnView(key, title);
-//        interaction.check(matches(not(isEnabled())));
-//
-//        selectPreference(R.string.internal_storage_key_preference,prefs,context);
-//        interaction.check(matches(isEnabled()));
-//
-//        DataInteraction seekBar = interaction.onChildView(allOf(withId(R.id.seek_bar_preference)));
-//        seekBar.perform(swipeRight());
-//        seekBar.perform(swipeLeft());
+        selectPreference(R.string.recording_audio_key_preference,prefs,context);
+        selectPreference(R.string.private_data_key_preference,prefs,context);
+        selectPreference(R.string.working_in_background_key_preference,prefs,context);
+        uncheckPreference(R.string.internal_storage_key_preference,prefs,context);
+
+        int title = R.string.title_seek_bar_preference;
+        String key = context.getString(R.string.measurements_in_storage_key_preference);
+
+        DataInteraction interaction = findPreferencesOnView(key, title);
+        interaction.check(matches(not(isEnabled())));
+
+        selectPreference(R.string.internal_storage_key_preference,prefs,context);
+        interaction.check(matches(isEnabled()));
+
+        DataInteraction seekBar = interaction.onChildView(allOf(withId(R.id.seek_bar_preference)));
+        seekBar.perform(swipeRight());
+        seekBar.perform(swipeLeft());
     }
 
 

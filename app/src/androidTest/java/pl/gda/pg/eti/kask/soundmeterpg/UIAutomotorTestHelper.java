@@ -31,7 +31,7 @@ public class UIAutomotorTestHelper {
     public static final String MEASUREMENTS_ITEM = "Measurements";
     public static final String MEASUREMENTS_ID = "pl.gda.pg.eti.kask.soundmeterpg:id/measurements_layout";
 
-    public static final String LOGIN_ACTIVITY_ITEM = "Log in";
+    public static final String LOGIN_ACTIVITY_ITEM = "Sign in";
     public static final String LOGIN_PROGRESS_ACTIVITY_ID = "pl.gda.pg.eti.kask.soundmeterpg:id/progress_bar_view";
     public static final String LOGIN_ACTIVITY_ID = "pl.gda.pg.eti.kask.soundmeterpg:id/login_form";
 
@@ -43,7 +43,7 @@ public class UIAutomotorTestHelper {
     public static final String ABOUT_TEXT="About";
     public static final String ABOUT_ID="pl.gda.pg.eti.kask.soundmeterpg:id/about_view";
 
-    public static final String FAQ_TEXT="FAQ";
+    public static final String FAQ_TEXT="Frequently Asked Question";
     public static final String FAQ_ID="pl.gda.pg.eti.kask.soundmeterpg:id/faq_view";
 
     public static final String LOGIN_DIALOG_TEXT ="Login";
