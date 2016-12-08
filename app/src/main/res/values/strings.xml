@@ -102,7 +102,7 @@
     <!-- Question 8 -->
     <string name="question_about_web_page">8. What is the address of the page?</string>
     <string name="answer_about_web_page">Our WebSite address is <a href="http://soundmeterpg.cba.pl">http://soundmeterpg.cba.pl</a></string>
-        <string name="title_faq_dialog">Frequency Asked Question</string>
+        <string name="title_faq_dialog">Frequently Asked Question</string>
         <string name="application_description_faq_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
         <string name="icon_description_faq_dialog">Politechnika Gdańska</string>
 
@@ -135,8 +135,8 @@
 
         <!-- Login Dialog-->
         <string name="cookies_link_login_dialog">http://www.wp.pl</string>
-        <string name="cookies_information_login_dialog">This application uses cookies. Logując się zgadzasz się na naszą politykę związaną z ich wykorzystaniem. Find out more <a href="http://www.wp.pl">here</a>.</string>
-        <string name="title_login_dialog">Achtung!</string>
+        <string name="cookies_information_login_dialog">This application uses cookies. Signing up you agree to the policy of cookies used by our service. Find out more <a href="http://www.wp.pl">here</a>.</string>
+        <string name="title_login_dialog">Warning!</string>
 
     <!-- Drawer Activity -->
     <string name="drawer_open">drawer_open</string>

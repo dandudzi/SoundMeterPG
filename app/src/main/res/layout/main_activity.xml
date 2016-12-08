@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:id="@+id/main_activity_toolbar"
-            android:background="#6a64d9"
+            android:background="@color/primary"
             android:contentDescription="@string/main_icon_description"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />

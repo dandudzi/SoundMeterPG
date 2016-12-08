@@ -136,7 +136,7 @@ public class SenderTest {
         measurementStatistics.min = random.nextInt(Sample.MAX_NOISE_LEVEL - Sample.MIN_NOISE_LEVEL) + Sample.MIN_NOISE_LEVEL;
         measurementStatistics.max = random.nextInt(Sample.MAX_NOISE_LEVEL - Sample.MIN_NOISE_LEVEL) + Sample.MIN_NOISE_LEVEL;
         measurementStatistics.avg = random.nextInt(Sample.MAX_NOISE_LEVEL - Sample.MIN_NOISE_LEVEL) + Sample.MIN_NOISE_LEVEL;
-        measure= new Measurement(measurementStatistics, CORRECT_LOCATION, true, date);
+        measure= new Measurement(measurementStatistics, CORRECT_LOCATION, true, date,1000);
         return measure;
     }
 

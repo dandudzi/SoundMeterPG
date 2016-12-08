@@ -3,19 +3,19 @@
     <group android:checkableBehavior="single"
         android:id="@+id/main_content_drawer">
         <item android:id="@+id/measure_drawer"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_measure"
             android:title="@string/measure_drawer"/>
         <item android:id="@+id/measurements_drawer"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_measurements"
             android:title="@string/measurements_drawer"/>
         <item android:id="@+id/settings_drawer"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_settings"
             android:title="@string/settings_drawer"/>
     </group>
     <group android:checkableBehavior="single"
         android:id="@+id/log_in_content_drawer">
         <item android:id="@+id/log_in_drawer"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_login"
             android:title="@string/log_in_drawer"/>
     </group>
 </menu>

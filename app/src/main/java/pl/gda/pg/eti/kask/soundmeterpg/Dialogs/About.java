@@ -84,31 +84,7 @@ public class About {
         return alertDialog;
     }
 
-    private static void sendMail(Activity ownerDialog) {
-        try
-        {
-            Intent gmail = new Intent(Intent.ACTION_VIEW);
-            gmail.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
-            gmail.putExtra(Intent.EXTRA_EMAIL, new String[] { "yourmail@gmail.com" });
-            gmail.setData(Uri.parse("yourmail@gmail.com"));
-            gmail.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-            gmail.setType("plain/text");
-            gmail.putExtra(Intent.EXTRA_TEXT, "I have question to you : ");
-            gmail.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ownerDialog.startActivity(gmail);
-        }
 
-        catch (Exception e)
-        {
-            Intent i = new Intent(Intent.ACTION_SEND);
-            i.putExtra(Intent.EXTRA_EMAIL, new String[] { "yourmail@gmail.com" });
-            i.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-            i.putExtra(Intent.EXTRA_TEXT, "Email message");
-            i.setType("plain/text");
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ownerDialog.startActivity(i);
-        }
-    }
 
     private static void setTextView(View view, int dialogID, String text){
         TextView tmp = (TextView) view.findViewById(dialogID);
