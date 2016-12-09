@@ -88,7 +88,7 @@ public class NavigationDrawerDisplayCorrectly {
     public int getHeader() {
         int id;
         if(manager.isLogIn())
-            id = R.id.log_in_header;
+            id = R.id.log_out_header;
         else
             id = R.id.log_out_header;
         return id;

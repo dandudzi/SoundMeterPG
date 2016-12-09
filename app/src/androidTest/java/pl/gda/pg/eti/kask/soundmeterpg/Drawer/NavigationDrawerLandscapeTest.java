@@ -35,7 +35,7 @@ public class NavigationDrawerLandscapeTest extends NavigationDrawerDisplayCorrec
     public void setUp(){
         super.device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         super.context =  mActivityRule.getActivity().getBaseContext();
-        super.manager =  new MyAccountManager(mActivityRule.getActivity());
+        super.manager =   MyAccountManager.getInstance(mActivityRule.getActivity());
         onView(isRoot()).perform(orientationLandscape());
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
     }

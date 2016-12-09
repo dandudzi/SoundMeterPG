@@ -42,14 +42,19 @@ public class MyAccountManager implements AccountManager  {
     private Thread logOutThread;
     private CookieManager cookieManager = null;
     private ConnectionInternetDetector connectionInternetDetector ;
-
-    public MyAccountManager(Context context){
+    private static  MyAccountManager instance = null;
+    private MyAccountManager(Context context){
         this.context = context;
         cookieManager = SingletonCookieManager.getInstance();
         prefs = SynchronizedPreference.getInstance();
         connectionInternetDetector = new ConnectionInternetDetector(context);
     }
 
+    public static MyAccountManager getInstance(Context context){
+        if(instance == null)
+            instance = new MyAccountManager(context);
+        return instance;
+    }
     @Override
     public boolean isLogIn() {
         return prefs.getBoolean(context.getResources().getString(R.string.logged_key),false,context);

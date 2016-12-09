@@ -93,7 +93,7 @@ public void isServiceWorking() throws UiObjectNotFoundException, InterruptedExce
 
 
     @Test
-    public void isStoringInListWhenHavePermissionTest() throws UiObjectNotFoundException, InterruptedException {
+    public void isStoringInDBTest() throws UiObjectNotFoundException, InterruptedException {
         openItemInDrawer(SETTINGS_ITEM,device);
         selectPreference(R.string.internal_storage_key_preference,sharedPreferences,context);
         context.deleteDatabase(context.getResources().getString(R.string.database_name));
@@ -108,7 +108,7 @@ public void isServiceWorking() throws UiObjectNotFoundException, InterruptedExce
 
     }
     @Test
-    public void isNotStoringInListWhenNotHavePermissionTest() throws UiObjectNotFoundException, InterruptedException {
+    public void isNotStoringInDBTest() throws UiObjectNotFoundException, InterruptedException {
         openItemInDrawer(SETTINGS_ITEM,device);
         uncheckPreference(R.string.internal_storage_key_preference,sharedPreferences,context);
         context.deleteDatabase(context.getResources().getString(R.string.database_name));
@@ -118,9 +118,20 @@ public void isServiceWorking() throws UiObjectNotFoundException, InterruptedExce
         Thread.sleep(4000);
         startBtn.click();
         Assert.assertNull(dataBaseHandler.getLastAddedRow());
+    }
 
-
-
+    @Test
+    public void isMeasureServiceStoringInListTest() throws UiObjectNotFoundException, InterruptedException {
+        openItemInDrawer(SETTINGS_ITEM,device);
+        selectPreference(R.string.recording_audio_key_preference,sharedPreferences,context);
+        context.deleteDatabase(context.getResources().getString(R.string.database_name));
+        UiObject startBtn = device.findObject(new UiSelector().resourceId("pl.gda.pg.eti.kask.soundmeterpg:id/measure_button_fragment"));
+        device.pressBack();
+        startBtn.click();
+        Thread.sleep(4000);
+        MeasurementDataBaseManager manager = MeasurementDataBaseManager.getIsnstance(context, new PreferenceParser(context));
+        Assert.assertTrue(manager.getListSize() > 0);
+        startBtn.click();
     }
 
 }

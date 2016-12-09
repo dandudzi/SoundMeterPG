@@ -44,10 +44,8 @@
         <string name="internal_storage_summary_preference">The application uses the device memory to collect measurements in the local database of the device. The current contents of the database can be seen in the \'Measurements\' bookmark.</string>
 
 
-        <string name="number_of_samples_preference">processing_private_data</string>
-        <string name="number_of_samples_title_preference">Number of samples stored on device</string>
-      <!--  <string name="number_of_samples_summary_preference"> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
-        -->
+    <!--  <string name="number_of_samples_summary_preference"> 6Komentarz bardzo długi w chuj długi komentarz jeszcze dłuższy niż można sobie to wyobrazić</string>
+    -->
 
     <string name="measurements_in_storage_key_preference">measurement_key_preference</string>
         <string name="title_seek_bar_preference">Maximum number of measurements stored in the device.</string>
@@ -56,10 +54,8 @@
         <string name="calibrate_title_preference">Calibrate your device</string>
         <string name="calibrate_summary_preference">Calibrate the device in order to improve the quality of measurements.</string>
         <string name="calibrate_msg_preference">db</string>
-        <string name="negative_value_calibration_dialog">Negative Value</string>
-        <string name="switch_text_calibration_dialog">value*(-1)</string>
 
-        <!-- About Dialog MainActivity-->
+    <!-- About Dialog MainActivity-->
         <string name="title_about_dialog">About</string>
         <string name="author_about_dialog">Created by Dudziak Daniel and Gierłowski Filip for Gdańsk University of Technology</string>
         <string name="icon_description_about_dialog">Politechnika Gdańska</string>
@@ -103,21 +99,8 @@
     <string name="question_about_web_page">8. What is the address of the page?</string>
     <string name="answer_about_web_page">Our WebSite address is <a href="http://soundmeterpg.pl">http://soundmeterpg.pl</a></string>
         <string name="title_faq_dialog">Frequently Asked Question</string>
-        <string name="application_description_faq_dialog">Created by Dudziak Daniel and Gierłowski Filip for Politechnika Gdańska</string>
-        <string name="icon_description_faq_dialog">Politechnika Gdańska</string>
+    <string name="icon_description_faq_dialog">Politechnika Gdańska</string>
 
-       <string name="github_link_faq_dialog">You can find project at <a href="https://github.com/dandudzi/SoundMeterPG/">GitHub</a></string>
-        <string name="github_url_faq_dialog">https://github.com/dandudzi/SoundMeterPG/</string>
-
-        <string name="licence_link_faq_dialog">You can find projects licence <a href="https://github.com/dandudzi/SoundMeterPG/blob/master/licence">here</a></string>
-        <string name="licence_url_faq_dialog">https://github.com/dandudzi/SoundMeterPG/blob/master/licence</string>
-
-
-        <string name="website_link_faq_dialog">Application <a href="http://www.wp.pl">web page</a></string>
-        <string name="website_url_faq_dialog">http://www.wp.pl</string>
-
-        <string name="help_link_faq_dialog">If you need help click <a href="http://www.wp.pl">here</a></string>
-        <string name="help_url_faq_dialog">http://www.wp.pl</string>
 
     <!-- Login Activity-->
     <string name="login_button_text">Login</string>
@@ -128,11 +111,9 @@
     <string name="registration_text_login_activity"><a href="http://www.wp.pl">If you don\'t have account, register here.</a></string>
     <string name="title_activity_login">Login</string>
     <string name="logging_text_login_activity">Logging…</string>
-    <string name="timeout_error_message_login_activity">! Time out !</string>
     <string name="incorrect_credentials_login_activity">! Login or password is incorrect !</string>
-    <string name="end_task_login_Activity">END TASK</string>
 
-        <!-- Login Dialog-->
+    <!-- Login Dialog-->
         <string name="cookies_link_login_dialog">http://www.wp.pl</string>
         <string name="cookies_information_login_dialog">This application uses cookies. Signing up you agree to the policy of cookies used by our service. Find out more <a href="http://www.wp.pl">here</a>.</string>
         <string name="title_login_dialog">Warning!</string>
@@ -149,13 +130,10 @@
 
         <!-- DataBaseHandler-->
     <string name="database_name">noiseDataBase.db</string>
-    <string name="table">SAMPLES</string>
     <!--Database for Tests-->
     <string name="database_test">noiseDataBase_test.db</string>
 
     <!-- Sender -->
-    <string name="confirmation_added_record"><!-- TODO -->Succesfuly added!</string>
-    <string name="site">http://soundmeterpg.cba.pl/insert.php/</string>
     <string name="ping_site">soundmeterpg.pl</string>
 
     <string name="stored">Store sample on server :</string>
@@ -179,7 +157,6 @@
     <string name="ok_default">OK</string>
 
     <!-- Login keys -->
-    <string name="expired_time_key">expired_time</string>
     <string name="login_key">login</string>
     <string name="password">password</string>
     <string name="logged_key">logged</string>

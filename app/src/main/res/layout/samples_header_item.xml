@@ -18,9 +18,8 @@
         android:textSize="18sp" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="111dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.20"
         android:text="Date"
         android:id="@+id/dateCols"
         android:gravity="center"

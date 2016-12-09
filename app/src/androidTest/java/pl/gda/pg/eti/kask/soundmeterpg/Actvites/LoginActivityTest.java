@@ -41,7 +41,7 @@ public class LoginActivityTest {
     public void initSettings() {
         context = mActivityRule.getActivity().getBaseContext();
         openDrawer(R.id.drawer_layout);
-        MyAccountManager mn=  new MyAccountManager(context);
+        MyAccountManager mn=  MyAccountManager.getInstance(context);
         if(mn.isLogIn()) {
             onView(withText("Log out")).perform(click());
             openDrawer(R.id.drawer_layout);

@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /*once onFirst start app*/
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
         preference.askUserForPermission(this);
-        accountManager = new MyAccountManager(getBaseContext());
+        accountManager = MyAccountManager.getInstance(getBaseContext());
 
         saveDeviceName();
 

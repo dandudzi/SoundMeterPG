@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         errorMessage = (TextView) findViewById(R.id.error_message_login_activity);
 
-        manager =  new MyAccountManager(this);
+        manager =  MyAccountManager.getInstance(this);
 
         result = new MyProperty();
 

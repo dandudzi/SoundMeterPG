@@ -74,7 +74,7 @@ public class Sender extends IntentService {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         MeasurementDataBaseObject measurementDataBaseObject;
         cookieManager = SingletonCookieManager.getInstance();
-        accountManager = new MyAccountManager(getBaseContext());
+        accountManager = MyAccountManager.getInstance(getBaseContext());
         String login  = sharedPreferences.getString(getResources().getString(R.string.login_key),"");
         String pass = sharedPreferences.getString(getResources().getString(R.string.password),"");
         //sprawdzenie czy zalogowany

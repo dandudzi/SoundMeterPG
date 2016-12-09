@@ -34,11 +34,18 @@ public class MeasurementDataBaseManager {
     private PreferenceParser preference;
     private SharedPreferences sharedPreferences;
     private Context context;
+    private static MeasurementDataBaseManager instance = null;
 
-    public MeasurementDataBaseManager(Context context, PreferenceParser preference){
+    private MeasurementDataBaseManager(Context context, PreferenceParser preference){
         this.context = context;
         this.preference = preference;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public static MeasurementDataBaseManager getIsnstance(Context context, PreferenceParser preferenceParser){
+        if(instance == null)
+            instance = new MeasurementDataBaseManager(context,preferenceParser);
+        return instance;
     }
 
     public void sendToDataBase(Sample sample){
@@ -54,7 +61,9 @@ public class MeasurementDataBaseManager {
         }
     }
 
-
+public int getListSize(){
+    return list.size();
+}
 
     public void flush(){
         long currentTime = System.currentTimeMillis();

@@ -39,7 +39,7 @@ public class NavigationDrawerIntentTest {
 
     @Before
     public void setUp(){
-        manager =  new MyAccountManager(mActivityRule.getActivity());
+        manager =  MyAccountManager.getInstance(mActivityRule.getActivity());
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
     }
 

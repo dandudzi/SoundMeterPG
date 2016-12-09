@@ -68,7 +68,7 @@ public class Measure extends IntentService {
         bindServices();
         setUpThreads();
         preferences = new PreferenceParser(this);
-        dataBaseManger =  new MeasurementDataBaseManager(getBaseContext(), preferences);
+        dataBaseManger =  MeasurementDataBaseManager.getIsnstance(getBaseContext(), preferences);
         binderThread.start();
     }
 

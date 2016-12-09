@@ -53,7 +53,7 @@ public class  GoogleAPILocalization extends Service implements ConnectionCallbac
     public void onCreate() {
         context = getBaseContext();
         preferenceParser = new PreferenceParser(context);
-        measurementDataBaseManager = new MeasurementDataBaseManager(context, preferenceParser);
+        measurementDataBaseManager =  MeasurementDataBaseManager.getIsnstance(context, preferenceParser);
 
         if (checkPlayServices()) {
             buildGoogleApiClient();
